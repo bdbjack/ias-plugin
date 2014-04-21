@@ -21,16 +21,59 @@ if (!defined('IAS_URL_BASE')) {
 }
 
 if (!defined('IAS_TEXTDOMAIN')) {
-    define('IAS_TEXTDOMAIN', 'tr');
+    define('IAS_TEXTDOMAIN', 'ias');
 }
 
 if (!defined('IAS_SHOW_ERRORS')) {
     define('IAS_SHOW_ERRORS', TRUE);
 }
 
-if (!defined('IAS_DB_PREFIX')) {
-    define('IAS_DB_PREFIX', $wpdb->prefix . 'ias_');
+/**
+ * Set up Text Domain & Translation Directories
+ */
+load_plugin_textdomain(IAS_TEXTDOMAIN, false, IAS_BASE . '/languages' );
+
+/**
+ * Set up custom error handling
+ */
+function ias_error_handling($errno, $errstr, $errfile, $errline) {
+	if (!(error_reporting() & $errno)) {
+        return;
+    }
+    switch ($errno) {
+    case E_USER_ERROR:
+        $error = new WP_Error('ias_error', __("$errstr error in file $errfile on line $errline", IAS_TEXTDOMAIN));
+        exit(1);
+        break;
+
+    case E_USER_WARNING:
+        $error = new WP_Error('ias_warning', __("$errstr error in file $errfile on line $errline", IAS_TEXTDOMAIN));
+        break;
+
+    case E_USER_NOTICE:
+        $error = new WP_Error('ias_notice', __("$errstr error in file $errfile on line $errline", IAS_TEXTDOMAIN));
+        break;
+
+    default:
+        $error = new WP_Error('ias_unknown', __("$errstr error in file $errfile on line $errline", IAS_TEXTDOMAIN));
+        break;
+    }
+    if(IAS_SHOW_ERRORS == TRUE) {
+		ias_show_admin_error($error->get_error_message() , 'error');
+    }
+    return true;
 }
+
+$error_handling = set_error_handler("ias_error_handling");
+
+/**
+ * Set up error message displays
+ */
+$ias_error_messages = array();
+$ias_warning_messages = array();
+$ias_sticky_messages = array();
+$ias_client_messages = array();
+$ias_install_valid = true;
 
 /**
  * In order to faciliate faster development, we will bypass the need to check the entire site against a license, and will simply rely on the API licensing server for individual brands
@@ -38,17 +81,40 @@ if (!defined('IAS_DB_PREFIX')) {
  */
 $ias_license = true;
 
-/**
- * Set up array for displaying error messages
- */
-$ias_error_messages = array();
-$ias_warning_messages = array();
-$ias_sticky_messages = array();
-$ias_client_messages = array();
+function ias_show_admin_error( $message , $type ) {
+	print('<div class="' . $type . '">');
+ 	print('<p>' . __( $message , IAS_TEXTDOMAIN ) . '</p>');
+ 	print('</div>');
+}
 
 /**
  * Set up Password Hashing
  */
 require_once( ABSPATH . 'wp-includes/class-phpass.php');
 $wp_hasher = new PasswordHash(16, FALSE);
+
+/**
+ * Check to make sure that we have core files
+ */
+if(!file_exists( IAS_BASE . '/core/core.php') ) {
+	array_push($ias_error_messages, 'The core.php file does not exist. Please make sure that the entire plugin has been uploaded.');
+	$ias_install_valid = false;
+} else {
+	require_once(IAS_BASE . '/core/core.php');
+}
+
+function ias_show_admin_notices() {
+	global $ias_error_messages ,$ias_warning_messages ,$ias_sticky_messages ,$ias_client_messages, $wpdb;
+	foreach ($ias_error_messages as $message) {
+		ias_show_admin_error( $message , 'error' );
+	}
+	foreach ($ias_warning_messages as $message) {
+		ias_show_admin_error( $message , 'updated' );
+	}
+	foreach ($ias_sticky_messages as $message) {
+		ias_show_admin_error( $message , 'update-nag' );
+	}
+}
+
+add_action('admin_notices','ias_show_admin_notices');
 ?>
