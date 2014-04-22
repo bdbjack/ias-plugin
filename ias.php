@@ -130,6 +130,23 @@ if(!file_exists( IAS_BASE . '/core/core.php') ) {
 	require_once(IAS_BASE . '/core/core.php');
 }
 
+
+add_action('admin_notices','ias_show_admin_notices');
+
+register_activation_hook(__FILE__,'ias_activation');
+
+/**
+ * Load all of the files under the "functions" sub-directory
+ */
+$dir = new RecursiveDirectoryIterator(IAS_BASE . '/functions');
+$iterator = new RecursiveIteratorIterator($dir);
+$functionsobj = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+foreach ($functionsobj as $name => $obj) {
+	if(strpos($name, 'index.php') === FALSE) {
+		require_once($name);
+	}
+}
+
 function ias_show_admin_notices() {
 	global $ias_error_messages ,$ias_warning_messages ,$ias_sticky_messages ,$ias_client_messages, $wpdb;
 	foreach ($ias_error_messages as $message) {
@@ -142,8 +159,4 @@ function ias_show_admin_notices() {
 		ias_show_admin_error( $message , 'update-nag' );
 	}
 }
-
-add_action('admin_notices','ias_show_admin_notices');
-
-register_activation_hook(__FILE__,'ias_activation');
 ?>
