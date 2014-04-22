@@ -75,4 +75,38 @@
 			</table>
 		</div>
 	</div>
+	<div style="float:none; clear:both; display:block; width:100%;overflow-x: auto;">
+		<div style="float:right; width:50%;">
+			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table">
+				<thead>
+					<tr>
+						<th colspan="2"><?php _e('Latest News',IAS_TEXTDOMAIN); ?></th>
+					</tr>
+					<tr>
+						<td><?php _e('Time',IAS_TEXTDOMAIN); ?></td>
+						<td><?php _e('Update',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+				</thead>
+				<tbody><?php
+					$raw_xml_fetch = wp_remote_get('http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/activity.atom?key=1ddce9dbe93533bd1a6b9c6fa6d239844f82ccee');
+					if(!is_wp_error( $raw_xml_fetch ) ) {
+						$xml = $raw_xml_fetch['body'];
+						$xml_obj = new SimpleXMLElement($xml);
+						foreach ($xml_obj->entry as $issue) {
+						print('<tr>' . "\r\n");
+						?>
+						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php print($issue->updated); ?></a></td>
+						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
+						<?php
+						print('</tr>' . "\r\n");
+						}
+					} else {
+						print('<pre>');
+						print_r($raw_xml_fetch);
+						print('</pre>');
+					}
+				?></tbody>
+			</table>
+		</div>
+	</div>
 </div>
