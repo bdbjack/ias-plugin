@@ -65,7 +65,6 @@ function ias_admin_menu() {
 			'is_sub' => TRUE,
 			'sub_of' => 'ias-brands-edit',
 		),
-		//////
 		array(
 			'title' => 'IAS Tracking',
 			'menu_title' => 'IAS Tracking',
@@ -94,6 +93,7 @@ function ias_admin_menu() {
 			add_submenu_page ( $page['sub_of'] , $page['title'] , $page['menu_title'] , $page['capability'] , $page['menu_slug'] , $page['function'] );
 		}
 	}
+	do_action('ias_admin_pages');
 }
 class ias_admin_page {
 	static function ias_load_admin_page() {
@@ -105,6 +105,7 @@ class ias_admin_page {
 		} else {
 			ias_add_error('File ' . $page . '.php could not be found');
 		}
+		do_action('ias_render_admin_page');
 	}
 } // end of ias_admin_page class
 
