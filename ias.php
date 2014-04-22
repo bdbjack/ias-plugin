@@ -12,6 +12,12 @@ Text Domain: ias
 /**
  * Let's Define some never-changing content
  */
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
 if (!defined('IAS_BASE')) {
     define('IAS_BASE', dirname( __FILE__ ) );
 }

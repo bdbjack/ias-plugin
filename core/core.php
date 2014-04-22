@@ -130,6 +130,9 @@ function ias_fix_db_prefix( $sql ) {
 }
 
 function ias_activation() {
+	if(PHP_VERSION_ID < 50400) {
+		throw new Exception("PHP Version too low. Please upgrade your version of PHP to at least 5.4", 1);
+	}
 	if(get_site_option('IAS_DB_VERSION') !== IAS_DB_VERSION) {
 		global $wpdb;
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
