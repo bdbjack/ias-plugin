@@ -43,7 +43,7 @@
 		$table->setProperty('table_title','Integrated Brands');
 		$table->setProperty('searchKey','name');
 		$table->setProperty('isForm',TRUE);
-		$table->setProperty('deleteAction','admin.php?page=ias-brands-save');
+		$table->setProperty('deleteAction','admin.php?page=ias-brands-save&noheader=true');
 		$table->setProperty('addAction','admin.php?page=ias-brands-add');
 		$table->setProperty('editAction','admin.php?page=ias-brands-edit');
 		print($table->html);

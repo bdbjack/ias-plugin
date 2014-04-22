@@ -100,10 +100,6 @@
 						<?php
 						print('</tr>' . "\r\n");
 						}
-					} else {
-						print('<pre>');
-						print_r($raw_xml_fetch);
-						print('</pre>');
 					}
 				?></tbody>
 			</table>
