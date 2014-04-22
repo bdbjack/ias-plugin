@@ -54,15 +54,17 @@
 				</thead>
 				<tbody><?php
 					$raw_xml_fetch = wp_remote_get('http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues.atom?c%5B%5D=tracker&c%5B%5D=status&c%5B%5D=priority&c%5B%5D=subject&c%5B%5D=assigned_to&c%5B%5D=updated_on&f%5B%5D=status_id&f%5B%5D=&group_by=&key=1ddce9dbe93533bd1a6b9c6fa6d239844f82ccee&op%5Bstatus_id%5D=o&set_filter=1&utf8=%E2%9C%93');
-					$xml = $raw_xml_fetch['body'];
-					$xml_obj = new SimpleXMLElement($xml);
-					foreach ($xml_obj->entry as $issue) {
-					print('<tr>' . "\r\n");
-					?>
-					<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
-					<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php print($issue->updated); ?></a></td>
-					<?php
-					print('</tr>' . "\r\n");
+					if(!is_wp_error( $raw_xml_fetch ) ) {
+						$xml = $raw_xml_fetch['body'];
+						$xml_obj = new SimpleXMLElement($xml);
+						foreach ($xml_obj->entry as $issue) {
+						print('<tr>' . "\r\n");
+						?>
+						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
+						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php print($issue->updated); ?></a></td>
+						<?php
+						print('</tr>' . "\r\n");
+						}
 					}
 				?></tbody>
 				<tfoot>
