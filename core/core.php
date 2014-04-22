@@ -157,6 +157,7 @@ function ias_activation() {
 			}
 		}
 		update_option( "IAS_DB_VERSION", IAS_DB_VERSION );
+		do_action('IAS_activation');
 	}
 }
 

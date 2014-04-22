@@ -1,0 +1,4 @@
+INSERT INTO `{{ias}}brands` (`id`, `isBDB`, `name`, `URL`, `loginByCredsURL`, `phoneNumbers`, `logoURL`, `licenseKey`, `apiURL`, `apiUser`, `apiPass`, `campaignID`) VALUES
+(1, 1, 'Banc De Binary', 'https://eu.bancdebinary.com', 'https://eu.bancdebinary.com?action=login', '[]', 'https://eu.bancdebinary.com/wp-content/themes/bbinary/assets/img/logo.png', '', '', '', '', ''),
+(2, 1, 'Banc De Binary', 'https://bancdebinary.com', 'https://bancdebinary.com?action=login', '[]', 'https://bancdebinary.com/wp-content/themes/bbinary/assets/img/logo.png', '', '', '', '', ''),
+(3, 1, 'Option Financial Markets', 'https://option.fm/', 'https://option.fm?action=login', '[]', 'https://option.fm/wp-content/themes/bbinary/assets/img/logoSmall.png', '', '', '', '', '');
