@@ -147,6 +147,11 @@ foreach ($functionsobj as $name => $obj) {
 	}
 }
 
+/**
+ * Run all hooked functions
+ */
+ias_add_all_wp_action_functions();
+
 function ias_show_admin_notices() {
 	global $ias_error_messages ,$ias_warning_messages ,$ias_sticky_messages ,$ias_client_messages, $wpdb;
 	foreach ($ias_error_messages as $message) {
