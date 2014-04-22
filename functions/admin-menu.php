@@ -26,6 +26,16 @@ function ias_admin_menu() {
 			'sub_of' => 'ias',
 		),
 		array(
+			'title' => 'IAS Brands Save',
+			'menu_title' => 'IAS Brands Save',
+			'capability' => 'activate_plugins',
+			'menu_slug' => 'ias-brands-save',
+			'function' => array('ias_admin_page','ias_load_admin_page'),
+			'icon' => NULL,
+			'is_sub' => TRUE,
+			'sub_of' => 'ias-brands',
+		),
+		array(
 			'title' => 'IAS Brands Add',
 			'menu_title' => 'IAS Brands Add',
 			'capability' => 'activate_plugins',
@@ -105,6 +115,27 @@ class ias_admin_page {
 		} else {
 			ias_add_error('File ' . $page . '.php could not be found');
 		}
+		?>
+		<link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+		<script type="text/javascript">
+			jQuery('.fancyopen').fancybox({
+				type: 'iframe',
+				padding: 0,
+				width: '80%',
+				height: '80%',
+				autoWidth: true,
+				autoHeight: true,
+			});
+			jQuery('.fancyimage').fancybox({
+				type: 'image',
+				padding: 10,
+				autoWidth: true,
+				autoHeight: true,
+			});
+		</script>
+		<?php
 		do_action('ias_render_admin_page');
 	}
 } // end of ias_admin_page class

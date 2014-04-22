@@ -136,6 +136,18 @@ add_action('admin_notices','ias_show_admin_notices');
 register_activation_hook(__FILE__,'ias_activation');
 
 /**
+ * Load all of the files under the "core/helper-classes" sub-directory
+ */
+$core_dir = new RecursiveDirectoryIterator(IAS_BASE . '/core/helper-classes');
+$core_iterator = new RecursiveIteratorIterator($core_dir);
+$core_functionsobj = new RegexIterator($core_iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+foreach ($core_functionsobj as $name => $obj) {
+	if(strpos($name, 'index.php') === FALSE) {
+		require_once($name);
+	}
+}
+
+/**
  * Load all of the files under the "functions" sub-directory
  */
 $dir = new RecursiveDirectoryIterator(IAS_BASE . '/functions');

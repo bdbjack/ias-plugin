@@ -27,6 +27,17 @@
 						<th><?php _e('WordPress Version',IAS_TEXTDOMAIN); ?></th>
 						<td><?php print( $wp_version ); ?></td>
 					</tr>
+					<tr>
+						<th><?php _e('Server IP',IAS_TEXTDOMAIN); ?></th>
+						<td><?php print( $_SERVER['SERVER_ADDR'] ); ?></td>
+					</tr>
+					<tr>
+						<th><?php _e('Server External IP',IAS_TEXTDOMAIN); ?></th>
+						<td><?php 
+						$ip_feedback = wp_remote_get('http://httpbin.org/ip');
+						$ip_feedback_array = json_decode($ip_feedback['body'],true);
+						print( $ip_feedback_array['origin'] ); ?></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -63,16 +74,3 @@
 		</div>
 	</div>
 </div>
-<link href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-	jQuery('.fancyopen').fancybox({
-		type: 'iframe',
-		padding: 0,
-		width: '80%',
-		height: '80%',
-		autoWidth: true,
-		autoHeight: true,
-	})
-</script>
