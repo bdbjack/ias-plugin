@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Instant Affiliate Software
+Plugin Name: Instant Affiliate Software Base
 Plugin URI: http://rm.14all.me/projects/instant-affiliate-software-ias-plugin
 Description: The Instant Affiliate Software WordPress plugin is a plugin for WordPress which allows an affiliate to hook up instantly to a broker.
 Author: 3 Musketeers Group
@@ -26,6 +26,10 @@ if (!defined('IAS_TEXTDOMAIN')) {
 
 if (!defined('IAS_SHOW_ERRORS')) {
     define('IAS_SHOW_ERRORS', TRUE);
+}
+
+if (!defined('IAS_DB_VERSION')) {
+    define('IAS_DB_VERSION', 0.01);
 }
 
 /**
@@ -87,6 +91,23 @@ function ias_show_admin_error( $message , $type ) {
  	print('</div>');
 }
 
+function ias_add_error( $message , $type = 'error' ) {
+	global $ias_error_messages,$ias_warning_messages,$ias_sticky_messages,$ias_install_valid;
+	switch ($type) {
+		case 'update':
+			array_push($ias_warning_messages, $message);
+			break;
+
+		case 'sticky':
+			array_push($ias_sticky_messages, $message);
+			break;
+		
+		default:
+			array_push($ias_error_messages, $message);
+			break;
+	}
+}
+
 /**
  * Set up Password Hashing
  */
@@ -117,4 +138,6 @@ function ias_show_admin_notices() {
 }
 
 add_action('admin_notices','ias_show_admin_notices');
+
+register_activation_hook(__FILE__,'ias_activation');
 ?>

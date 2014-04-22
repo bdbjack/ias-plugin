@@ -118,4 +118,61 @@ function ias_add_all_wp_action_functions() {
  	}
  }
 }
+
+function ias_db_prefix() {
+	global $wpdb;
+	return $wpdb->prefix . 'ias_';
+}
+
+function ias_fix_db_prefix( $sql ) {
+	$sql = str_replace('{{ias}}', ias_db_prefix(), $sql);
+	return $sql;
+}
+
+function ias_activation() {
+	if(get_site_option('IAS_DB_VERSION') !== IAS_DB_VERSION) {
+		global $wpdb;
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		$dir = new RecursiveDirectoryIterator(IAS_BASE . '/install/sql');
+		$iterator = new RecursiveIteratorIterator($dir);
+		$sqlsobj = new RegexIterator($iterator, '/^.+\.sql$/i', RecursiveRegexIterator::GET_MATCH);
+		$files = array();
+		$files['create'] = array();
+		$files['populate'] = array();
+		foreach ($sqlsobj as $name => $obj) {
+			if(strpos($name, 'Create') !== FALSE) {
+				array_push($files['create'],$name);
+			}
+			if(strpos($name, 'Populate') !== FALSE) {
+				array_push($files['populate'],$name);
+			}
+		}
+		foreach ($files['create'] as $file) {
+			dbDelta( ias_fix_db_prefix ( file_get_contents( $file ) ) );
+		}
+		foreach ($files['populate'] as $file) {
+			$sql = file_get_contents($file);
+			if( checkIfTableHasRecords($sql) == FALSE ) {
+				$wpdb->query( ias_fix_db_prefix ( $sql ) );
+			}
+		}
+		update_option( "IAS_DB_VERSION", IAS_DB_VERSION );
+	}
+}
+
+function checkIfTableHasRecords( $sql ) {
+	global $wpdb;
+	$beg = strpos($sql, '{{ias}}');
+	$end = strpos($sql, '`',$beg);
+	$len = $end - $beg;
+	$name = substr($sql, $beg, $len);
+	$name = ias_fix_db_prefix( $name );
+	$query = "SELECT COUNT(*) FROM `". $name ."`";
+	$count = $wpdb->get_var($query);
+	if($count > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
 ?>
