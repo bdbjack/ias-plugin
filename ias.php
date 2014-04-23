@@ -164,6 +164,10 @@ foreach ($functionsobj as $name => $obj) {
  */
 ias_add_all_wp_action_functions();
 
+if(checkBrands() != TRUE) {
+	array_push($ias_sticky_messages, 'Some of your brands are missing critical information required for them to work.<br />Please update them <a href="admin.php?page=ias-brands">here</a>');
+}
+
 function ias_show_admin_notices() {
 	global $ias_error_messages ,$ias_warning_messages ,$ias_sticky_messages ,$ias_client_messages, $wpdb;
 	foreach ($ias_error_messages as $message) {

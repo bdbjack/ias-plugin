@@ -20,6 +20,7 @@ class ias_table {
 	private $page = 0;
 	private $pagination = 20;
 	private $table_title = NULL;
+	private $showWarning = array();
 	public $html = NULL;
 
 	// Object Functions

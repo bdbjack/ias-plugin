@@ -179,4 +179,14 @@ function checkIfTableHasRecords( $sql ) {
 		return false;
 	}
 }
+
+function checkBrands() {
+	global $wpdb;
+	$count = $wpdb->get_var( ias_fix_db_prefix( "SELECT COUNT(*) as `count` FROM `{{ias}}brands` WHERE ( `isBDB` = 1 AND `licenseKey` = '' AND `campaignID` = '') OR ( `active` = 1 AND `isBDB` = 0 AND `apiURL` = '' AND `apiUser` = '' AND `apiPass` = '' AND `campaignID` = '')" ));
+	if($count > 0) {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
+}
 ?>
