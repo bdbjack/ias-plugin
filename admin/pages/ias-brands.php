@@ -11,11 +11,11 @@
 				'type' => 'bool',
 				'isLink' => FALSE,
 			),
-			'active' => array(
-				'name' => 'Active',
-				'type' => 'view-bool',
-				'isLink' => FALSE,
-			),
+			//'active' => array(
+			//	'name' => 'Active',
+			//	'type' => 'view-bool',
+			//	'isLink' => FALSE,
+			//),
 			'logoURL' => array(
 				'name' => 'Logo',
 				'type' => 'image',
