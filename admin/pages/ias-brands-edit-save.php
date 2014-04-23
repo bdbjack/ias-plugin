@@ -21,5 +21,6 @@ if($brand['isBDB'] == 1) {
 	);
 }
 $wpdb->update( ias_fix_db_prefix('{{ias}}brands') , $updateArray , array('id' => $_POST['id']) );
+do_action('ias_edit_brand' , $brand );
 header("location: admin.php?page=ias-brands");
 ?>

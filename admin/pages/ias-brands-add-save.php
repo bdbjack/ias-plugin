@@ -26,5 +26,6 @@
 	$region_original = json_decode( $wpdb->get_var( ias_fix_db_prefix("SELECT `brands` FROM `{{ias}}regions` WHERE `id` = 3") ) , true );
 	array_push($region_original, $insertId);
 	$wpdb->update( ias_fix_db_prefix('{{ias}}regions') , array('brands' => json_encode($region_original)) , array('id' => 3) );
+	do_action('ias_add_brand' , $insertId );
 	header("location: admin.php?page=ias-brands");
 ?>
