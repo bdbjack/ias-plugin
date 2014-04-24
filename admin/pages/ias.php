@@ -67,11 +67,11 @@
 						}
 					}
 				?></tbody>
-				<tfoot>
+				<!-- <tfoot>
 					<tr>
 						<th colspan="2"><a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues/new" class="" target="_blank"><?php _e('Open a New Issue',IAS_TEXTDOMAIN); ?></a></th>
 					</tr>
-				</tfoot>
+				</tfoot> -->
 			</table>
 		</div>
 	</div>
