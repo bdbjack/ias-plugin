@@ -12,7 +12,7 @@
 ?><div class="wrap">
 	<h2><?php _e('Instant Affiliate Program Brand Management - Edit a Brand',IAS_TEXTDOMAIN); ?></h2>
 	<p><?php _e('Welcome to the Edit Brand Interface. From here you will be able to edit your brands.',IAS_TEXTDOMAIN); ?></p>
-	<p><?php _e('For more information on how to use this interface, visit:',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/wiki/Brand_Management_Interface#How-to-Use" class="fancyopen" target="_blank">IAS Wiki - Brand Management Interface - How to Use</a></p>
+	<p><?php _e('For more information on how to use this interface, visit:',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/wiki/Brand_Management_Interface#How-to-Use" class="" target="_blank">IAS Wiki - Brand Management Interface - How to Use</a></p>
 	<form action="admin.php?page=ias-brands-edit-save&noheader=true" method="POST" role="form">
 		<input type="hidden" name="id" value="<?php print($brand['id']); ?>" />
 		<div style="width:100%; max-width: 40%;">

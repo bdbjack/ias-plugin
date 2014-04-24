@@ -1,7 +1,7 @@
 <div class="wrap">
 	<h2><?php _e('Instant Affiliate Program Brand Management',IAS_TEXTDOMAIN); ?></h2>
 	<p><?php _e('Welcome to the Brand Management Interface. From here you will be able to manage all the brands which your site is integrated with.',IAS_TEXTDOMAIN); ?></p>
-	<p><?php _e('For more information on how to use this interface, visit:',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/wiki/Brand_Management_Interface#How-to-Use" class="fancyopen" target="_blank">IAS Wiki - Brand Management Interface - How to Use</a></p>
+	<p><?php _e('For more information on how to use this interface, visit:',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/wiki/Brand_Management_Interface#How-to-Use" class="" target="_blank">IAS Wiki - Brand Management Interface - How to Use</a></p>
 	<hr />
 	<?php
 		$table_data = $wpdb->get_results( ias_fix_db_prefix( "SELECT * FROM `{{ias}}brands`" ) , ARRAY_A );

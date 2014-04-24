@@ -60,8 +60,8 @@
 						foreach ($xml_obj->entry as $issue) {
 						print('<tr>' . "\r\n");
 						?>
-						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
-						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php print($issue->updated); ?></a></td>
+						<td><a href="<?php print($issue->id); ?>" class="" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
+						<td><a href="<?php print($issue->id); ?>" class="" target="_blank"><?php print($issue->updated); ?></a></td>
 						<?php
 						print('</tr>' . "\r\n");
 						}
@@ -69,7 +69,7 @@
 				?></tbody>
 				<tfoot>
 					<tr>
-						<th colspan="2"><a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues/new" class="fancyopen" target="_blank"><?php _e('Open a New Issue',IAS_TEXTDOMAIN); ?></a></th>
+						<th colspan="2"><a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues/new" class="" target="_blank"><?php _e('Open a New Issue',IAS_TEXTDOMAIN); ?></a></th>
 					</tr>
 				</tfoot>
 			</table>
@@ -95,8 +95,8 @@
 						foreach ($xml_obj->entry as $issue) {
 						print('<tr>' . "\r\n");
 						?>
-						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php print($issue->updated); ?></a></td>
-						<td><a href="<?php print($issue->id); ?>" class="fancyopen" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
+						<td><a href="<?php print($issue->id); ?>" class="" target="_blank"><?php print($issue->updated); ?></a></td>
+						<td><a href="<?php print($issue->id); ?>" class="" target="_blank"><?php _e($issue->title,IAS_TEXTDOMAIN); ?></a></td>
 						<?php
 						print('</tr>' . "\r\n");
 						}
