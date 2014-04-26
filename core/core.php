@@ -117,6 +117,14 @@ function ias_add_all_wp_action_functions() {
 		add_action($action,'ias_' . $action);
  	}
  }
+
+ $hooks = array(
+ 	
+ );
+
+ foreach ($hooks as $hook => $action) {
+ 	add_action($hook,$action);
+ }
 }
 
 function ias_db_prefix() {

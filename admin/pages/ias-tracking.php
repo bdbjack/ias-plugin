@@ -5,6 +5,7 @@
 	<div style="float:none; clear:both; over-flow:auto;">
 		<div style="float:left; width: 40%;">
 			<h3>Server Postback URLs</h3>
+			<form action="admin.php?page=ias-tracking-save&noheader=true" method="POST" role="form">
 			<table class="widefat" width="100%" cellpadding="0" cellpadding="0" role="table">
 				<thead>
 					<tr>
@@ -19,11 +20,36 @@
 					</tr>
 				</thead>
 				<tbody>
+				<tr>
+					<th><?php _e('Visit',IAS_TEXTDOMAIN); ?></th>
+					<td><input type="url" style="width:100%;" name="" value="" /></td>
+				</tr>
+				<tr>
+					<th><?php _e('Email Capture',IAS_TEXTDOMAIN); ?></th>
+					<td><input type="url" style="width:100%;" name="" value="" /></td>
+				</tr>
+				<tr>
+					<th><?php _e('Customer Registration',IAS_TEXTDOMAIN); ?></th>
+					<td><input type="url" style="width:100%;" name="" value="" /></td>
+				</tr>
+				<tr>
+					<th><?php _e('Customer Deposit',IAS_TEXTDOMAIN); ?></th>
+					<td><input type="url" style="width:100%;" name="" value="" /></td>
+				</tr>
 				<?php
 					do_action('ias_tracking_form_generation');
 				?>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th colspan="2">
+							<input type="submit" class="button button-primary" value="<?php _e('Save',IAS_TEXTDOMAIN); ?>" />
+							<a href="admin.php?page=ias-tracking" class="button"><?php _e('Cancel',IAS_TEXTDOMAIN); ?></a>
+						</th>
+					</tr>
+				</tfoot>
 			</table>
+			</form>
 		</div>
 	</div>
 </div>
