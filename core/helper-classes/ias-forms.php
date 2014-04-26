@@ -10,8 +10,8 @@ abstract class ias_forms {
 	public $html = NULL;
 	// Set up protected variables (used to generate the HTML)
 	protected $recaptchaKey = '6LeKivISAAAAAEQWD7n5Szjf1FuDc3dvibxGszvV';
-	# https://developers.google.com/recaptcha/docs/php
-	protected $id = md5(time() . 'form' phpversion());
+	// https://developers.google.com/recaptcha/docs/php
+	protected $id = NULL;
 	protected $atts = array(
 		'useChosen' => FALSE,		// Use Chosen Styling
 		'useValidate' => FALSE,		// Use jQuery Validate plugin
@@ -33,8 +33,8 @@ abstract class ias_forms {
 		'accept-charset' => 'UTF-8',
 		'autocomplete' => 'off',
 		'enctype' => 'application/x-www-form-urlencoded',
-		'name' => $this->id,
-		'id' => $this->id,
+		'name' => NULL,
+		'id' => NULL,
 		'target' => '_self',
 	);
 	protected $fieldTypes = array(
@@ -90,7 +90,7 @@ abstract class ias_forms {
 							$text = __($option,IAS_TEXTDOMAIN);
 						} else {
 							$val = $option['value'];
-							if(!isset( $option['text'] ) {
+							if( !isset( $option['text'] ) ) {
 								$text = __($option['value'],IAS_TEXTDOMAIN);
 							} else {
 								$text = __($option['text'],IAS_TEXTDOMAIN);
