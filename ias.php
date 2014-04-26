@@ -4,7 +4,7 @@ Plugin Name: Instant Affiliate Software Base
 Plugin URI: http://rm.14all.me/projects/instant-affiliate-software-ias-plugin
 Description: The Instant Affiliate Software WordPress plugin is a plugin for WordPress which allows an affiliate to hook up instantly to a broker.
 Author: 3 Musketeers Group
-Version: 0.01
+Version: 0.
 Author URI: http://rm.14all.me/projects/instant-affiliate-software-ias-plugin
 Text Domain: ias
 */

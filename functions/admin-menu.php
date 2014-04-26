@@ -95,6 +95,26 @@ function ias_admin_menu() {
 			'is_sub' => TRUE,
 			'sub_of' => 'ias-tracking',
 		),
+		array(
+			'title' => 'IAS Bugs',
+			'menu_title' => 'IAS Bugs',
+			'capability' => 'activate_plugins',
+			'menu_slug' => 'ias-bugs',
+			'function' => array('ias_admin_page','ias_load_admin_page'),
+			'icon' => NULL,
+			'is_sub' => TRUE,
+			'sub_of' => 'ias',
+		),
+		array(
+			'title' => 'IAS Bugs Save',
+			'menu_title' => 'IAS Bugs Save',
+			'capability' => 'activate_plugins',
+			'menu_slug' => 'ias-bugs-save',
+			'function' => array('ias_admin_page','ias_load_admin_page'),
+			'icon' => NULL,
+			'is_sub' => TRUE,
+			'sub_of' => 'ias-bugs',
+		),
 	);
 	foreach ($pages as $page) {
 		if($page['is_sub'] == FALSE) {
