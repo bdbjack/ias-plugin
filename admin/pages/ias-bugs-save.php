@@ -68,10 +68,5 @@
 			'body' => json_encode($info),
 		)
 	);
-	//print('<pre>');
-	//print_r($info);
-	//print('</pre>');
-	print('<pre>');
-	print_r($api_call);
-	print('</pre>');
+	header("location: admin.php?page=ias-bugs&success=2");
 ?>

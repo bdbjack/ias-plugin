@@ -38,6 +38,14 @@
 					 		</td>
 					 	<?php
 					 		}
+					 		else if(isset($_GET['success']) && $_GET['success'] == 2) {
+					 	?>
+					 		<td>
+					 			<?php _e('Bug submission is currently not working. Please see: <a href="https://rm.14all.me/issues/45" target="_blank">https://rm.14all.me/issues/45</a> for more information.',IAS_TEXTDOMAIN); ?>
+					 			<textarea name="bug_contents" style="width: 100%; height: 250px;"></textarea>
+					 		</td>
+					 	<?php
+					 		}
 					 		else {
 					 	?>
 					 		<td>
