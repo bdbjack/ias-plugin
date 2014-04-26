@@ -22,19 +22,19 @@
 				<tbody>
 				<tr>
 					<th><?php _e('Visit',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="" value="" /></td>
+					<td><input type="url" style="width:100%;" name="tracking_ias_visit" value="<?php print(get_site_option('tracking_ias_visit')); ?>" /></td>
 				</tr>
 				<tr>
 					<th><?php _e('Email Capture',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="" value="" /></td>
+					<td><input type="url" style="width:100%;" name="tracking_ias_capture" value="<?php print(get_site_option('tracking_ias_capture')); ?>" /></td>
 				</tr>
 				<tr>
 					<th><?php _e('Customer Registration',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="" value="" /></td>
+					<td><input type="url" style="width:100%;" name="tracking_ias_registration" value="<?php print(get_site_option('tracking_ias_registration')); ?>" /></td>
 				</tr>
 				<tr>
 					<th><?php _e('Customer Deposit',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="" value="" /></td>
+					<td><input type="url" style="width:100%;" name="tracking_ias_deposit" value="<?php print(get_site_option('tracking_ias_deposit')); ?>" /></td>
 				</tr>
 				<?php
 					do_action('ias_tracking_form_generation');
@@ -50,6 +50,22 @@
 				</tfoot>
 			</table>
 			</form>
+		</div>
+		<div style="float:left; width: 60%;">
+			<h3>Variable Information Macros</h3>
+			<table class="widefat" width="100%" cellpadding="0" cellpadding="0" role="table">
+				<thead>
+					<tr>
+						<td colspan="2">
+							<p><?php _e('The following is a list of Variable Information Macros. These are used to input dynamically changing information into your Postback URLs.',IAS_TEXTDOMAIN); ?></p>
+							<p><?php _e('For more information on Variable Information Macros, please visit ',IAS_TEXTDOMAIN); ?><a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/wiki/Dictionary#Variable_Information_Macros" class="" target="_blank"><?php _e('IAS Wiki - Dictionary - Variable Information Macros',IAS_TEXTDOMAIN); ?></a></p>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?php do_action('show_variable_macros'); ?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
