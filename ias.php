@@ -162,7 +162,7 @@ foreach ($functionsobj as $name => $obj) {
 /**
  * Load all autoloaders for autoloaded classes
  */
-$dir = new RecursiveDirectoryIterator(IAS_BASE . '/auto-loaded-classes');
+$dir = new RecursiveDirectoryIterator(IAS_BASE . '/autoLoadedClasses');
 $iterator = new RecursiveIteratorIterator($dir);
 $functionsobj = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
 foreach ($functionsobj as $name => $obj) {
