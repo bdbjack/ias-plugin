@@ -1,7 +1,7 @@
 <div class="wrap">
 	<h2><?php _e('Instant Affiliate Program',IAS_TEXTDOMAIN); ?></h2>
 	<p><?php _e('Welcome to the IAS Information page. For more information about IAS, visit: ',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin" target="_blank">http://rm.14all.me/projects/instant-affiliate-software-ias-plugin</a>.</p>
-	<p><?php _e('To report any bugs, visit:',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues/new" target="_blank">http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues/new</a> <?php _e('or send an email to:',IAS_TEXTDOMAIN); ?> <a href="mailto:ias_bugs@14all.me" target="_blank">ias_bugs@14all.me</a></p>
+	<p><?php _e('To report any bugs, visit:',IAS_TEXTDOMAIN); ?> <a href="admin.php?page=ias-bugs">IAS Bug Reporting</a> <?php _e('or send an email to:',IAS_TEXTDOMAIN); ?> <a href="mailto:ias_bugs@14all.me" target="_blank">ias_bugs@14all.me</a></p>
 	<div style="float:none; clear:both; display:block; width:100%;overflow-x: auto; margin-bottom: 15px;">
 		<div style="float:left; width:50%;">
 			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table">

@@ -14,8 +14,9 @@ abstract class ias_forms {
 	protected $id = NULL;
 	protected $atts = array(
 		'useChosen' => FALSE,		// Use Chosen Styling
-		'useValidate' => FALSE,		// Use jQuery Validate plugin
-		'useCaptcha' => TRUE,
+		'useValidate' => TRUE,		// Use jQuery Validate plugin
+		'useCaptcha' => FALSE,
+		'responsiveSize' => 'sm',	// Class to use for col- divs for responsive styling
 	);
 	protected $form_head = array(
 		'html' => NULL,
@@ -125,6 +126,142 @@ abstract class ias_forms {
 			array_push($this->validatedionMessages, $field_info['validate']['messages']);
 		}
 		return $html;
+	}
+
+	protected function gen_row_html( $row ) {
+		$cellCount = count($row);
+		$cell_class_number = floor(12 / $cellCount);
+	}
+	
+	// Set up modification functions
+	public function use_chosen( $value = TRUE ) {
+		do_action('ias_form_set_use_chosen',$value);
+		if( $value == TRUE || $value == FALSE ) {
+			$this->atts['useChosen'] = $value;
+			return true;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function use_validate( $value = TRUE ) {
+		do_action('ias_form_set_use_validate',$value);
+		if( $value == TRUE || $value == FALSE ) {
+			$this->atts['useValidate'] = $value;
+			return true;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function use_captcha( $value = TRUE ) {
+		do_action('ias_form_set_use_captcha',$value);
+		if( $value == TRUE || $value == FALSE ) {
+			$this->atts['useCaptcha'] = $value;
+			return true;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function set_response_size( $size = 'sm' ) {
+		do_action('ias_form_set_response_size',$size);
+		if( $size == 'xs' || $size == 'sm' || $size == 'md' || $size == 'lg' ) {
+			$this->atts['responsiveSize'] = $size;
+			return true;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	public function update_form_head_html( $html = NULL , $overwrite = FALSE ) {
+		if(!is_null( $this->form_head['html'] )) {
+			if( $overwrite == FALSE ) {
+				return FALSE;
+			}
+		}
+		do_action('ias_update_form_head_html',$html);
+		$this->form_head['html'] = $html;
+		return TRUE;
+	}
+
+	public function update_form_head_css( $css = NULL , $overwrite = FALSE ) {
+		if(!is_null( $this->form_head['css'] )) {
+			if( $overwrite == FALSE ) {
+				return FALSE;
+			}
+		}
+		do_action('ias_update_form_head_css',$css);
+		$this->form_head['css'] = $css;
+		return TRUE;
+	}
+
+	public function update_form_head_js( $js = NULL , $overwrite = FALSE ) {
+		if(!is_null( $this->form_head['js'] )) {
+			if( $overwrite == FALSE ) {
+				return FALSE;
+			}
+		}
+		do_action('ias_update_form_head_js',$js);
+		$this->form_head['js'] = $js;
+		return TRUE;
+	}
+
+	public function update_form_foot_html( $html = NULL , $overwrite = FALSE ) {
+		if(!is_null( $this->form_foot['html'] )) {
+			if( $overwrite == FALSE ) {
+				return FALSE;
+			}
+		}
+		do_action('ias_update_form_foot_html',$html);
+		$this->form_foot['html'] = $html;
+		return TRUE;
+	}
+
+	public function update_form_foot_css( $css = NULL , $overwrite = FALSE ) {
+		if(!is_null( $this->form_foot['css'] )) {
+			if( $overwrite == FALSE ) {
+				return FALSE;
+			}
+		}
+		do_action('ias_update_form_foot_css',$css);
+		$this->form_foot['css'] = $css;
+		return TRUE;
+	}
+
+	public function update_form_foot_js( $js = NULL , $overwrite = FALSE ) {
+		if(!is_null( $this->form_foot['js'] )) {
+			if( $overwrite == FALSE ) {
+				return FALSE;
+			}
+		}
+		do_action('ias_update_form_foot_js',$js);
+		$this->form_foot['js'] = $js;
+		return TRUE;
+	}
+
+	public function set_form_action( $input = NULL ) {
+		do_action('ias_set_form_action',$input);
+	}
+
+	public function set_form_method( $input = 'POST' ) {
+		do_action('ias_set_form_method',$input);
+	}
+
+	public function set_form_charset( $input = 'UTF-8' ) {
+		do_action('ias_set_form_charset',$input);
+	}
+
+	public function set_form_autocomplete( $input = TRUE ) {
+		do_action('ias_set_form_autocomplete',$input);
+	}
+
+	public function set_form_enctype( $input = 'application/x-www-form-urlencoded' ) {
+		do_action('ias_set_form_enctype',$input);
+	}
+
+	public function set_form_target( $input = '_self' ) {
+		do_action('ias_set_form_target',$input);
 	}
 
 } // end of ias_forms class
