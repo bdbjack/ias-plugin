@@ -3,7 +3,11 @@
 		header("location: admin.php?page=ias-bugs&success=0");
 	}
 	$ip_feedback = wp_remote_get('http://httpbin.org/ip');
-	$ip_feedback_array = json_decode($ip_feedback['body'],true);
+	if(!is_wp_error()) {
+		$ip_feedback_array = json_decode($ip_feedback['body'],true);
+	} else {
+		$ip_feedback_array['origin'] = 'Error';
+	}
 	// Gather Information
 	$info = array(
 		'issue' => array(
@@ -11,6 +15,11 @@
 				'subject' => 'New bug from ' . get_bloginfo('name') . ' (' . get_bloginfo('wpurl') . ')',
 				'project_id' => 18,
 				'tracker_id' => 1,
+				'status' => array(
+						'id' => 1,
+						'name' => "New",
+					),
+				'fixed_version_id' => IAS_VERSION_ID,
 				'description' => $_POST['bug_contents'],
 				'custom_fields' => array(
 					array(

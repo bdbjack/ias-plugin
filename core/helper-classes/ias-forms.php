@@ -131,6 +131,8 @@ abstract class ias_forms {
 	protected function gen_row_html( $row ) {
 		$cellCount = count($row);
 		$cell_class_number = floor(12 / $cellCount);
+		$html = '';
+		return $html;
 	}
 	
 	// Set up modification functions
@@ -242,26 +244,76 @@ abstract class ias_forms {
 
 	public function set_form_action( $input = NULL ) {
 		do_action('ias_set_form_action',$input);
+		$this->form_attr['action'] = $input;
+		return true;
 	}
 
 	public function set_form_method( $input = 'POST' ) {
 		do_action('ias_set_form_method',$input);
+		$this->form_attr['method'] = $input;
+		return true;
 	}
 
 	public function set_form_charset( $input = 'UTF-8' ) {
 		do_action('ias_set_form_charset',$input);
+		$this->form_attr['accept-charset'] = $input;
+		return true;
 	}
 
 	public function set_form_autocomplete( $input = TRUE ) {
 		do_action('ias_set_form_autocomplete',$input);
+		if($input == TRUE) {
+			$this->form_attr['autocomplete'] = 'ON';
+		} else {
+			$this->form_attr['autocomplete'] = 'OFF';
+		}
+		return true;
 	}
 
 	public function set_form_enctype( $input = 'application/x-www-form-urlencoded' ) {
 		do_action('ias_set_form_enctype',$input);
+		$this->form_attr['enctype'] = $input;
+		return true;
 	}
 
 	public function set_form_target( $input = '_self' ) {
 		do_action('ias_set_form_target',$input);
+		$this->form_attr['target'] = $input;
+		return true;
+	}
+
+	public function add_form_attributes( $atts ) {
+		do_action('ias_add_form_attributes',$atts);
+		if(!is_array($atts)) {
+			return FALSE;
+		}
+		foreach ($atts as $key => $value) {
+			if(is_array($value)) {
+				foreach ($value as $r_key => $r_value) {
+					$this->form_attr[$r_key] = $r_value;
+				}
+			} else {
+				$this->form_attr[$key] = $value;
+			}
+		}
+	}
+
+	public function update_form_fields( $fields , $overwrite = FALSE) {
+		do_action('ias_form_update_fields', $fields );
+		if( $this->fields !== array() && $overwrite == FALSE ) {
+			return FALSE;
+		}
+		$this->fields = $fields;
+		return TRUE;
+	}
+
+	public function update_form_layout( $layout , $overwrite ) {
+		do_action('ias_form_update_layout' , $layout , $overwrite );
+		if( $this->layout !== array() && $overwrite == FALSE ) {
+			return FALSE;
+		}
+		$this->layout = $layout;
+		return TRUE;
 	}
 
 } // end of ias_forms class

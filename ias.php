@@ -1,11 +1,7 @@
 <?php
 /*
 Plugin Name: Instant Affiliate Software Base
-Plugin URI: http://rm.14all.me/projects/instant-affiliate-software-ias-plugin
 Description: The Instant Affiliate Software WordPress plugin is a plugin for WordPress which allows an affiliate to hook up instantly to a broker.
-Author: 3 Musketeers Group
-Version: 0.
-Author URI: http://rm.14all.me/projects/instant-affiliate-software-ias-plugin
 Text Domain: ias
 */
 
@@ -26,6 +22,18 @@ if (!defined('IAS_URL_BASE')) {
     define('IAS_URL_BASE', plugin_dir_url( __FILE__ ) );
 }
 
+if (!defined('IAS_PLUGIN_BASENAME')) {
+    define('IAS_PLUGIN_BASENAME', plugin_basename( dirname( __FILE__ ) ) );
+}
+
+if (!defined('IAS_PLUGIN_BASEFOLDER')) {
+    define('IAS_PLUGIN_BASEFOLDER', dirname( __FILE__ ) );
+}
+
+if (!defined('IAS_PLUGIN_FILENAME')) {
+    define('IAS_PLUGIN_FILENAME', str_replace( IAS_PLUGIN_BASEFOLDER . '/', '', plugin_basename(__FILE__) ) );
+}
+
 if (!defined('IAS_TEXTDOMAIN')) {
     define('IAS_TEXTDOMAIN', 'ias');
 }
@@ -36,6 +44,14 @@ if (!defined('IAS_SHOW_ERRORS')) {
 
 if (!defined('IAS_DB_VERSION')) {
     define('IAS_DB_VERSION', 0.01);
+}
+
+if (!defined('IAS_VERSION')) {
+    define('IAS_VERSION', 'Alpha Release');
+}
+
+if (!defined('IAS_VERSION_ID')) {
+    define('IAS_VERSION_ID', 1);
 }
 
 /**
@@ -175,6 +191,11 @@ foreach ($functionsobj as $name => $obj) {
  * Run all hooked functions
  */
 ias_add_all_wp_action_functions();
+
+/**
+ * Run Filter for Plugin Meta Row
+ */
+add_filter( 'plugin_row_meta', 'ias_filter_plugin_meta', 10, 2 );
 
 if(checkBrands() != TRUE) {
 	array_push($ias_sticky_messages, 'Some of your brands are missing critical information required for them to work.<br />Please update them <a href="admin.php?page=ias-brands">here</a>');
