@@ -80,7 +80,7 @@
 			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table">
 				<thead>
 					<tr>
-						<th colspan="2"><?php _e('Latest Activity',IAS_TEXTDOMAIN); ?></th>
+						<th colspan="2"><?php _e('Latest Dev Team Activity',IAS_TEXTDOMAIN); ?></th>
 					</tr>
 					<tr>
 						<td><?php _e('Time',IAS_TEXTDOMAIN); ?></td>
