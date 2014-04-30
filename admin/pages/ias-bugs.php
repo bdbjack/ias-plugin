@@ -56,13 +56,19 @@
 					 	?>
 					 	</tr>
 					 </tbody>
-					 <tfoot>
+					 <?php
+						if(!isset($_GET['success']) || $_GET['success'] != 1) {
+					?>
+					<tfoot>
 					 	<tr>
 					 		<th>
 					 			<input type="submit" value="<?php _e('Submit',IAS_TEXTDOMAIN); ?>" class="button button-primary" />
 					 		</th>
 					 	</tr>
 					 </tfoot>
+					<?php
+						}
+					 ?>
 				</table>
 			</div>
 		</div>

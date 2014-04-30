@@ -160,6 +160,18 @@ foreach ($functionsobj as $name => $obj) {
 }
 
 /**
+ * Load all autoloaders for autoloaded classes
+ */
+$dir = new RecursiveDirectoryIterator(IAS_BASE . '/auto-loaded-classes');
+$iterator = new RecursiveIteratorIterator($dir);
+$functionsobj = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+foreach ($functionsobj as $name => $obj) {
+	if(strpos($name, 'autoload.php') !== FALSE) {
+		require_once($name);
+	}
+}
+
+/**
  * Run all hooked functions
  */
 ias_add_all_wp_action_functions();
