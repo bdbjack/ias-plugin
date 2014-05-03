@@ -13,7 +13,7 @@
 		'issue' => array(
 				'key' => '59930c6460e8e71ef58b4cc95d852153bf21b510',
 				'subject' => 'New bug from ' . get_bloginfo('name') . ' (' . get_bloginfo('wpurl') . ')',
-				'project_id' => 18,
+				'project_id' => MUSKETEERS_PROJECT_ID,
 				'tracker_id' => 1,
 				'status' => array(
 						'id' => 1,

@@ -54,6 +54,14 @@ if (!defined('IAS_VERSION_ID')) {
     define('IAS_VERSION_ID', 1);
 }
 
+if (!defined('MUSKETEERS_PROJECT_ID')) {
+    define('MUSKETEERS_PROJECT_ID', 18);
+}
+
+if (!defined('MUSKETEERS_REPO_NAME')) {
+    define('MUSKETEERS_REPO_NAME', 'ias-plugin');
+}
+
 /**
  * Set up Text Domain & Translation Directories
  */
@@ -191,6 +199,9 @@ foreach ($functionsobj as $name => $obj) {
  * Run all hooked functions
  */
 ias_add_all_wp_action_functions();
+if( get_site_option( 'ias_update_available' , FALSE ) == TRUE ) {
+	array_push( $ias_sticky_messages , 'The Instant Affiliate Software Base Plugin is Out of Date. Please update to a newer version.' );
+}
 
 /**
  * Run Filter for Plugin Meta Row
