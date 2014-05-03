@@ -46,5 +46,6 @@ function ias_update_check () {
  	} else {
  		update_site_option( 'ias_update_available' , FALSE );
  	}
+ 	update_site_option( 'ias_last_update' , time() );
 }
 ?>

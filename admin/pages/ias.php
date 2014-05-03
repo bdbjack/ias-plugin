@@ -1,6 +1,6 @@
 <div class="wrap">
 	<h2><?php _e('Instant Affiliate Program',IAS_TEXTDOMAIN); ?></h2>
-	<p><?php _e('Welcome to the IAS Information page. For more information about IAS, visit: ',IAS_TEXTDOMAIN); ?> <a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin" target="_blank">http://rm.14all.me/projects/instant-affiliate-software-ias-plugin</a>.</p>
+	<p><?php _e('Welcome to the IAS Information page. For more information about IAS, visit: ',IAS_TEXTDOMAIN); ?> <a href="https://rm.14all.me/projects/ias" target="_blank">https://rm.14all.me/projects/ias</a>.</p>
 	<p><?php _e('To report any bugs, visit:',IAS_TEXTDOMAIN); ?> <a href="admin.php?page=ias-bugs">IAS Bug Reporting</a> <?php _e('or send an email to:',IAS_TEXTDOMAIN); ?> <a href="mailto:ias_bugs@14all.me" target="_blank">ias_bugs@14all.me</a></p>
 	<div style="float:none; clear:both; display:block; width:100%;overflow-x: auto; margin-bottom: 15px;">
 		<div style="float:left; width:50%;">
@@ -39,6 +39,46 @@
 						print( $ip_feedback_array['origin'] ); ?></td>
 					</tr>
 				</tbody>
+			</table>
+			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table" style="margin-top: 15px;">
+				<thead>
+					<tr>
+						<th><?php _e('Latest News',IAS_TEXTDOMAIN); ?></th>
+					</tr>
+				</thead>
+				<tbody><?php
+					$raw_xml_fetch = wp_remote_get('https://rm.14all.me/projects/ias/news.atom');
+					if(!is_wp_error( $raw_xml_fetch ) ) {
+						$xml = $raw_xml_fetch['body'];
+						$xml_obj = new SimpleXMLElement($xml);
+						foreach ($xml_obj->entry as $article) {
+						print('<tr>' . "\r\n");
+						?>
+						<td>
+							<h4><?php _e($article->title,IAS_TEXTDOMAIN); ?></h4>
+							<?php
+								if(strlen($article->content) > 300) {
+							?>
+							<p><?php _e(substr($article->content, 0 , 300),IAS_TEXTDOMAIN); ?>...</p>
+							<a href="<?php print($article->link['href']); ?>" target="_blank"><?php _e('View Full Article',IAS_TEXTDOMAIN); ?></a>
+							<?php
+								} else {
+							?>
+							<p><?php _e($article->content,IAS_TEXTDOMAIN); ?></p>
+							<?php
+										}
+							?>
+						</td>
+						<?php
+						print('</tr>' . "\r\n");
+						}
+					}
+				?></tbody>
+				<!-- <tfoot>
+					<tr>
+						<th colspan="2"><a href="http://rm.14all.me/projects/instant-affiliate-software-ias-plugin/issues/new" class="" target="_blank"><?php _e('Open a New Issue',IAS_TEXTDOMAIN); ?></a></th>
+					</tr>
+				</tfoot> -->
 			</table>
 		</div>
 		<div style="float:left; width:50%;">

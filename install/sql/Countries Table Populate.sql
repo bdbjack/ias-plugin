@@ -1,5 +1,5 @@
 INSERT INTO `{{ias}}countries` (`id`, `ISO`, `name`, `prefix`, `region`) VALUES
-(0, '', 'Any', '0', 1),
+(0, '', 'Any', '0', 3),
 (1, 'AF', 'Afghanistan', '93', 3),
 (2, 'AL', 'Albania', '355', 1),
 (3, 'DZ', 'Algeria', '213', 3),

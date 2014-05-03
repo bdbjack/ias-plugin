@@ -3,8 +3,9 @@
 		do_action('ias_main_init');
 		do_action('ias_visit',$_GET);
 		ias_session_start();
+		ias_activate_geoip();
 		$last_ias_update = get_site_option( 'ias_last_update' , 0 );
-		if( time() - $last_ias_update > 3600 ) {
+		if( time() - $last_ias_update > 3600 || get_site_option( 'ias_update_available' , FALSE ) == TRUE ) {
 			ias_updates();
 		}
 	}
@@ -38,6 +39,12 @@
 			do_action('ias_start_session');
 		} else {
 			$_SESSION['reset'] = FALSE;
+		}
+	}
+
+	function ias_activate_geoip() {
+		if(!isset($_SESSION['ias_geoip']) || !is_object($_SESSION['ias_geoip']) ) {
+			$_SESSION['ias_geoip'] = new ias_geoip();
 		}
 	}
 ?>

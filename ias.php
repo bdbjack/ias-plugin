@@ -63,6 +63,17 @@ if (!defined('MUSKETEERS_REPO_NAME')) {
 }
 
 /**
+ * Define Info from Superglobals to regular global variables so they can be accessed by the variable variable method
+ */
+
+if(isset($_SESSION['ias_geoip'])) {
+	$ias_geoip_info = $_SESSION['ias_geoip'];	
+} else {
+	$ias_geoip_info = NULL;
+}
+
+
+/**
  * Set up Text Domain & Translation Directories
  */
 load_plugin_textdomain(IAS_TEXTDOMAIN, false, IAS_BASE . '/languages' );
