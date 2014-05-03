@@ -46,5 +46,6 @@
 		if(!isset($_SESSION['ias_geoip']) || !is_object($_SESSION['ias_geoip']) ) {
 			$_SESSION['ias_geoip'] = new ias_geoip();
 		}
+		$_SESSION['ias_tracking'] = new ias_affiliate_tracking();
 	}
 ?>

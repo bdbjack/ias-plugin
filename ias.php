@@ -72,6 +72,12 @@ if(isset($_SESSION['ias_geoip'])) {
 	$ias_geoip_info = NULL;
 }
 
+if(isset($_SESSION['ias_tracking'])) {
+	$ias_tracking = $_SESSION['ias_tracking'];	
+} else {
+	$ias_tracking = NULL;
+}
+
 
 /**
  * Set up Text Domain & Translation Directories

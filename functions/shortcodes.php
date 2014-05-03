@@ -21,9 +21,9 @@
 		$html .= '<pre>' . "\r\n";
 		$html .= print_r( $_SESSION , true ) . "\r\n";
 		$html .= '</pre>' . "\r\n";
-		$html .= '<pre>' . "\r\n";
-		$html .= print_r( $_SERVER , true ) . "\r\n";
-		$html .= '</pre>' . "\r\n";
+		//$html .= '<pre>' . "\r\n";
+		//$html .= print_r( $_SERVER , true ) . "\r\n";
+		//$html .= '</pre>' . "\r\n";
 	return $html;
 	}
 ?>
