@@ -29,6 +29,7 @@ abstract class ias_forms {
 		'js' => NULL,
 	);
 	protected $form_attr = array(
+		'role' => 'form',
 		'action' => NULL,
 		'method' => 'POST',
 		'accept-charset' => 'UTF-8',
@@ -67,11 +68,12 @@ abstract class ias_forms {
 	protected $validatedionMessages = array();
 	
 	// Set up core functions
-	protected function gen_field_html( $field ) {
+	private function gen_field_html( $field ) {
 		if(!isset($this->fields) || !is_array($this->fields)) {
 			return NULL;
 		}
 		$field_info = $this->fields[$field];
+		$html = '';
 		$html .= '<div class="form-group">' . "\r\n";
 		$html .= '	<label for="' . $this->id . '_' . $field_info['name'] . '">' . $this->id . '_' . $field_info['label'] . '</label>' . "\r\n";
 		switch ($field_info['type']) {
@@ -81,14 +83,18 @@ abstract class ias_forms {
 					$html .= 'data-placeholder="' . $field_info['placeholder'] . '" ';
 				}
 				foreach ($field_info['attributes'] as $key => $value) {
-					$html .= $key . '="' . $vaulue . '" ';
+					$html .= $key . '="' . $value . '" ';
 				}
 				$html .= '>' . "\r\n";
 				if(is_array($field_info['value'])) {
 					foreach ($field_info['value'] as $key => $option) {
 						if(is_numeric($key) || !isset($option['value'])) {
 							$val = $key;
-							$text = __($option,IAS_TEXTDOMAIN);
+							if(is_array($option)) {
+								$text = __($option['text'],IAS_TEXTDOMAIN);
+							} else {
+								$text = __($option,IAS_TEXTDOMAIN);
+							}
 						} else {
 							$val = $option['value'];
 							if( !isset( $option['text'] ) ) {
@@ -115,7 +121,7 @@ abstract class ias_forms {
 					$html .= 'placeholder="' . $field_info['placeholder'] . '" ';
 				}
 				foreach ($field_info['attributes'] as $key => $value) {
-					$html .= $key . '="' . $vaulue . '" ';
+					$html .= $key . '="' . $value . '" ';
 				}
 				$html .= '/>' . "\r\n";
 				break;
@@ -128,14 +134,92 @@ abstract class ias_forms {
 		return $html;
 	}
 
-	protected function gen_row_html( $row ) {
+	private function gen_row_html( $row ) {
 		$cellCount = count($row);
 		$cell_class_number = floor(12 / $cellCount);
-		$html = '';
+		$html = '<div class="row">';
+		foreach ( $row as $field ) {
+			$html .= '	<div class="col=' . $this->atts['responsiveSize'] . '-' . $cell_class_number . '">';
+			$html .= $this->gen_field_html( $field );
+			$html .= '	</div>';
+		}
+		$html .= '</div>';
 		return $html;
+	}
+
+	protected function get_form_html() {
+		$unique_name = substr( md5( time() . ip() . rand() ) , 0 , 10 );
+		$this->form_attr['id'] = $unique_name;
+		$this->form_attr['name'] = $unique_name;
+		$this->id = $unique_name;
+		$html = '';
+		# Put the Header styles, html and then JS
+		if(!is_null($this->form_head['css'])) {
+			$html .= '	' . '<style type="text/css">' . "\r\n";
+			$html .= '	' . $this->form_head['css'] . "\r\n";
+			$html .= '	' . '</style>' . "\r\n";
+		}
+		if(!is_null($this->form_head['html'])) {
+			$html .= '	' . $this->form_head['html'] . "\r\n";
+		}
+		if(!is_null($this->form_head['js'])) {
+			$html .= '	' . '<script type="text/javascript">' . "\r\n";
+			$html .= '	' . $this->form_head['js'] . "\r\n";
+			$html .= '	' . '</script>' . "\r\n";
+		}
+		# Start Laying down the fields
+		$html .= '<form ';
+		foreach ($this->form_attr as $key => $value) {
+			$html .= $key . '="' . $value .'" ';
+		}
+		$html .= '>' . "\r\n";
+		$html .= '	' . '	<input type="hidden" name="form_id" value="' . $this->id . '" />' . "\r\n";
+		$html .= '	' . wp_nonce_field( get_class() , 'form_' . $this->id . '_nonce' ) . "\r\n";
+		foreach ($this->layout as $row) {
+			$html .= $this->gen_row_html( $row );
+		}
+		$html .= '</form>';
+		# Put the Footer styles, html and then JS
+		if(!is_null($this->form_foot['css'])) {
+			$html .= '	' . '<style type="text/css">' . "\r\n";
+			$html .= '	' . $this->form_foot['css'] . "\r\n";
+			$html .= '	' . '</style>' . "\r\n";
+		}
+		if(!is_null($this->form_foot['html'])) {
+			$html .= $this->form_foot['html'] . "\r\n";
+		}
+		if(!is_null($this->form_foot['js'])) {
+			$html .= '	' . '<script type="text/javascript">' . "\r\n";
+			$html .= '	' . $this->form_foot['js'] . "\r\n";
+			$html .= '	' . '</script>' . "\r\n";
+		}
+		if( $this->atts['useChosen'] == TRUE ) {
+			$html .= '	' .'<script type="text/javascript">' . "\r\n";
+			$html .= '	' .'		jQuery(function() {' . "\r\n";
+			$html .= '	' .'			jQuery("#' . $this->id . ' select").chosen({enable_split_word_search:true,no_results_text:"' . __('No Match Found',IAS_TEXTDOMAIN) . '",search_contains:true,width:"100%"});' . "\r\n";
+			$html .= '	' .'		});' . "\r\n";
+			$html .= '	' .'</script>' . "\r\n";
+		}
+		if( $this->atts['useValidate'] == TRUE ) {
+			$html .= '	' .'<script type="text/javascript">' . "\r\n";
+			$html .= '	' .'		jQuery(function() {' . "\r\n";
+			$html .= '	' .'			jQuery("#' . $this->id . '").validate(';
+			$html .= json_encode(array(
+					'rules' => $this->validationRules,
+					'messages' => $this->validatedionMessages,
+				));
+			$html .= ')' . "\r\n";
+			$html .= '	' .'		});' . "\r\n";
+			$html .= '	' .'</script>' . "\r\n";
+		}
+		$this->html = $html;
 	}
 	
 	// Set up modification functions
+	public function regenerate() {
+		$this->get_form_html();
+	}
+	
 	public function use_chosen( $value = TRUE ) {
 		do_action('ias_form_set_use_chosen',$value);
 		if( $value == TRUE || $value == FALSE ) {
@@ -307,7 +391,7 @@ abstract class ias_forms {
 		return TRUE;
 	}
 
-	public function update_form_layout( $layout , $overwrite ) {
+	public function update_form_layout( $layout , $overwrite = FALSE) {
 		do_action('ias_form_update_layout' , $layout , $overwrite );
 		if( $this->layout !== array() && $overwrite == FALSE ) {
 			return FALSE;

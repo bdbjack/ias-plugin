@@ -57,9 +57,9 @@
 						<td>
 							<h4><?php _e($article->title,IAS_TEXTDOMAIN); ?></h4>
 							<?php
-								if(strlen($article->content) > 300) {
+								if(strlen($article->content) > 450) {
 							?>
-							<p><?php _e(substr($article->content, 0 , 300),IAS_TEXTDOMAIN); ?>...</p>
+							<p><?php _e(substr($article->content, 0 , 450),IAS_TEXTDOMAIN); ?>...</p>
 							<a href="<?php print($article->link['href']); ?>" target="_blank"><?php _e('View Full Article',IAS_TEXTDOMAIN); ?></a>
 							<?php
 								} else {
@@ -85,7 +85,7 @@
 			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table">
 				<thead>
 					<tr>
-						<th colspan="2"><?php _e('Open Plugin Issues',IAS_TEXTDOMAIN); ?></th>
+						<th colspan="2"><?php _e('Open Plugin Issues for version',IAS_TEXTDOMAIN); ?> <?php _e(IAS_VERSION,IAS_TEXTDOMAIN); ?></th>
 					</tr>
 					<tr>
 						<td><?php _e('Issue',IAS_TEXTDOMAIN); ?></td>
@@ -93,7 +93,7 @@
 					</tr>
 				</thead>
 				<tbody><?php
-					$raw_xml_fetch = wp_remote_get('https://rm.14all.me/projects/ias/issues.atom?key=cdf829065376dbf75a6bb57829f2abb862c611e3');
+					$raw_xml_fetch = wp_remote_get('https://rm.14all.me/projects/ias/issues.atom?c%5B%5D=tracker&c%5B%5D=status&c%5B%5D=priority&c%5B%5D=subject&c%5B%5D=assigned_to&c%5B%5D=updated_on&f%5B%5D=status_id&f%5B%5D=fixed_version_id&f%5B%5D=&group_by=&key=cdf829065376dbf75a6bb57829f2abb862c611e3&op%5Bfixed_version_id%5D=%3D&op%5Bstatus_id%5D=o&set_filter=1&utf8=%E2%9C%93&v%5Bfixed_version_id%5D%5B%5D=' . IAS_VERSION_ID);
 					if(!is_wp_error( $raw_xml_fetch ) ) {
 						$xml = $raw_xml_fetch['body'];
 						$xml_obj = new SimpleXMLElement($xml);
@@ -113,11 +113,7 @@
 					</tr>
 				</tfoot> -->
 			</table>
-		</div>
-	</div>
-	<div style="float:none; clear:both; display:block; width:100%;overflow-x: auto;">
-		<div style="float:right; width:50%;">
-			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table">
+			<table class="widefat" width="100%" cellpadding="0" cellspacing="0" role="table" style="margin-top: 15px;">
 				<thead>
 					<tr>
 						<th colspan="2"><?php _e('Latest Dev Team Activity',IAS_TEXTDOMAIN); ?></th>
@@ -143,6 +139,11 @@
 					}
 				?></tbody>
 			</table>
+		</div>
+	</div>
+	<div style="float:none; clear:both; display:block; width:100%;overflow-x: auto;">
+		<div style="float:right; width:50%;">
+			
 		</div>
 	</div>
 </div>

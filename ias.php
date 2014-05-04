@@ -63,23 +63,6 @@ if (!defined('MUSKETEERS_REPO_NAME')) {
 }
 
 /**
- * Define Info from Superglobals to regular global variables so they can be accessed by the variable variable method
- */
-
-if(isset($_SESSION['ias_geoip'])) {
-	$ias_geoip_info = $_SESSION['ias_geoip'];	
-} else {
-	$ias_geoip_info = NULL;
-}
-
-if(isset($_SESSION['ias_tracking'])) {
-	$ias_tracking = $_SESSION['ias_tracking'];	
-} else {
-	$ias_tracking = NULL;
-}
-
-
-/**
  * Set up Text Domain & Translation Directories
  */
 load_plugin_textdomain(IAS_TEXTDOMAIN, false, IAS_BASE . '/languages' );
@@ -211,6 +194,15 @@ foreach ($functionsobj as $name => $obj) {
 		require_once($name);
 	}
 }
+
+/**
+ * Define Info from Superglobals to regular global variables so they can be accessed by the variable variable method
+ */
+
+$ias_get = $_GET;
+$ias_post = $_POST;
+$ias_server = $_SERVER;
+$ias_session = array();
 
 /**
  * Run all hooked functions

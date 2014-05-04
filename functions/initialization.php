@@ -1,13 +1,18 @@
 <?php
 	function ias_init() {
+		global $ias_session;
 		do_action('ias_main_init');
 		do_action('ias_visit',$_GET);
 		ias_session_start();
 		ias_activate_geoip();
+		ias_activate_tracking();
+		ias_perma_get();
 		$last_ias_update = get_site_option( 'ias_last_update' , 0 );
 		if( time() - $last_ias_update > 3600 || get_site_option( 'ias_update_available' , FALSE ) == TRUE ) {
 			ias_updates();
 		}
+		$ias_session = $_SESSION;
+		remove_filter( 'the_content', 'wpautop' );
 	}
 
 	function ias_filter_plugin_meta( $plugin_meta, $plugin_file, $plugin_data = NULL, $status = NULL ) {
@@ -46,6 +51,38 @@
 		if(!isset($_SESSION['ias_geoip']) || !is_object($_SESSION['ias_geoip']) ) {
 			$_SESSION['ias_geoip'] = new ias_geoip();
 		}
+	}
+
+	function ias_activate_tracking() {
 		$_SESSION['ias_tracking'] = new ias_affiliate_tracking();
 	}
+
+	function ias_perma_get() {
+		if(!isset($_SESSION['perma_get'])) {
+			$_SESSION['perma_get'] = array();
+		}
+		$banned_get = array(
+			'page',
+			'post',
+			'action',
+			'message',
+			'a_aid',
+			'a_bid',
+			'a_cid',
+			'tracker',
+		);
+		foreach ($_GET as $key => $value) {
+			if(!in_array($key, $banned_get)) {
+				$_SESSION['perma_get'][$key] = $value;
+			}
+		}
+	}
+
+	function cleanup_shortcode_fix($content) {
+	    $array = array('<p>[' => '[', ']</p>' => ']', ']<br />' => ']', ']<br>' => ']');
+	    $content = strtr($content, $array);
+	    return $content;
+	}
+	
+	add_filter('the_content', 'cleanup_shortcode_fix');
 ?>
