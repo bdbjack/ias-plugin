@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS `{{ias}}tracking` (
   `tracker` text NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
