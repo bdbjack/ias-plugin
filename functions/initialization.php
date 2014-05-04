@@ -13,6 +13,7 @@
 		}
 		$ias_session = $_SESSION;
 		remove_filter( 'the_content', 'wpautop' );
+		form_actions();
 	}
 
 	function ias_filter_plugin_meta( $plugin_meta, $plugin_file, $plugin_data = NULL, $status = NULL ) {
@@ -85,4 +86,26 @@
 	}
 	
 	add_filter('the_content', 'cleanup_shortcode_fix');
+
+	function form_actions() {
+		if(!isset($_POST['action']) && !isset($_POST['form_id'])) {
+			return FALSE;
+		}
+		$id = $_POST['form_id'];
+		$nonce = $_POST[ 'form_' . $id . '_nonce' ];
+		$nonce_response = wp_verify_nonce( $nonce );
+		$actions_array = array(
+			'login' => array( 'ias_login_form' , 'action' ),
+		);
+		if( isset( $actions_array[$_POST['action']] ) ) {
+			$action = $actions_array[$_POST['action']];
+			if( is_array($action) ) {
+				$class = $action[0];
+				$method = $action[1];
+				$class::{$method}();
+			} else {
+				$action();
+			}
+		}
+	}
 ?>

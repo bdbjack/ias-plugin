@@ -191,7 +191,10 @@ class ias_login_form extends ias_forms {
 	}
 
 	public static function action() {
-
+		$cust = ias_customer::login_validate( $_POST['brand'] , $_POST['email'] , $_POST['password'] );
+		print('<pre>');
+		print_r($cust);
+		print('</pre>');
 	}
 } // end of ias_login_form class
 
