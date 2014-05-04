@@ -50,4 +50,21 @@ function ias_wp_enqueue_style() {
 		wp_enqueue_style($style['handle']);
 	}
 }
+
+function ias_admin_enqueue_scripts() {
+	$scripts = array(
+		array(
+			'handle' => 'ace',
+			'src' => '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js',
+			'deps' => array('jquery'),
+			'ver' => NULL,
+			'in_footer' => FALSE,
+		),
+	);
+	foreach ($scripts as $script) {
+		wp_deregister_script($script['handle']);
+		wp_register_script($script['handle'],$script['src'],$script['deps'],$script['ver'],$script['in_footer']);
+		wp_enqueue_script($script['handle']);
+	}
+}
 ?>

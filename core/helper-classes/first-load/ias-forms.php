@@ -17,6 +17,7 @@ abstract class ias_forms {
 		'useValidate' => TRUE,		// Use jQuery Validate plugin
 		'useCaptcha' => FALSE,
 		'responsiveSize' => 'sm',	// Class to use for col- divs for responsive styling
+		'noformtags' => FALSE,
 	);
 	protected $form_head = array(
 		'html' => NULL,
@@ -74,8 +75,10 @@ abstract class ias_forms {
 		}
 		$field_info = $this->fields[$field];
 		$html = '';
-		$html .= '<div class="form-group">' . "\r\n";
-		$html .= '	<label for="' . $this->id . '_' . $field_info['name'] . '">' . $this->id . '_' . $field_info['label'] . '</label>' . "\r\n";
+		if( $field_info['type'] !== 'hidden' ) {
+			$html .= '<div class="form-group">' . "\r\n";
+			$html .= '	<label for="' . $this->id . '_' . $field_info['name'] . '">' . $field_info['label'] . '</label>' . "\r\n";
+		}
 		switch ($field_info['type']) {
 			case 'select':
 				$html .= '<select class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . ' "';
@@ -87,32 +90,32 @@ abstract class ias_forms {
 				}
 				$html .= '>' . "\r\n";
 				if(is_array($field_info['value'])) {
-					foreach ($field_info['value'] as $key => $option) {
-						if(is_numeric($key) || !isset($option['value'])) {
-							$val = $key;
-							if(is_array($option)) {
-								$text = __($option['text'],IAS_TEXTDOMAIN);
-							} else {
-								$text = __($option,IAS_TEXTDOMAIN);
-							}
-						} else {
-							$val = $option['value'];
-							if( !isset( $option['text'] ) ) {
-								$text = __($option['value'],IAS_TEXTDOMAIN);
-							} else {
-								$text = __($option['text'],IAS_TEXTDOMAIN);
+					foreach ( $field_info['value'] as $option ) {
+						$html .= '<option value="' . $option['value'] . '"';
+						if(isset($field_info['default'])) {
+							if($option['value'] == $field_info['default']) {
+								$html .= ' selected';
 							}
 						}
-						$html .= '<option value="' . $val . '" ';
-						foreach ($option as $attKey => $attval) {
-							if($attKey !== 'value' && $attKey !== 'text') {
-								$html .= $attKey . '="' . $attval . '" ';
-							}
+						$html .= '>' . __( $option['name'] , IAS_TEXTDOMAIN );
+						if( isset( $option['URL'] ) ) {
+							$html .= ' (' . $option['URL'] . ')';
 						}
-						$html .'>' . $text . '</option>' . "\r\n";
+						$html .= '</option>' . "\r\n";
 					}
 				}
 				$html .= '</select>' . "\r\n";
+				break;
+
+			case 'submit':
+				$html .= '<input type="' . $field_info['type'] . '" class="form-control btn btn-success button" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . ' "';
+				if(!isset($field_info['placeholder']) || !is_null($field_info['placeholder']) || strlen($field_info['placeholder']) != 0 ) {
+					$html .= 'placeholder="' . $field_info['placeholder'] . '" ';
+				}
+				foreach ($field_info['attributes'] as $key => $value) {
+					$html .= $key . '="' . $value . '" ';
+				}
+				$html .= '/>' . "\r\n";
 				break;
 			
 			default:
@@ -126,7 +129,9 @@ abstract class ias_forms {
 				$html .= '/>' . "\r\n";
 				break;
 		}
-		$html .= '</div>' . "\r\n";
+		if( $field_info['type'] !== 'hidden' ) {
+			$html .= '</div>' . "\r\n";
+		}
 		if($field_info['validate'] !== FALSE) {
 			array_push($this->validationRules, $field_info['validate']['rules']);
 			array_push($this->validatedionMessages, $field_info['validate']['messages']);
@@ -139,7 +144,7 @@ abstract class ias_forms {
 		$cell_class_number = floor(12 / $cellCount);
 		$html = '<div class="row">';
 		foreach ( $row as $field ) {
-			$html .= '	<div class="col=' . $this->atts['responsiveSize'] . '-' . $cell_class_number . '">';
+			$html .= '	<div class="col-' . $this->atts['responsiveSize'] . '-' . $cell_class_number . '">';
 			$html .= $this->gen_field_html( $field );
 			$html .= '	</div>';
 		}
@@ -168,17 +173,21 @@ abstract class ias_forms {
 			$html .= '	' . '</script>' . "\r\n";
 		}
 		# Start Laying down the fields
-		$html .= '<form ';
-		foreach ($this->form_attr as $key => $value) {
-			$html .= $key . '="' . $value .'" ';
+		if($this->atts['noformtags'] == FALSE ) {
+			$html .= '<form ';
+			foreach ($this->form_attr as $key => $value) {
+				$html .= $key . '="' . $value .'" ';
+			}
+			$html .= '>' . "\r\n";
 		}
-		$html .= '>' . "\r\n";
 		$html .= '	' . '	<input type="hidden" name="form_id" value="' . $this->id . '" />' . "\r\n";
 		$html .= '	' . wp_nonce_field( get_class() , 'form_' . $this->id . '_nonce' ) . "\r\n";
 		foreach ($this->layout as $row) {
 			$html .= $this->gen_row_html( $row );
 		}
-		$html .= '</form>';
+		if($this->atts['noformtags'] == FALSE ) {
+			$html .= '</form>';
+		}
 		# Put the Footer styles, html and then JS
 		if(!is_null($this->form_foot['css'])) {
 			$html .= '	' . '<style type="text/css">' . "\r\n";
@@ -258,6 +267,10 @@ abstract class ias_forms {
 		} else {
 			return FALSE;
 		}
+	}
+
+	public function disable_form_tags() {
+		$this->atts['noformtags'] = TRUE;
 	}
 	
 	public function update_form_head_html( $html = NULL , $overwrite = FALSE ) {
