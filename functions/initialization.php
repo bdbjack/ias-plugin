@@ -84,8 +84,6 @@
 	    $content = strtr($content, $array);
 	    return $content;
 	}
-	
-	add_filter('the_content', 'cleanup_shortcode_fix');
 
 	function form_actions() {
 		if(!isset($_POST['action']) && !isset($_POST['form_id'])) {
@@ -108,4 +106,35 @@
 			}
 		}
 	}
+
+	function show_client_errors( $content ) {
+		global $ias_session;
+		if(isset($_SESSION['client_errors']) && is_array($_SESSION['client_errors'])) {
+			$html = '';
+			foreach ($_SESSION['client_errors'] as $error) {
+				$html .= '<div class="alert alert-danger">' . "\r\n";
+				$html .= '	' . __( $error , IAS_TEXTDOMAIN ) . "\r\n";
+				$html .= '</div>' . "\r\n";
+			}
+			unset($_SESSION['client_errors']);
+			unset($ias_session['client_errors']);
+			return $html . $content;
+		} else {
+			return $content;
+		}
+	}
+
+	function push_client_error( $error ) {
+		if(!isset($_SESSION['client_errors'])) {
+			$_SESSION['client_errors'] = array();
+		}
+		array_push( $_SESSION['client_errors'] , $error );
+	}
+
+	/**
+	 * Add some filters
+	 */
+
+	add_filter('the_content', 'cleanup_shortcode_fix');
+	add_filter('the_content', 'show_client_errors');
 ?>
