@@ -94,6 +94,7 @@
 		$nonce_response = wp_verify_nonce( $nonce );
 		$actions_array = array(
 			'login' => array( 'ias_login_form' , 'action' ),
+			'logout' => array( 'ias_login_form' , 'logout' ),
 		);
 		if( isset( $actions_array[$_POST['action']] ) ) {
 			$action = $actions_array[$_POST['action']];

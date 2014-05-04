@@ -15,8 +15,8 @@ class ias_login_form extends ias_forms {
 	
 	function __construct( $layout = NULL ) {
 		global $ias_session, $wpdb;
-		if(isset($ias_session['perma_get']['email'])) {
-			$email = $ias_session['perma_get']['email'];
+		if(isset($_SESSION['perma_get']['email'])) {
+			$email = $_SESSION['perma_get']['email'];
 		}
 		else {
 			$email = NULL;
@@ -143,7 +143,18 @@ class ias_login_form extends ias_forms {
 			}
 		}
 		$form->regenerate();
-		return $form->html;
+		if(!isset($_SESSION['ias_customer']) || $_SESSION['ias_customer']->valid == FALSE ) {
+			return $form->html;
+		}
+		else {
+			$html = '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
+			$html .= '	<input type="hidden" name="action" value="logout" />';
+			$html .= '	<input type="hidden" name="form_id" value="none" />';
+			$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
+			$html .= '	<input type="submit" class="btn btn-success button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
+			$html .= '</form>';
+			return $html;
+		}
 	}
 
 	public static function shortcode( $atts, $content = NULL ) {
@@ -186,15 +197,38 @@ class ias_login_form extends ias_forms {
 			return htmlentities( print_r( $form , true ) );
 		}
 		else {
-			return $form->html;
+			if(!isset($_SESSION['ias_customer']) || $_SESSION['ias_customer']->valid == FALSE ) {
+				return $form->html;
+			}
+			else {
+				$html = '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
+				$html .= '	<input type="hidden" name="action" value="logout" />';
+				$html .= '	<input type="hidden" name="form_id" value="none" />';
+				$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
+				$html .= '	<input type="submit" class="btn btn-success button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
+				$html .= '</form>';
+				return $html;
+			}
 		}
 	}
 
 	public static function action() {
+		global $ias_session;
 		$cust = ias_customer::login_validate( $_POST['brand'] , $_POST['email'] , $_POST['password'] );
-		print('<pre>');
-		print_r($cust);
-		print('</pre>');
+		if( $cust->valid == TRUE ) {
+			$_SESSION['ias_customer'] = $cust;
+			$ias_session = $cust;
+		}
+		else {
+			unset($_SESSION['ias_customer']);
+			unset($_SESSION['ias_session']);
+		}
+	}
+
+	public static function logout() {
+		global $ias_session;
+		unset($_SESSION['ias_customer']);
+		unset($_SESSION['ias_session']);
 	}
 } // end of ias_login_form class
 
