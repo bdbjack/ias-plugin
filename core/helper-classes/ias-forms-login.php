@@ -123,9 +123,23 @@ class ias_login_form extends ias_forms {
 			'form_attributes' => 'add_form_attributes',
 		);
 		foreach ($instance as $key => $value) {
-			if(isset($possible_atts[$key])) {
+			if(isset($possible_atts[$key]) && $key !== 'use_chosen' && $key !== 'use_validate' ) {
 				$function = $possible_atts[$key];
 				$form->$function( $value );
+			}
+			else if ( isset($possible_atts[$key]) && $key == 'use_chosen' ) {
+				if( $value == 1 ) {
+					$form->use_chosen( TRUE );
+				} else {
+					$form->use_chosen( FALSE );
+				}
+			}
+			else if ( isset($possible_atts[$key]) && $key == 'use_validate' ) {
+				if( $value == 1 ) {
+					$form->use_validate( TRUE );
+				} else {
+					$form->use_validate( FALSE );
+				}
 			}
 		}
 		$form->regenerate();
@@ -174,7 +188,10 @@ class ias_login_form extends ias_forms {
 		else {
 			return $form->html;
 		}
-		
+	}
+
+	public static function action() {
+
 	}
 } // end of ias_login_form class
 

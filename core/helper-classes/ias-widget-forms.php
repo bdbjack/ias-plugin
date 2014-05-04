@@ -24,9 +24,18 @@
 					break;
 
 				case 'checkbox':
-				$html .= '<input type="checkbox" id="' . $field['id'] . '" name="' . $field['name'] . '" ';
-				$html .= ( $field['value'] == TRUE ) ? 'checked="checked"' : '';
-				$html .= '/>' . "\r\n";
+				$html .= '<select style="display:block; width: 100%;" id="' . $field['id'] . '" name="' . $field['name'] . '">' . "\r\n";
+				$html .= '	<option value="1"';
+				if( $field['value'] == 1 ) {
+					$html .= ' selected';
+				}
+				$html .= '>' . __('Yes',IAS_TEXTDOMAIN) . '</option>' . "\r\n";
+				$html .= '	<option value="0"';
+				if( $field['value'] == 0 ) {
+					$html .= ' selected';
+				}
+				$html .= '>' . __('No',IAS_TEXTDOMAIN) . '</option>' . "\r\n";
+				$html .= '</select>';
 					break;
 				
 				default:

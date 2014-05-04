@@ -126,6 +126,7 @@ abstract class ias_forms {
 				foreach ($field_info['attributes'] as $key => $value) {
 					$html .= $key . '="' . $value . '" ';
 				}
+				$html .= 'value="' . $field_info['value'] . '"';
 				$html .= '/>' . "\r\n";
 				break;
 		}
@@ -229,34 +230,22 @@ abstract class ias_forms {
 		$this->get_form_html();
 	}
 	
-	public function use_chosen( $value = TRUE ) {
+	public function use_chosen( $value = FALSE ) {
 		do_action('ias_form_set_use_chosen',$value);
-		if( $value == TRUE || $value == FALSE ) {
-			$this->atts['useChosen'] = $value;
-			return true;
-		} else {
-			return FALSE;
-		}
+		$this->atts['useChosen'] = $value;
+		return TRUE;
 	}
 
-	public function use_validate( $value = TRUE ) {
+	public function use_validate( $value = FALSE ) {
 		do_action('ias_form_set_use_validate',$value);
-		if( $value == TRUE || $value == FALSE ) {
-			$this->atts['useValidate'] = $value;
-			return true;
-		} else {
-			return FALSE;
-		}
+		$this->atts['useValidate'] = $value;
+		return TRUE;
 	}
 
-	public function use_captcha( $value = TRUE ) {
+	public function use_captcha( $value = FALSE ) {
 		do_action('ias_form_set_use_captcha',$value);
-		if( $value == TRUE || $value == FALSE ) {
-			$this->atts['useCaptcha'] = $value;
-			return true;
-		} else {
-			return FALSE;
-		}
+		$this->atts['useCaptcha'] = $value;
+		return TRUE;
 	}
 
 	public function set_response_size( $size = 'sm' ) {
