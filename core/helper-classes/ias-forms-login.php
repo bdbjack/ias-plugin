@@ -108,11 +108,12 @@ class ias_login_form extends ias_forms {
 			'use_validate' => 'use_validate',
 			'use_captcha' => 'use_captcha',
 			'response_size' => 'set_response_size',
-			'form_head_css' => 'update_form_head_css',
-			'form_head_js' => 'update_form_head_js',
-			'form_foot_html' => 'update_form_foot_html',
-			'form_foot_css' => 'update_form_foot_css',
-			'form_foot_js' => 'update_form_foot_js',
+			'header_html' => 'update_form_head_html',
+			'header_css' => 'update_form_head_css',
+			'header_js' => 'update_form_head_js',
+			'footer_html' => 'update_form_foot_html',
+			'footer_css' => 'update_form_foot_css',
+			'footer_js' => 'update_form_foot_js',
 			'form_action' => 'set_form_action',
 			'form_method' => 'set_form_method',
 			'form_charset' => 'set_form_charset',
@@ -121,6 +122,12 @@ class ias_login_form extends ias_forms {
 			'form_target' => 'set_form_target',
 			'form_attributes' => 'add_form_attributes',
 		);
+		foreach ($instance as $key => $value) {
+			if(isset($possible_atts[$key])) {
+				$function = $possible_atts[$key];
+				$form->$function( $value );
+			}
+		}
 		$form->regenerate();
 		return $form->html;
 	}
@@ -189,6 +196,60 @@ class ias_login_form_widget extends WP_Widget {
 	public function form( $instance ) {
 		$html = '<div style="min-height: 200px; margin-bottom: 20px;">' . "\r\n";
 		$fields = array(
+			'form_action' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_action' ),
+				'label' => 'Form Action',
+				'placeholder' => 'Form Action',
+				'id' => $this->get_field_id( 'form_action' ),
+				'value' => ( isset( $instance['form_action'] ) ) ? $instance['form_action'] : NULL,
+				'attributes' => NULL,
+				),
+			'form_method' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_method' ),
+				'label' => 'Form Method',
+				'placeholder' => 'Form Method',
+				'id' => $this->get_field_id( 'form_method' ),
+				'value' => ( isset( $instance['form_method'] ) ) ? $instance['form_method'] : 'POST',
+				'attributes' => NULL,
+				),
+			'form_charset' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_charset' ),
+				'label' => 'Form Character Set',
+				'placeholder' => 'Form Character Set',
+				'id' => $this->get_field_id( 'form_charset' ),
+				'value' => ( isset( $instance['form_charset'] ) ) ? $instance['form_charset'] : 'UTF-8',
+				'attributes' => NULL,
+				),
+			'form_autocomplete' => array(
+				'type' => 'checkbox',
+				'name' => $this->get_field_name( 'form_autocomplete' ),
+				'label' => 'Form autocompletes',
+				'placeholder' => 'Form autocompletes',
+				'id' => $this->get_field_id( 'form_autocomplete' ),
+				'value' => ( isset( $instance['form_autocomplete'] ) ) ? $instance['form_autocomplete'] : FALSE,
+				'attributes' => NULL,
+				),
+			'form_enctype' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_enctype' ),
+				'label' => 'Form Encoding Type',
+				'placeholder' => 'Form Encoding Type',
+				'id' => $this->get_field_id( 'form_enctype' ),
+				'value' => ( isset( $instance['form_enctype'] ) ) ? $instance['form_enctype'] : 'application/x-www-form-urlencoded',
+				'attributes' => NULL,
+				),
+			'form_target' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_target' ),
+				'label' => 'Target Window',
+				'placeholder' => 'Target Window',
+				'id' => $this->get_field_id( 'form_target' ),
+				'value' => ( isset( $instance['form_target'] ) ) ? $instance['form_target'] : '_self',
+				'attributes' => NULL,
+				),
 			'header_html' => array(
 				'type' => 'textarea',
 				'name' => $this->get_field_name( 'header_html' ),
