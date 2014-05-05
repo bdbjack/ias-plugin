@@ -31,7 +31,7 @@ abstract class ias_forms {
 	);
 	protected $form_attr = array(
 		'role' => 'form',
-		'action' => NULL,
+		'action' => 'javascript:false;',
 		'method' => 'POST',
 		'accept-charset' => 'UTF-8',
 		'autocomplete' => 'off',
@@ -66,7 +66,7 @@ abstract class ias_forms {
 	protected $fields = array();
 	protected $layout = array();
 	protected $validationRules = array();
-	protected $validatedionMessages = array();
+	protected $validationMessages = array();
 	
 	// Set up core functions
 	private function gen_field_html( $field ) {
@@ -81,7 +81,7 @@ abstract class ias_forms {
 		}
 		switch ($field_info['type']) {
 			case 'select':
-				$html .= '<select class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . ' "';
+				$html .= '<select class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . '"';
 				if(!isset($field_info['placeholder']) || !is_null($field_info['placeholder']) || strlen($field_info['placeholder']) != 0 ) {
 					$html .= 'data-placeholder="' . $field_info['placeholder'] . '" ';
 				}
@@ -113,7 +113,7 @@ abstract class ias_forms {
 				break;
 
 			case 'submit':
-				$html .= '<input type="' . $field_info['type'] . '" class="form-control btn btn-success button" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . ' "';
+				$html .= '<input type="' . $field_info['type'] . '" class="form-control btn btn-success button" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . '"';
 				if(!isset($field_info['placeholder']) || !is_null($field_info['placeholder']) || strlen($field_info['placeholder']) != 0 ) {
 					$html .= 'placeholder="' . $field_info['placeholder'] . '" ';
 				}
@@ -124,7 +124,7 @@ abstract class ias_forms {
 				break;
 			
 			default:
-				$html .= '<input type="' . $field_info['type'] . '" class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . ' "';
+				$html .= '<input type="' . $field_info['type'] . '" class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . '"';
 				if(!isset($field_info['placeholder']) || !is_null($field_info['placeholder']) || strlen($field_info['placeholder']) != 0 ) {
 					$html .= 'placeholder="' . $field_info['placeholder'] . '" ';
 				}
@@ -139,8 +139,16 @@ abstract class ias_forms {
 			$html .= '</div>' . "\r\n";
 		}
 		if($field_info['validate'] !== FALSE) {
-			array_push($this->validationRules, $field_info['validate']['rules']);
-			array_push($this->validatedionMessages, $field_info['validate']['messages']);
+			$rules = array();
+			foreach ($field_info['validate']['rules'] as $rule => $val) {
+				$rules[$rule] = str_replace( '{id}' , '#' . $this->id . '_' , $val );
+			}
+			$this->validationRules[$field_info['name']] = $rules;
+			$message = array();
+			foreach ($field_info['validate']['messages'] as $rule => $val) {
+				$message[$rule] = str_replace( '{id}' , '#' . $this->id . '_' , $val );
+			}
+			$this->validationMessages[$field_info['name']] = $message;
 		}
 		return $html;
 	}
@@ -221,7 +229,7 @@ abstract class ias_forms {
 			$html .= '	' .'			jQuery("#' . $this->id . '").validate(';
 			$html .= json_encode(array(
 					'rules' => $this->validationRules,
-					'messages' => $this->validatedionMessages,
+					'messages' => $this->validationMessages,
 				));
 			$html .= ')' . "\r\n";
 			$html .= '	' .'		});' . "\r\n";

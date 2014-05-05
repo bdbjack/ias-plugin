@@ -284,6 +284,14 @@
 		else {
 			$this->update_form_layout( $this->defaultLayout );
 		}
+		$header_js = '';
+		$header_js .= 'jQuery.validator.addMethod("phoneVal", function(value, element, params) {' . "\r\n";
+		$header_js .= ' return this.optional(element) || true;' . "\r\n";
+		$header_js .= '}, jQuery.validator.format("The number you have entered is not a valid phone number."));' . "\r\n";
+		$header_js .= 'jQuery.validator.addMethod("cellPhoneVal", function(value, element, params) {' . "\r\n";
+		$header_js .= ' return this.optional(element) || true;' . "\r\n";
+		$header_js .= '}, jQuery.validator.format("The number you have entered is not a valid mobile phone number."));' . "\r\n";
+		$this->update_form_head_js( $header_js );
 		$this->get_form_html();
 	}
 
