@@ -147,11 +147,12 @@ class ias_login_form extends ias_forms {
 			return $form->html;
 		}
 		else {
-			$html = '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
+			$html = do_action('ias_logged_in_form');
+			$html .= '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
 			$html .= '	<input type="hidden" name="action" value="logout" />';
 			$html .= '	<input type="hidden" name="form_id" value="none" />';
 			$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
-			$html .= '	<input type="submit" class="btn btn-success button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
+			$html .= '	<input type="submit" class="btn btn-success btn-block button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
 			$html .= '</form>';
 			return $html;
 		}
@@ -201,11 +202,12 @@ class ias_login_form extends ias_forms {
 				return $form->html;
 			}
 			else {
-				$html = '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
+				$html = do_action('ias_logged_in_form');
+				$html .= '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
 				$html .= '	<input type="hidden" name="action" value="logout" />';
 				$html .= '	<input type="hidden" name="form_id" value="none" />';
 				$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
-				$html .= '	<input type="submit" class="btn btn-success button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
+				$html .= '	<input type="submit" class="btn btn-success btn-block button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
 				$html .= '</form>';
 				return $html;
 			}

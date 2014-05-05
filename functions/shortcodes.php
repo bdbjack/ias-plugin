@@ -5,6 +5,10 @@
 			'shortcode' => 'ias_login_form',
 			'function' => array( 'ias_login_form' , 'shortcode' ),
 		),
+		array(
+			'shortcode' => 'ias_registration_form',
+			'function' => array( 'ias_registration_form' , 'shortcode' ),
+		),
 	);
 	$shortcodes[] = do_action('ias_add_shortcode');
 	foreach ($shortcodes as $key => $value) {

@@ -97,6 +97,11 @@ abstract class ias_forms {
 								$html .= ' selected';
 							}
 						}
+						foreach ($option as $key => $value) {
+							if( $key != 'name' && $key != 'value' ) {
+								$html .= 'data-' . $key . '="' . $value .'" ';
+							}
+						}
 						$html .= '>' . __( $option['name'] , IAS_TEXTDOMAIN );
 						if( isset( $option['URL'] ) ) {
 							$html .= ' (' . $option['URL'] . ')';
