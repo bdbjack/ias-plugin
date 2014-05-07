@@ -7,8 +7,11 @@
  */
  class ias_customer {
 	
-	function __construct( $brand , $input ) {
+	function __construct( $brand , $input , $justRegistered = FALSE) {
 		switch (TRUE) {
+			case ($justRegistered == TRUE):
+				break;
+
 			case (is_array($input) && isset($input['email']) && isset($input['password'])):
 				$query = array(
 						'MODULE' => 'Customer',
@@ -55,7 +58,14 @@
 				$noResultsError = 'Your user information could not be retrieved from your broker at this time. Please try again later.';
 				break;
 		}
-		$result = ias_so_api::return_query( $brand , $query );
+		if( $justRegistered == FALSE ) {
+			$result = ias_so_api::return_query( $brand , $query );
+		}
+		else {
+			$result['Customer']['data_0'] = $input;
+			$result['connection_status'] = 'successful';
+			$result['operation_status'] = 'successful';
+		}
 		$errors = array(
 			'noResults' => $noResultsError,
 			'invalidCustomerId' => $noResultsError,
@@ -132,6 +142,18 @@
 		$class = __CLASS__;
 		$cust = new $class( $brand, $info );
 		return $cust;
+	}
+
+	public static function just_registered( $brand , $spot_return ) {
+		global $ias_session;
+		if( !isset($spot_return['Customer']) ) {
+			return FALSE;
+		}
+		$info = $spot_return['Customer'];
+		$class = __CLASS__;
+		$cust = new $class( $brand , $info , TRUE );
+		$_SESSION['ias_customer'] = $cust;
+		$ias_session['ias_customer'] = $cust;
 	}
 
  } // end of ias_customer class

@@ -20,6 +20,9 @@
 		foreach ($_SESSION['perma_get'] as $key => $value) {
 			$$key = $value;
 		}
+		foreach ($_POST as $key => $value) {
+			$$key = $value;
+		}
 		$fields = array(
 			'action' => array(
 				'type' => 'hidden',
@@ -184,7 +187,7 @@
 						'required' => 'required',
 					),
 				'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT  `{{ias}}countries`.`id` as `value`,  `{{ias}}countries`.`name`,  `{{ias}}countries`.`prefix`, `{{ias}}countries`.`ISO` as `iso`,  `{{ias}}countries`.`region`  FROM `{{ias}}countries` LEFT JOIN `{{ias}}regions` ON `{{ias}}countries`.`region` = `{{ias}}regions`.`id` WHERE  `{{ias}}countries`.`id` NOT LIKE '0' AND `{{ias}}regions`.`brands` NOT LIKE '[]'" ), ARRAY_A),
-				'default' => $_SESSION['ias_geoip']->spotid,
+				'default' => ( isset($country) ) ? $country : $_SESSION['ias_geoip']->spotid,
 				'validate' => FALSE,
 				),
 			'currency' => array(
@@ -213,6 +216,7 @@
 							'value' => 'cny',
 							),
 					),
+				'default' => ( isset($currency) ) ? $currency : NULL,
 				'validate' => FALSE,
 				),
 			'password' => array(
@@ -223,7 +227,7 @@
 				'attributes' => array(
 						'required' => 'required',
 					),
-				'value' => '',
+				'value' => ( isset($password) ) ? $password : NULL,
 				'validate' => array(
 						'rules' => array(
 								'minlength' => 6,
@@ -262,6 +266,7 @@
 						'required' => 'required',
 					),
 				'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT `id` as `value`, `name` , `URL` FROM `{{ias}}brands` WHERE ( `active` = 1 AND  `isBDB` = 1  AND  `licenseKey` NOT LIKE '' ) OR (   `active` = 1 AND  `isBDB` = 0 AND  `apiURL` NOT LIKE ''  AND  `apiUSER` NOT LIKE ''  AND  `apiPass` NOT LIKE '' )" ), ARRAY_A),
+				'default' => ( isset($brand) ) ? $brand : NULL,
 				'validate' => FALSE,
 				),
 			'submit' => array(
@@ -359,6 +364,7 @@
 					$form->$function( $value );
 				}
 			}
+			$form->regenerate();
 		}
 		if(isset($atts['debug'])) {
 			return htmlentities($form->html);
@@ -381,6 +387,230 @@
 				return $html;
 			}
 		}
+	}
+
+	public static function action() {
+		global $ias_session, $wpdb;
+		$errors = array();
+		$req_fields = array(
+			'fName' => 'You are missing your First Name. Please enter your First Name and try again.',
+			'lName' => 'You are missing your Last Name. Please enter your Last Name and try again.',
+			'email' => 'You are missing an email address. Please enter an email address and try again.',
+			'phone' => 'You are missing a phone number. Please enter a phone number and try again.',
+			'country' => 'You have not chosen a country. Please choose a country and try again.',
+			'currency' => 'You have not chosen a currency. Please choose a currency and try again.',
+			'password' => 'You have not chosen a password. Please choose a password and try again.',
+			'brand' => 'You have not chosen a broker. Please choose a broker and try again.',
+		);
+		foreach ($req_fields as $key => $error) {
+			if(!isset($_POST[$key])) {
+				array_push($errors, $error);
+			}
+		}
+		if( count($errors) !== 0 ) {
+			foreach ($errors as $error) {
+				push_client_error( $error );
+			}
+			return FALSE;
+		}
+		if( !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) ) {
+			push_client_error( 'The email address you have entered is not valid. Please enter a valid email and try again.' );
+			return FALSE;
+		}
+		$atsignpos = strpos( $_POST['email'] , '@' );
+		$domain = substr( $_POST['email'], $atsignpos );
+		$domain = str_replace('@', '', $domain);
+		if( !checkdnsrr( $domain , 'MX' ) ) {
+			push_client_error( 'Your email domain does not seem to be valid. Please check the domain of your email (' . $domain .') and try again.' );
+			return FALSE;
+		}
+		$iso = $wpdb->get_var( ias_fix_db_prefix("SELECT `ISO` FROM `{{ias}}countries` WHERE `id` = " . $_POST['country'] . " ") );
+		$phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+		try {
+			$post_phone_lib = $phoneUtil->parse( $_POST['phone'] , $iso );
+			if( $phoneUtil->isPossibleNumber( $post_phone_lib ) == FALSE ) {
+				push_client_error( 'The phone number you have entered is invalid. Please check your details and try again.' );
+				return FALSE;
+			}
+		}
+		catch (\libphonenumber\NumberParseException $e) {
+			push_client_error( 'There was an issue validating your phone number. Please check your details and try again.' );
+			return FALSE;
+		}
+		if( isset( $_POST['cellphone'] ) ) {
+			$post_cellphone_lib = $phoneUtil->parse( $_POST['cellphone'] , $iso );
+			if( $phoneUtil->isPossibleNumber( $post_cellphone_lib ) == FALSE ) {
+				push_client_error( 'The mobile phone number you have entered is invalid. Please check your details and try again.' );
+				return FALSE;
+			}
+		}
+		if( isset( $_POST['confirmEmail']) && $_POST['email'] != $_POST['confirmEmail'] ) {
+			push_client_error( 'The confirmation of your email address does not match your email address. Please check the confirmation of your email address and try again.' );
+			return FALSE;
+		}
+		if( isset( $_POST['repeatPassword']) && $_POST['password'] != $_POST['repeatPassword'] ) {
+			push_client_error( 'Please check that the password that you have entered matches your confirmation and try again.' );
+			return FALSE;
+		}
+		if( !current_user_can( 'manage_options' ) ) {
+			$chosen_region = $wpdb->get_var( ias_fix_db_prefix("SELECT `region` FROM `{{ias}}countries` WHERE `id` = " . $_POST['country'] . " ") );
+			$current_region = $_SESSION['ias_geoip']->region;
+			if( $chosen_region != $current_region && $current_region == 3 ) {
+				push_client_error( 'The country you are trying to register from does not match your current location. Please try again from your country of residence.' );
+				return FALSE;
+			}
+		}
+		if( !current_user_can( 'manage_options' ) ) {
+			$chosen_region = $wpdb->get_var( ias_fix_db_prefix("SELECT `region` FROM `{{ias}}countries` WHERE `id` = " . $_POST['country'] . " ") );
+			$brands_json = $wpdb->get_var( ias_fix_db_prefix("SELECT `brands` FROM `{{ias}}regions` WHERE `id` = " . $chosen_region . " ") );
+			try {
+				$brands = json_decode($brands_json,true);
+			}
+			catch (exception $e) {
+				push_client_error( 'The country you are attempting to register from cannot register with this broker. Please choose another broker and try again.' );
+				return FALSE;
+			}
+		}
+		// now let's try to register with spot
+		$spot_reg_customer_array = array(
+			'MODULE' => 'Customer',
+			'COMMAND' => 'add',
+			'FirstName' => $_POST['fName'],
+			'LastName' => $_POST['lName'],
+			'email' => $_POST['email'],
+			'Phone' => $_POST['phone'],
+			'gender' => 'male',
+			'Country' => $_POST['country'],
+			'birthday' => '1970-01-01',
+			'campaignId' => $wpdb->get_var( ias_fix_db_prefix("SELECT `campaignID` FROM `{{ias}}brands` WHERE `id` = '" . $_POST['brand'] . "'") ),
+			'subCampaign' => ( !is_null( $_SESSION['ias_tracking']->tracker ) ) ? $_SESSION['ias_tracking']->tracker : '',
+			'a_aid' => ( !is_null( $_SESSION['ias_tracking']->a_aid ) ) ? $_SESSION['ias_tracking']->a_aid : '',
+			'a_bid' => ( !is_null( $_SESSION['ias_tracking']->a_bid ) ) ? $_SESSION['ias_tracking']->a_bid : '',
+			'a_cid' => ( !is_null( $_SESSION['ias_tracking']->a_cid ) ) ? $_SESSION['ias_tracking']->a_cid : '',
+			'siteLanguage' => substr( get_bloginfo('language') , 0 , 2 ),
+			'currency' => strtoupper( $_POST['currency'] ),
+			'password' => $_POST['password'],
+		);
+		if( !current_user_can( 'manage_options' ) ) {
+			$spot_reg_customer_array['registrationCountry'] = $_SESSION['ias_geoip']->spotid;
+		} else {
+			$spot_reg_customer_array['registrationCountry'] = $_POST['country'];
+		}
+		if( strlen( $_SESSION['ias_geoip']->omni['region_code'] ) > 0 && strlen( $_SESSION['ias_geoip']->omni['region_code'] ) <= 2 ) {
+			$spot_reg_customer_array['State'] = $_SESSION['ias_geoip']->omni['region_code'];
+		}
+		if( strlen( $_SESSION['ias_geoip']->omni['city_name'] ) > 0 ) {
+			$spot_reg_customer_array['City'] = $_SESSION['ias_geoip']->omni['city_name'];
+		}
+		if( isset( $_POST['cellphone'] ) && strlen( $_POST['cellphone'] ) != 0 ) {
+			$spot_reg_customer_array['cellphone'] = $_POST['cellphone'];
+		}
+		if( $_POST['brand'] == 1 ) {
+			$spot_reg_customer_array['regulateStatus'] = 'pending';
+			$spot_reg_customer_array['regulateType'] = '1';
+		}
+
+		$errors = array(
+			'addFailed' => 'We were not able to register your information with the broker you selected at this time.',
+			'requiredFieldsMissing' => 'You are missing some required information.',
+			'invalidFirstName' => 'Please check that you have entered your first name correctly.',
+			'invalidLastName' => 'Please check that you have entered your last name correctly.',
+			'invalidGender' => 'Please check that you have chosen a gender.',
+			'invalidEmail' => 'Please submit a valid email address.',
+			'emailAlreadyExists' => 'The email you are attempting to register with already exists in our system. Please try to log in or speak with your broker to reset your password.',
+			'passwordTooshort' => 'The password that you have chosen is too short. Please try a longer password.',
+			'invalidAuthKey' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidCellPhoneNo' => 'The cellphone number that you provided is invalid. Please check the number and try again.',
+			'invalidPhoneNo' => 'The phone number you have provided is invalid. Please check the number and try again.',
+			'invalidPersonalId' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidFaxNo' => 'The fax number you have provided is invalid. Please check the number and try again.',
+			'invalidCountry' => 'The country you are trying to register from is not allowed to register with this broker.',
+			'invalidRegistrationCountry' => 'The country you are trying to register from is not allowed to register with this broker.',
+			'invalidState' => 'Please enter only 2 digits for a state code',
+			'invalidCity' => 'The city name that you have provided is too short.',
+			'invalidStreetAddress' => 'The street address you have provided is not valid. Please check the street address and try again.',
+			'invalidCurrency' => 'This broker does not allow users to register with this currency. Please choose a different currency and try again.',
+			'invalidHouseNo' => 'Please provide a valid house number.',
+			'invalidApartmentNo' => 'Please provide a valid apartment identification.',
+			'invalidApprovesEmailAdsStatus' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidPostalCode' => 'The postal code you have provided is not valid. Please check your postal code and try again.',
+			'invalidCampaignId' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidSubCampaign' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidAffiliateId' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidBirthday' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'customerTooYoung' => 'You are too young to register an account with this broker. Please try a different broker.',
+			'invalidEmployee' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidDate' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidPotential' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidRisk' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invaludRegStatus' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidSaleStatus' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidCustomerGroup' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidReferLink' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidIsDemo' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidSpecialAccountNumber' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'specialAccountNumberExists' => 'There was a general issue with your registration. Please try again in a few moments.',
+			'invalidRegulateStatus' => 'There was a general issue with your registration. Please try again later.',
+			'invalidRegulateType' => 'There was a general issue with your registration. Please try again later.',
+		);
+
+		$reg_results = ias_so_api::return_query( $_POST['brand'] , $spot_reg_customer_array );
+		if(!isset($reg_results['operation_status']) || !isset($reg_results['connection_status'])) {
+			push_client_error( 'The broker that you have chosen is not currently available for registration. Please choose another broker and try again.' );
+			$bug_report = 'SpotAPI has returned an error on an attempted customer registration.' . "\r\n" . "\r\n" . '*Attempted Query*:' . "\r\n" . '<pre>' . "\r\n";
+			$bug_report .= print_r($spot_reg_customer_array,true) . "\r\n";
+			$bug_report .= '</pre>' . "\r\n". "\r\n";
+			$bug_report .= '*SpotAPI Return*' . "\r\n" . "\r\n";
+			$bug_report .= '<pre>' . "\r\n";
+			$bug_report .= print_r($reg_results,true) . "\r\n";
+			$bug_report .= '</pre>' . "\r\n". "\r\n";
+			report_ias_bug( 'Registration API Failure from ' . get_bloginfo('wpurl') , $bug_report );
+		}
+		else if( $reg_results['connection_status'] != 'successful' || $reg_results['operation_status'] != 'successful') {
+			switch (TRUE) {
+				case ($reg_results['connection_status'] != 'successful'):
+					push_client_error( 'The broker that you have chosen is not currently available for registration. Please choose another broker and try again.' );
+					break;
+
+				case(!is_array($reg_results['errors']['error'])):
+					foreach ($reg_results['errors'] as $key => $error) {
+						if(isset($errors[$error])) {
+							push_client_error( $errors[$error] );
+						} else {
+							push_client_error( 'There was a general issue performing this action. Please try again later' );
+						}
+					}
+					break;
+				
+				default:
+					foreach ($reg_results['errors']['error'] as $error) {
+						if(isset($errors[$error])) {
+							push_client_error( $errors[$error] );
+						} else {
+							push_client_error( 'There was a general issue performing this action. Please try again later' );
+						}
+					}
+					break;
+			}
+			$bug_report = 'SpotAPI has returned an error on an attempted customer registration.' . "\r\n" . "\r\n" . '*Attempted Query*:' . "\r\n" . '<pre>' . "\r\n";
+			$bug_report .= print_r($spot_reg_customer_array,true) . "\r\n";
+			$bug_report .= '</pre>' . "\r\n". "\r\n";
+			$bug_report .= '*SpotAPI Return*' . "\r\n" . "\r\n";
+			$bug_report .= '<pre>' . "\r\n";
+			$bug_report .= print_r($reg_results,true) . "\r\n";
+			$bug_report .= '</pre>' . "\r\n". "\r\n";
+
+			report_ias_bug( 'Registration API Failure from ' . get_bloginfo('wpurl') , $bug_report );
+		}
+		if( !isset( $reg_results['Customer']['id'] ) ) {
+			push_client_error( 'There was an issue processing your registration. Please try again.' );
+			return FALSE;
+		}
+		ias_customer::just_registered( $_POST['brand'] , $reg_results );
+		$customer_id = $reg_results['Customer']['id'];
+		print('<pre>');
+		print_r($reg_results);
+		print('</pre>');
 	}
  } // end of ias_registration_form
 ?>

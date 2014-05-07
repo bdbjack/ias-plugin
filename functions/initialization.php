@@ -91,21 +91,24 @@
 		if(!isset($_POST['action']) && !isset($_POST['form_id'])) {
 			return FALSE;
 		}
-		$id = $_POST['form_id'];
-		$nonce = $_POST[ 'form_' . $id . '_nonce' ];
-		$nonce_response = wp_verify_nonce( $nonce );
-		$actions_array = array(
-			'login' => array( 'ias_login_form' , 'action' ),
-			'logout' => array( 'ias_login_form' , 'logout' ),
-		);
-		if( isset( $actions_array[$_POST['action']] ) ) {
-			$action = $actions_array[$_POST['action']];
-			if( is_array($action) ) {
-				$class = $action[0];
-				$method = $action[1];
-				$class::{$method}();
-			} else {
-				$action();
+		if( isset($_POST['form_id']) ) {
+			$id = $_POST['form_id'];
+			$nonce = $_POST[ 'form_' . $id . '_nonce' ];
+			$nonce_response = wp_verify_nonce( $nonce );
+			$actions_array = array(
+				'login' => array( 'ias_login_form' , 'action' ),
+				'logout' => array( 'ias_login_form' , 'logout' ),
+				'registerCustomer' => array( 'ias_registration_form' , 'action'),
+			);
+			if( isset( $actions_array[$_POST['action']] ) ) {
+				$action = $actions_array[$_POST['action']];
+				if( is_array($action) ) {
+					$class = $action[0];
+					$method = $action[1];
+					$class::{$method}();
+				} else {
+					$action();
+				}
 			}
 		}
 	}

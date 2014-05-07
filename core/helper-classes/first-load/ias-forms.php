@@ -31,7 +31,7 @@ abstract class ias_forms {
 	);
 	protected $form_attr = array(
 		'role' => 'form',
-		'action' => 'javascript:false;',
+		'action' => NULL,
 		'method' => 'POST',
 		'accept-charset' => 'UTF-8',
 		'autocomplete' => 'off',
