@@ -235,6 +235,7 @@ abstract class ias_forms {
 			$html .= '	' .'		});' . "\r\n";
 			$html .= '	' .'</script>' . "\r\n";
 		}
+		$html = str_replace( '{id}' , $this->id , $html );
 		$this->html = $html;
 	}
 	

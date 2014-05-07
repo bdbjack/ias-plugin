@@ -14,6 +14,8 @@
 		$ias_session = $_SESSION;
 		remove_filter( 'the_content', 'wpautop' );
 		form_actions();
+		show_phone_lib();
+		show_brands_lib();
 	}
 
 	function ias_filter_plugin_meta( $plugin_meta, $plugin_file, $plugin_data = NULL, $status = NULL ) {
@@ -130,6 +132,22 @@
 			$_SESSION['client_errors'] = array();
 		}
 		array_push( $_SESSION['client_errors'] , $error );
+	}
+
+	function show_phone_lib() {
+		if(isset($_GET['phonelib'])) {
+			header('Content-type: application/javascript');
+			require_once( IAS_BASE . '/clientLibs/lib-phonenumber.js' );
+			exit();
+		}
+	}
+
+	function show_brands_lib() {
+		if(isset($_GET['brandlib'])) {
+			header('Content-type: application/javascript');
+			require_once( IAS_BASE . '/clientLibs/lib-brands.js' );
+			exit();
+		}
 	}
 
 	/**

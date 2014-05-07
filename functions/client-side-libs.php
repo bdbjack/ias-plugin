@@ -25,6 +25,20 @@ function ias_wp_enqueue_scripts() {
 			'ver' => NULL,
 			'in_footer' => FALSE,
 		),
+		array(
+			'handle' => 'phonelib',
+			'src' => '/?phonelib',
+			'deps' => array('jquery','validate'),
+			'ver' => NULL,
+			'in_footer' => FALSE,
+		),
+		array(
+			'handle' => 'brandlib',
+			'src' => '/?brandlib',
+			'deps' => array('jquery'),
+			'ver' => NULL,
+			'in_footer' => FALSE,
+		),
 	);
 	foreach ($scripts as $script) {
 		wp_deregister_script($script['handle']);

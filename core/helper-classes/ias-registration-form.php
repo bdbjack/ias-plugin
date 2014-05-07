@@ -183,8 +183,7 @@
 				'attributes' => array(
 						'required' => 'required',
 					),
-				// Only Show Countries from regions which can register //
-				'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT  `{{ias}}countries`.`id` as `value`,  `{{ias}}countries`.`name`,  `{{ias}}countries`.`prefix`,  `{{ias}}countries`.`region`  FROM `{{ias}}countries` LEFT JOIN `{{ias}}regions` ON `{{ias}}countries`.`region` = `{{ias}}regions`.`id` WHERE  `{{ias}}countries`.`id` NOT LIKE '0' AND `{{ias}}regions`.`brands` NOT LIKE '[]'" ), ARRAY_A),
+				'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT  `{{ias}}countries`.`id` as `value`,  `{{ias}}countries`.`name`,  `{{ias}}countries`.`prefix`, `{{ias}}countries`.`ISO` as `iso`,  `{{ias}}countries`.`region`  FROM `{{ias}}countries` LEFT JOIN `{{ias}}regions` ON `{{ias}}countries`.`region` = `{{ias}}regions`.`id` WHERE  `{{ias}}countries`.`id` NOT LIKE '0' AND `{{ias}}regions`.`brands` NOT LIKE '[]'" ), ARRAY_A),
 				'default' => $_SESSION['ias_geoip']->spotid,
 				'validate' => FALSE,
 				),
@@ -285,13 +284,50 @@
 			$this->update_form_layout( $this->defaultLayout );
 		}
 		$header_js = '';
+		$header_js .= 'function checkPhone( phone , elem ) {' . "\r\n";
+		$header_js .= '	or_elem = jQuery(elem);' . "\r\n";
+		$header_js .= '	form_id = or_elem.attr(\'id\').replace(\'_phone\',\'\');' . "\r\n";
+		$header_js .= '	form_id = form_id.replace(\'_cellphone\',\'\');' . "\r\n";
+		$header_js .= '	iso = jQuery("#" + form_id +"_country option:selected").attr(\'data-iso\');' . "\r\n";
+		$header_js .= '	var validatedResults = isValidNumber( phone , iso );' . "\r\n";
+		$header_js .= '	return validatedResults;' . "\r\n";
+		$header_js .= '}' . "\r\n";
+		$header_js .= 'function numbersonly(e,t,n){var r;var i;if(window.event)r=window.event.keyCode;else if(t)r=t.which;else return true;i=String.fromCharCode(r);if(r==null||r==0||r==8||r==9||r==13||r==27)return true;else if("0123456789".indexOf(i)>-1)return true;else if(n&&i=="."){e.form.elements[n].focus();return false}else return false}' . "\r\n";
 		$header_js .= 'jQuery.validator.addMethod("phoneVal", function(value, element, params) {' . "\r\n";
-		$header_js .= ' return this.optional(element) || true;' . "\r\n";
+		$header_js .= ' return this.optional(element) || checkPhone( value , element );' . "\r\n";
 		$header_js .= '}, jQuery.validator.format("The number you have entered is not a valid phone number."));' . "\r\n";
 		$header_js .= 'jQuery.validator.addMethod("cellPhoneVal", function(value, element, params) {' . "\r\n";
-		$header_js .= ' return this.optional(element) || true;' . "\r\n";
+		$header_js .= ' return this.optional(element) || checkPhone( value , element );' . "\r\n";
 		$header_js .= '}, jQuery.validator.format("The number you have entered is not a valid mobile phone number."));' . "\r\n";
 		$this->update_form_head_js( $header_js );
+		// get the hidden text areas with the json for the brokers list //
+		$header_html = '';
+		$regions = $wpdb->get_results( ias_fix_db_prefix( "SELECT `id`,`brands` FROM `{{ias}}regions` WHERE `brands` NOT LIKE '[]'" ), ARRAY_A);
+		foreach ($regions as $region) {
+			$header_html .= '<textarea readonly="readonly" disabled="disabled" id="{id}_region_' . $region['id'] . '_brands" style="display:none !important;">';
+			$brands_array = json_decode($region['brands'],true);
+			$brands_select_array = array();
+			foreach ($brands_array as $brand) {
+				$brand_info = $wpdb->get_row( ias_fix_db_prefix( "SELECT `id` AS `value`, `name`,`URL` as `url` FROM `{{ias}}brands` WHERE `id` = '" . $brand . "'") , ARRAY_A);
+				array_push($brands_select_array, $brand_info );
+			}
+			$header_html .= json_encode($brands_select_array);
+			$header_html .= '</textarea>' . "\r\n";
+		}
+		$this->update_form_head_html( $header_html );
+		$footer_js = 'jQuery(function(){jQuery("input[type = \'tel\']").on("keyup",function(){return numbersonly(this,event)});jQuery("input[type = \'tel\']").on("keypress",function(){return numbersonly(this,event)})})' . "\r\n";
+		$footer_js .= 'jQuery(function() {' . "\r\n";
+		$footer_js .= '	region = jQuery("#{id}_country option:selected").attr(\'data-region\');' . "\r\n";
+		$footer_js .= '	content = jQuery("#{id}_region_" + region +"_brands").html();' . "\r\n";
+		$footer_js .= '	brands_list_to_select( content , "{id}_brand");' . "\r\n";
+		$footer_js .= '	jQuery("#{id}_country").on(\'change\',function() {' . "\r\n";
+		$footer_js .= '		var id = jQuery(this).attr(\'id\');' . "\r\n";
+		$footer_js .= '		region = jQuery("#" + id + " option:selected").attr(\'data-region\');' . "\r\n";
+		$footer_js .= '		content = jQuery("#{id}_region_" + region +"_brands").html();' . "\r\n";
+		$footer_js .= '		brands_list_to_select( content , "{id}_brand");' . "\r\n";
+		$footer_js .= '	});' . "\r\n";
+		$footer_js .= '})' . "\r\n";
+		$this->update_form_foot_js( $footer_js );
 		$this->get_form_html();
 	}
 
