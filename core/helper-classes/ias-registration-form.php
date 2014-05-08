@@ -599,7 +599,6 @@
 			$bug_report .= '<pre>' . "\r\n";
 			$bug_report .= print_r($reg_results,true) . "\r\n";
 			$bug_report .= '</pre>' . "\r\n". "\r\n";
-
 			report_ias_bug( 'Registration API Failure from ' . get_bloginfo('wpurl') , $bug_report );
 		}
 		if( !isset( $reg_results['Customer']['id'] ) ) {

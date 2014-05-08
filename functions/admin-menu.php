@@ -96,6 +96,16 @@ function ias_admin_menu() {
 			'sub_of' => 'ias-tracking',
 		),
 		array(
+			'title' => 'IAS Tracking Save Pixels',
+			'menu_title' => 'IAS Tracking Save Pixels',
+			'capability' => 'activate_plugins',
+			'menu_slug' => 'ias-tracking-save-pixels',
+			'function' => array('ias_admin_page','ias_load_admin_page'),
+			'icon' => NULL,
+			'is_sub' => TRUE,
+			'sub_of' => 'ias-tracking',
+		),
+		array(
 			'title' => 'IAS Bugs',
 			'menu_title' => 'IAS Bugs',
 			'capability' => 'activate_plugins',

@@ -67,51 +67,165 @@
 				</tfoot>
 			</table>
 			</form>
-			<h3><?php _e('Server Postback URLs',IAS_TEXTDOMAIN); ?></h3>
-			<form action="admin.php?page=ias-tracking-save&noheader=true" method="POST" role="form">
-			<table class="widefat" width="100%" cellpadding="0" cellpadding="0" role="table">
-				<thead>
+			<h3><?php _e('Report Actions (Pixels)',IAS_TEXTDOMAIN); ?></h3>
+			<form action="admin.php?page=ias-tracking-save-pixels&noheader=true" method="POST" role="form">
+				<table class="widefat" width="100%" cellpadding="0" cellpadding="0" role="table">
+					<thead>
+						<tr>
+							<th colspan="2"><?php _e('Add a new reporting action (pixel)',IAS_TEXTDOMAIN); ?></th>
+						</tr>
+						<tr>
+							<th><?php _e('Trigger',IAS_TEXTDOMAIN); ?></th>
+							<th><?php _e('Type',IAS_TEXTDOMAIN); ?></th>
+						</tr>
+						<tr>
+							<td width="50%;">
+								<select name="trigger" style="width:100%;">
+									<option value="visit"><?php _e('Visit',IAS_TEXTDOMAIN); ?></option>
+									<option value="emailCap"><?php _e('Email Capture',IAS_TEXTDOMAIN); ?></option>
+									<option value="leadGen"><?php _e('Lead Generation',IAS_TEXTDOMAIN); ?></option>
+									<option value="customerGen"><?php _e('Customer Generation',IAS_TEXTDOMAIN); ?></option>
+									<option value="deposit"><?php _e('Deposit',IAS_TEXTDOMAIN); ?></option>
+								</select>
+							</td>
+							<td width="50%;">
+								<select name="type" style="width:100%;" id="pixel-type">
+									<option value="server" data-box-type="text"><?php _e('Server Postback',IAS_TEXTDOMAIN); ?></option>
+									<option value="image" data-box-type="html"><?php _e('Image Pixel',IAS_TEXTDOMAIN); ?></option>
+									<option value="iframe" data-box-type="html"><?php _e('Iframe Pixel',IAS_TEXTDOMAIN); ?></option>
+									<option value="js" data-box-type="html"><?php _e('Javascript',IAS_TEXTDOMAIN); ?></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="2"><?php _e('Content',IAS_TEXTDOMAIN); ?></th>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div style="width:100%; min-height: 150px;" id="new_pixel_box"></div>
+								<textarea id="new_pixel_textarea" name="content"></textarea>
+							</td>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>
+								<input type="submit" class="button button-primary" value="<?php _e('Add',IAS_TEXTDOMAIN); ?>" />
+								<a href="admin.php?page=ias-tracking" class="button"><?php _e('Cancel',IAS_TEXTDOMAIN); ?></a>
+							</th>
+						</tr>
+					</tfoot>
+				</table>
+				<table class="widefat" width="100%" cellpadding="0" cellpadding="0" role="table">
 					<tr>
-						<td colspan="2">
-							<p><?php _e('Please place your system\'s ',IAS_TEXTDOMAIN); ?><a href="http://rm.14all.me/projects/ias/wiki/Dictionary#Server_Postback_URLs" class="" target="_blank"><?php _e('Server Postback URLs',IAS_TEXTDOMAIN); ?></a> <?php _e('In their appropriate fields.',IAS_TEXTDOMAIN); ?></p>
-							<p><?php _e('Please Note: If your URL does not contain <strong>http://</strong> or <strong>https://</strong> it will not work correctly.',IAS_TEXTDOMAIN); ?></p>
-						</td>
-					</tr>
-					<tr>
+						<th>&nbsp;</th>
+						<th><?php _e('Type',IAS_TEXTDOMAIN); ?></th>
 						<th><?php _e('Trigger',IAS_TEXTDOMAIN); ?></th>
-						<th><?php _e('Postback URL',IAS_TEXTDOMAIN); ?></th>
+						<th><?php _e('Content',IAS_TEXTDOMAIN); ?></th>
 					</tr>
-				</thead>
-				<tbody>
-				<tr>
-					<th><?php _e('Visit',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="tracking_ias_visit" value="<?php print(get_site_option('tracking_ias_visit')); ?>" /></td>
-				</tr>
-				<tr>
-					<th><?php _e('Email Capture',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="tracking_ias_capture" value="<?php print(get_site_option('tracking_ias_capture')); ?>" /></td>
-				</tr>
-				<tr>
-					<th><?php _e('Customer Registration',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="tracking_ias_registration" value="<?php print(get_site_option('tracking_ias_registration')); ?>" /></td>
-				</tr>
-				<tr>
-					<th><?php _e('Customer Deposit',IAS_TEXTDOMAIN); ?></th>
-					<td><input type="url" style="width:100%;" name="tracking_ias_deposit" value="<?php print(get_site_option('tracking_ias_deposit')); ?>" /></td>
-				</tr>
-				<?php
-					do_action('ias_tracking_form_generation');
-				?>
-				</tbody>
-				<tfoot>
+					<?php
+						$pixels = $wpdb->get_results( ias_fix_db_prefix( "SELECT * FROM `{{ias}}postbacks`" ), ARRAY_A);
+						foreach ($pixels as $pixel) {
+							?>
+							<tr>
+								<td width="20px;"><input type="checkbox" name="remove[]" value="<?php print($pixel['id']); ?>" /></td>
+								<td width="15%">
+									<?php
+										switch ($pixel['type']) {
+											case 'server':
+												 _e('Server Postback',IAS_TEXTDOMAIN);
+												break;
+
+											case 'image':
+												 _e('Image Pixel',IAS_TEXTDOMAIN);
+												break;
+
+											case 'iframe':
+												 _e('Iframe Pixel',IAS_TEXTDOMAIN);
+												break;
+
+											case 'js':
+												 _e('Javascript',IAS_TEXTDOMAIN);
+												break;
+										}
+									?>
+								</td>
+								<td width="25%">
+									<?php
+										switch ($pixel['trigger']) {
+											case 'visit':
+												 _e('Visit',IAS_TEXTDOMAIN);
+												break;
+
+											case 'emailCap':
+												 _e('Email Capture',IAS_TEXTDOMAIN);
+												break;
+
+											case 'leadGen':
+												 _e('Lead Generation',IAS_TEXTDOMAIN);
+												break;
+
+											case 'customerGen':
+												 _e('Customer Generation',IAS_TEXTDOMAIN);
+												break;
+
+											case 'deposit':
+												 _e('Deposit',IAS_TEXTDOMAIN);
+												break;
+										}
+									?>
+								</td>
+								<td>
+									<div class="acebox" id="ace_box_pixel_<?php print($pixel['id']); ?>" data-box-type="<?php
+										switch ($pixel['type']) {
+											case 'server':
+												print('text');
+												break;
+											
+											default:
+												print('html');
+												break;
+										}
+									?>" style="width:100%; min-height: 150px;"><?php
+										print(htmlentities($pixel['content']));
+										?></div>
+								</td>
+							</tr>
+							<?php
+						}
+					?>
 					<tr>
-						<th colspan="2">
-							<input type="submit" class="button button-primary" value="<?php _e('Save',IAS_TEXTDOMAIN); ?>" />
+						<th colspan="4">
+							<input type="submit" class="button button-primary" value="<?php _e('Remove Selected',IAS_TEXTDOMAIN); ?>" />
 							<a href="admin.php?page=ias-tracking" class="button"><?php _e('Cancel',IAS_TEXTDOMAIN); ?></a>
 						</th>
 					</tr>
-				</tfoot>
-			</table>
+				</table>
+				<script type="text/javascript">
+					var pixelBox;
+					var textarea;
+					jQuery(function() {
+						pixelBox = ace.edit("new_pixel_box");
+						pixelBox.setTheme("ace/theme/chrome");
+						pixelBox.getSession().setMode("ace/mode/text");
+						textarea = jQuery("#new_pixel_textarea");
+						textarea.hide();
+						pixelBox.getSession().setValue(textarea.val());
+						pixelBox.getSession().on('change', function(){
+						  textarea.val(pixelBox.getSession().getValue());
+						});
+						jQuery("#pixel-type").on('change',function() {
+							var type = jQuery("#pixel-type option:selected").attr('data-box-type');
+							pixelBox.getSession().setMode("ace/mode/" + type);
+						});
+						jQuery(".acebox").each(function() {
+							var id = jQuery(this).attr('id');
+							var pixelWindow = ace.edit(id);
+							pixelWindow.setTheme("ace/theme/monakai");
+							pixelWindow.getSession().setMode("ace/mode/" + jQuery(this).attr('data-box-type'));
+						});
+					});
+				</script>
 			</form>
 		</div>
 		<div style="float:left; width: 60%;">
