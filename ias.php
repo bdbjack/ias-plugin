@@ -100,6 +100,10 @@ function ias_error_handling($errno, $errstr, $errfile, $errline) {
 
 $error_handling = set_error_handler("ias_error_handling");
 
+function killer() {
+	throw new Exception( 'Got to here!', 0 );
+}
+
 /**
  * Set up error message displays
  */
@@ -160,6 +164,18 @@ add_action('admin_notices','ias_show_admin_notices');
 register_activation_hook(__FILE__,'ias_activation');
 
 /**
+ * Load all of the files under the "core/first-load" sub-directory
+ */
+$first_load_dir = new RecursiveDirectoryIterator(IAS_BASE . '/core/first-load');
+$first_load_iterator = new RecursiveIteratorIterator($first_load_dir);
+$first_load_obj = new RegexIterator($first_load_iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+foreach ($first_load_obj as $name => $obj) {
+	if(strpos($name, 'index.php') === FALSE) {
+		require_once($name);
+	}
+}
+
+/**
  * Load all of the files under the "core/helper-classes" sub-directory
  */
 $core_dir = new RecursiveDirectoryIterator(IAS_BASE . '/core/helper-classes');
@@ -216,7 +232,6 @@ if( get_site_option( 'ias_update_available' , FALSE ) == TRUE ) {
  * Run Filter for Plugin Meta Row
  */
 add_filter( 'plugin_row_meta', 'ias_filter_plugin_meta', 10, 2 );
-
 if(checkBrands() != TRUE) {
 	array_push($ias_sticky_messages, 'Some of your brands are missing critical information required for them to work.<br />Please update them <a href="admin.php?page=ias-brands">here</a>');
 }

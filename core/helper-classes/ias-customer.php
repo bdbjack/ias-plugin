@@ -65,6 +65,8 @@
 			$result['Customer']['data_0'] = $input;
 			$result['connection_status'] = 'successful';
 			$result['operation_status'] = 'successful';
+			$noResultsError = '';
+			$noResultsError = '';
 		}
 		$errors = array(
 			'noResults' => $noResultsError,

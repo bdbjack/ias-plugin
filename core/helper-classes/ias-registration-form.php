@@ -39,7 +39,7 @@
 				'label' => NULL,
 				'placeholder' => NULL,
 				'attributes' => array(),
-				'value' => $ias_session['ias_tracking']->a_aid,
+				'value' => $_SESSION['ias_tracking']->a_aid,
 				'validate' => FALSE,
 				),
 			'a_bid' => array(
@@ -48,7 +48,7 @@
 				'label' => NULL,
 				'placeholder' => NULL,
 				'attributes' => array(),
-				'value' => $ias_session['ias_tracking']->a_bid,
+				'value' => $_SESSION['ias_tracking']->a_bid,
 				'validate' => FALSE,
 				),
 			'a_cid' => array(
@@ -57,7 +57,7 @@
 				'label' => NULL,
 				'placeholder' => NULL,
 				'attributes' => array(),
-				'value' => $ias_session['ias_tracking']->a_cid,
+				'value' => $_SESSION['ias_tracking']->a_cid,
 				'validate' => FALSE,
 				),
 			'tracker' => array(
@@ -66,7 +66,7 @@
 				'label' => NULL,
 				'placeholder' => NULL,
 				'attributes' => array(),
-				'value' => $ias_session['ias_tracking']->tracker,
+				'value' => $_SESSION['ias_tracking']->tracker,
 				'validate' => FALSE,
 				),
 			'regIP' => array(
@@ -75,7 +75,7 @@
 				'label' => NULL,
 				'placeholder' => NULL,
 				'attributes' => array(),
-				'value' => $ias_session['ip'],
+				'value' => $_SESSION['ip'],
 				'validate' => FALSE,
 				),
 			'fName' => array(
@@ -607,9 +607,7 @@
 		}
 		ias_customer::just_registered( $_POST['brand'] , $reg_results );
 		$customer_id = $reg_results['Customer']['id'];
-		print('<pre>');
-		print_r($reg_results);
-		print('</pre>');
+		ias_tracking::tracking_trigger('customerGen');
 	}
  } // end of ias_registration_form
 ?>

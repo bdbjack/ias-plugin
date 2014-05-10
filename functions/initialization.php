@@ -16,6 +16,7 @@
 		form_actions();
 		show_phone_lib();
 		show_brands_lib();
+		ias_tracking::do_server_postbacks('visit');
 	}
 
 	function ias_filter_plugin_meta( $plugin_meta, $plugin_file, $plugin_data = NULL, $status = NULL ) {
@@ -28,8 +29,6 @@
 	}
 
 	function ias_session_start() {
-		ini_set('session.cookie_lifetime', 2592000); 
-		ini_set('session.gc_maxlifetime', 2592000);
 		if( !session_id() ) {
 			session_start();
 		}
@@ -37,14 +36,12 @@
 			$_SESSION['ip'] = ip();
 			$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 			$_SESSION['reset'] = NULL;
-			do_action('ias_start_session');
 		} else if( $_SESSION['ip'] !== ip() || $_SESSION['HTTP_USER_AGENT'] !== $_SERVER['HTTP_USER_AGENT'] ) {
 			session_destroy();
 			session_start();
 			$_SESSION['ip'] = ip();
 			$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 			$_SESSION['reset'] = TRUE;
-			do_action('ias_start_session');
 		} else {
 			$_SESSION['reset'] = FALSE;
 		}
@@ -159,4 +156,5 @@
 
 	add_filter('the_content', 'cleanup_shortcode_fix');
 	add_filter('the_content', 'show_client_errors');
+	add_filter('the_content', array( 'ias_tracking' , 'do_client_side_pixels') );
 ?>

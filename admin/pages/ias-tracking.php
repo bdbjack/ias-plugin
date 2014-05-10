@@ -221,8 +221,9 @@
 						jQuery(".acebox").each(function() {
 							var id = jQuery(this).attr('id');
 							var pixelWindow = ace.edit(id);
-							pixelWindow.setTheme("ace/theme/monakai");
+							pixelWindow.setTheme("ace/theme/monokai");
 							pixelWindow.getSession().setMode("ace/mode/" + jQuery(this).attr('data-box-type'));
+							pixelWindow.setReadOnly(true);
 						});
 					});
 				</script>
@@ -240,7 +241,142 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php do_action('show_variable_macros'); ?>
+					<tr>
+					    <th>{ip}</th>
+					    <td><?php _e('The IP Address from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{iso}</th>
+					    <td><?php _e('The ISO of the country from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{spotid}</th>
+					    <td><?php _e('The SpotOption ID of the country from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{ias_region}</th>
+					    <td><?php _e('The IAS Region ID of the country from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{country_prefix}</th>
+					    <td><?php _e('The Dialing Prefix of the country from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_country}</th>
+					    <td><?php _e('The name of the country from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_region_code}</th>
+					    <td><?php _e('The 2 digit abbreviation of the region from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_region_name}</th>
+					    <td><?php _e('The name of the region from which the user triggered the action',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_city_name}</th>
+					    <td><?php _e('The name of the city from which the user triggered the action',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_time_zone}</th>
+					    <td><?php _e('The time zone from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_continent_code}</th>
+					    <td><?php _e('The 2 digit abbreviation of the continent from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{location_postal_code}</th>
+					    <td><?php _e('The postal code from which the user triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_id}</th>
+					    <td><?php _e('The id of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_FirstName}</th>
+					    <td><?php _e('The first name of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_LastName}</th>
+					    <td><?php _e('The last name of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_email}</th>
+					    <td><?php _e('The email of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_cellphone}</th>
+					    <td><?php _e('The mobile phone number of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_phone}</th>
+					    <td><?php _e('The phone number of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_fax}</th>
+					    <td><?php _e('The fax number of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_firstDepositDate}</th>
+					    <td><?php _e('The first deposit date of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_Country}</th>
+					    <td><?php _e('The country of residence of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_registrationCountry}</th>
+					    <td><?php _e('The country of registration of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_City}</th>
+					    <td><?php _e('The city of residence of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_state}</th>
+					    <td><?php _e('The 2 letter abbreviation of the state of residence of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_street}</th>
+					    <td><?php _e('The street name of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_houseNumber}</th>
+					    <td><?php _e('The house number of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_aptNumber}</th>
+					    <td><?php _e('The apartment number of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_regTime}</th>
+					    <td><?php _e('The registration time of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_accountBalance}</th>
+					    <td><?php _e('The current account balance of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{customer_currency}</th>
+					    <td><?php _e('The currency of the customer which triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{a_aid}</th>
+					    <td><?php _e('The value of the parameter a_aid of the user who triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{a_bid}</th>
+					    <td><?php _e('The value of the parameter a_bid of the user who triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{a_cid}</th>
+					    <td><?php _e('The value of the parameter a_cid of the user who triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
+					<tr>
+					    <th>{tracker}</th>
+					    <td><?php _e('The value of the parameter tracker of the user who triggered the action.',IAS_TEXTDOMAIN); ?></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
