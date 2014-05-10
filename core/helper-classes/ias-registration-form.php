@@ -5,12 +5,14 @@
  class ias_registration_form extends ias_forms {
 	private $defaultLayout = array(
 			array( 'action' , 'a_aid' , 'a_bid' , 'a_cid' , 'tracker' , 'regIP'),
-			array( 'fName' , 'lName' ),
-			array( 'email' , 'confirmEmail' ),
-			array( 'phone' , 'cellphone' ),
+			array( 'fName' ),
+			array( 'lName' ),
+			array( 'email' ),
+			array( 'phone' ),
 			array( 'country' ),
 			array( 'currency' ),
-			array( 'password' , 'repeatPassword' ),
+			array( 'password' ),
+			array( 'repeatPassword' ),
 			array( 'brand' ),
 			array( 'submit' ),
 		);
@@ -338,7 +340,23 @@
 
 	public static function shortcode( $atts, $content = NULL ) {
 		$class = get_class();
-		$form = new $class();
+		$req_fields = array(
+			'a_aid',
+			'a_bid',
+			'a_cid',
+			'tracker',
+			'regIP',
+			'action',
+			'fName',
+			'lName',
+			'email',
+			'phone',
+			'country',
+			'currency',
+			'password',
+			'brand',
+			'submit',
+		);
 		$possible_atts = array(
 			'use_chosen' => 'use_chosen',
 			'use_validate' => 'use_validate',
@@ -357,6 +375,32 @@
 			'form_target' => 'set_form_target',
 			'form_attributes' => 'add_form_attributes',
 		);
+		if(!is_null($content)) {
+			$whole = explode("\r\n", $content);
+			$layout = array();
+			$existing_fields = array();
+			foreach ($whole as $row) {
+				if( $row != '' ) {
+					$row_array = explode(',', $row);
+					$return_row = array();
+					foreach ($row_array as $field) {
+						if($field != '' && !in_array($field, $existing_fields)) {
+							array_push($return_row, $field);
+							array_push($existing_fields, $field);
+						}
+					}
+					array_push($layout, $return_row);
+				}
+			}
+			foreach ($req_fields as $field) {
+				if( !in_array( $field, $existing_fields ) ) {
+					array_push($layout, array($field) );
+				}
+			}
+		} else {
+			$layout = NULL;
+		}
+		$form = new $class( $layout );
 		if(is_array($atts)) {
 			foreach ($atts as $att => $value) {
 				if(isset($possible_atts[$att])) {
@@ -366,26 +410,18 @@
 			}
 			$form->regenerate();
 		}
-		if(isset($atts['debug'])) {
-			return htmlentities($form->html);
-		}
-		else if ( isset($atts['fulldebug'] ) ) {
-			return htmlentities( print_r( $form , true ) );
+		if(!isset($_SESSION['ias_customer']) || $_SESSION['ias_customer']->valid == FALSE ) {
+			return $form->html;
 		}
 		else {
-			if(!isset($_SESSION['ias_customer']) || $_SESSION['ias_customer']->valid == FALSE ) {
-				return $form->html;
-			}
-			else {
-				$html = do_action('ias_logged_in_form');
-				$html .= '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
-				$html .= '	<input type="hidden" name="action" value="logout" />';
-				$html .= '	<input type="hidden" name="form_id" value="none" />';
-				$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
-				$html .= '	<input type="submit" class="btn btn-success btn-block button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
-				$html .= '</form>';
-				return $html;
-			}
+			$html = do_action('ias_logged_in_form');
+			$html .= '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
+			$html .= '	<input type="hidden" name="action" value="logout" />';
+			$html .= '	<input type="hidden" name="form_id" value="none" />';
+			$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
+			$html .= '	<input type="submit" class="btn btn-success btn-block button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
+			$html .= '</form>';
+			return $html;
 		}
 	}
 
@@ -609,5 +645,177 @@
 		$customer_id = $reg_results['Customer']['id'];
 		ias_tracking::tracking_trigger('customerGen');
 	}
+
+	public static function widget( $args , $instance ) {
+		$class = get_class();
+		$form = new $class();
+		$possible_atts = array(
+			'use_chosen' => 'use_chosen',
+			'use_validate' => 'use_validate',
+			'use_captcha' => 'use_captcha',
+			'response_size' => 'set_response_size',
+			'header_html' => 'update_form_head_html',
+			'header_css' => 'update_form_head_css',
+			'header_js' => 'update_form_head_js',
+			'footer_html' => 'update_form_foot_html',
+			'footer_css' => 'update_form_foot_css',
+			'footer_js' => 'update_form_foot_js',
+			'form_action' => 'set_form_action',
+			'form_method' => 'set_form_method',
+			'form_charset' => 'set_form_charset',
+			'form_autocomplete' => 'set_form_autocomplete',
+			'form_enctype' => 'set_form_enctype',
+			'form_target' => 'set_form_target',
+			'form_attributes' => 'add_form_attributes',
+		);
+		foreach ($instance as $key => $value) {
+			if(isset($possible_atts[$key]) && $key !== 'use_chosen' && $key !== 'use_validate' ) {
+				$function = $possible_atts[$key];
+				$form->$function( $value );
+			}
+			else if ( isset($possible_atts[$key]) && $key == 'use_chosen' ) {
+				if( $value == 1 ) {
+					$form->use_chosen( TRUE );
+				} else {
+					$form->use_chosen( FALSE );
+				}
+			}
+			else if ( isset($possible_atts[$key]) && $key == 'use_validate' ) {
+				if( $value == 1 ) {
+					$form->use_validate( TRUE );
+				} else {
+					$form->use_validate( FALSE );
+				}
+			}
+		}
+		$form->regenerate();
+		if(!isset($_SESSION['ias_customer']) || $_SESSION['ias_customer']->valid == FALSE ) {
+			return $form->html;
+		}
+		else {
+			$html = do_action('ias_logged_in_form');
+			$html .= '<form action="" method="POST" accept-charset="UTF-8" autocomplete="off" enctype="application/x-www-form-urlencoded" target="_self">';
+			$html .= '	<input type="hidden" name="action" value="logout" />';
+			$html .= '	<input type="hidden" name="form_id" value="none" />';
+			$html .= '	<input type="hidden" name="form_none_nonce" value="0" />';
+			$html .= '	<input type="submit" class="btn btn-success btn-block button" value="' . __('Log Out',IAS_TEXTDOMAIN) . '" />';
+			$html .= '</form>';
+			return $html;
+		}
+	}
  } // end of ias_registration_form
+
+ class ias_registration_form_widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'ias_registration_form_widget',
+			__('IAS Registration Form', IAS_TEXTDOMAIN),
+			array( 
+				'description' => __( 'Allows a user register a trading account with a chosen broker.', IAS_TEXTDOMAIN ), 
+			)
+		);
+	}
+
+	public function widget( $args, $instance ) {
+		print( ias_registration_form::widget( $args , $instance ) );
+	}
+
+	public function form( $instance ) {
+		$html = '<div style="min-height: 200px; margin-bottom: 20px;">' . "\r\n";
+		$fields = array(
+			'form_action' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_action' ),
+				'label' => 'Form Action',
+				'placeholder' => 'Form Action',
+				'id' => $this->get_field_id( 'form_action' ),
+				'value' => ( isset( $instance['form_action'] ) ) ? $instance['form_action'] : NULL,
+				'attributes' => NULL,
+				),
+			'form_method' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_method' ),
+				'label' => 'Form Method',
+				'placeholder' => 'Form Method',
+				'id' => $this->get_field_id( 'form_method' ),
+				'value' => ( isset( $instance['form_method'] ) ) ? $instance['form_method'] : 'POST',
+				'attributes' => NULL,
+				),
+			'form_charset' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_charset' ),
+				'label' => 'Form Character Set',
+				'placeholder' => 'Form Character Set',
+				'id' => $this->get_field_id( 'form_charset' ),
+				'value' => ( isset( $instance['form_charset'] ) ) ? $instance['form_charset'] : 'UTF-8',
+				'attributes' => NULL,
+				),
+			'form_autocomplete' => array(
+				'type' => 'checkbox',
+				'name' => $this->get_field_name( 'form_autocomplete' ),
+				'label' => 'Form autocompletes',
+				'placeholder' => 'Form autocompletes',
+				'id' => $this->get_field_id( 'form_autocomplete' ),
+				'value' => ( isset( $instance['form_autocomplete'] ) ) ? $instance['form_autocomplete'] : FALSE,
+				'attributes' => NULL,
+				),
+			'form_enctype' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_enctype' ),
+				'label' => 'Form Encoding Type',
+				'placeholder' => 'Form Encoding Type',
+				'id' => $this->get_field_id( 'form_enctype' ),
+				'value' => ( isset( $instance['form_enctype'] ) ) ? $instance['form_enctype'] : 'application/x-www-form-urlencoded',
+				'attributes' => NULL,
+				),
+			'form_target' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'form_target' ),
+				'label' => 'Target Window',
+				'placeholder' => 'Target Window',
+				'id' => $this->get_field_id( 'form_target' ),
+				'value' => ( isset( $instance['form_target'] ) ) ? $instance['form_target'] : '_self',
+				'attributes' => NULL,
+				),
+			'use_chosen' => array(
+				'type' => 'checkbox',
+				'name' => $this->get_field_name( 'use_chosen' ),
+				'label' => 'Use Chosen',
+				'placeholder' => 'Use Chosen',
+				'id' => $this->get_field_id( 'use_chosen' ),
+				'value' => ( isset( $instance['use_chosen'] ) ) ? $instance['use_chosen'] : TRUE,
+				'attributes' => NULL,
+				),
+			'use_validate' => array(
+				'type' => 'checkbox',
+				'name' => $this->get_field_name( 'use_validate' ),
+				'label' => 'Use jQuery Validate',
+				'placeholder' => 'Use jQuery Validate',
+				'id' => $this->get_field_id( 'use_validate' ),
+				'value' => ( isset( $instance['use_validate'] ) ) ? $instance['use_validate'] : TRUE,
+				'attributes' => NULL,
+				),
+			'responsive_size' => array(
+				'type' => 'text',
+				'name' => $this->get_field_name( 'responsive_size' ),
+				'label' => 'Responsive Size',
+				'placeholder' => 'Responsive Size',
+				'id' => $this->get_field_id( 'responsive_size' ),
+				'value' => ( isset( $instance['responsive_size'] ) ) ? $instance['responsive_size'] : 'sm',
+				'attributes' => NULL,
+				),
+		);
+		$form = new ias_widget_form( $fields );
+		$html .= $form->html;
+		$html .= '</div>' . "\r\n";
+		print( $html );
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		foreach ($new_instance as $key => $value) {
+			$old_instance[$key] = $value;
+		}
+		return $old_instance;
+	}
+}
 ?>
