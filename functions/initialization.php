@@ -153,7 +153,7 @@
 	/**
 	 * Add some filters
 	 */
-
+	add_filter('the_content', 'ias_check_if_login_required');
 	add_filter('the_content', 'cleanup_shortcode_fix');
 	add_filter('the_content', 'show_client_errors');
 	add_filter('the_content', array( 'ias_tracking' , 'do_client_side_pixels') );

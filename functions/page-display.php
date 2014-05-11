@@ -8,8 +8,6 @@ if ( is_admin() ) {
     add_action( 'save_post', 'ias_save_must_login_meta', 10, 2 );
 }
 
-add_filter('the_content', 'ias_check_if_login_required');
-
 function ias_add_must_login_meta() {
 	add_action( 'add_meta_boxes', 'ias_add_must_login_meta_box' );
 }
