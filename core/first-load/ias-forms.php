@@ -70,7 +70,7 @@ abstract class ias_forms {
 	
 	// Set up core functions
 	private function gen_field_html( $field ) {
-		if(!isset($this->fields) || !is_array($this->fields)) {
+		if(!isset($this->fields) || !is_array($this->fields) || !isset( $this->fields[$field] ) ) {
 			return NULL;
 		}
 		$field_info = $this->fields[$field];
