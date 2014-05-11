@@ -122,6 +122,26 @@ abstract class ias_forms {
 				}
 				$html .= '/>' . "\r\n";
 				break;
+
+			case 'currency':
+				if(isset($_SESSION['ias_customer']->currencySign)) {
+					$html .= '<div class="input-group">' . "\r\n";
+					$html .= '		<span class="input-group-addon">' . $_SESSION['ias_customer']->currencySign . '</span>' . "\r\n";
+				}
+				$html .= '<input type="tel" class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . '"';
+				if(!isset($field_info['placeholder']) || !is_null($field_info['placeholder']) || strlen($field_info['placeholder']) != 0 ) {
+					$html .= 'placeholder="' . $field_info['placeholder'] . '" ';
+				}
+				foreach ($field_info['attributes'] as $key => $value) {
+					$html .= $key . '="' . $value . '" ';
+				}
+				$html .= 'value="' . $field_info['value'] . '"';
+				$html .= '/>' . "\r\n";
+				if(isset($_SESSION['ias_customer']->currencySign)) {
+					$html .= '<span class="input-group-addon">.00</span>' . "\r\n";
+					$html .= '</div>' . "\r\n";
+				}
+				break;
 			
 			default:
 				$html .= '<input type="' . $field_info['type'] . '" class="form-control" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . '"';

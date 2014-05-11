@@ -96,6 +96,7 @@
 				'login' => array( 'ias_login_form' , 'action' ),
 				'logout' => array( 'ias_login_form' , 'logout' ),
 				'registerCustomer' => array( 'ias_registration_form' , 'action'),
+				'makeDeposit' => array( 'ias_deposit_form' , 'action'),
 			);
 			if( isset( $actions_array[$_POST['action']] ) ) {
 				$action = $actions_array[$_POST['action']];

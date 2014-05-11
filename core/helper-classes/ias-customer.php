@@ -160,7 +160,7 @@
 		}
 		$info = $spot_return['Customer'];
 		$class = __CLASS__;
-		$cust = new $class( $brand , $info , TRUE );
+		$cust = new $class( $brand , $info['email'] );
 		$_SESSION['ias_customer'] = $cust;
 		$ias_session['ias_customer'] = $cust;
 	}

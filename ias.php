@@ -95,6 +95,7 @@ function ias_error_handling($errno, $errstr, $errfile, $errline) {
     if(IAS_SHOW_ERRORS == TRUE) {
 		ias_show_admin_error($error->get_error_message() , 'error');
     }
+    report_ias_bug( 'Code Error on ' . get_bloginfo('wpurl') , $error->get_error_message() );
     return true;
 }
 

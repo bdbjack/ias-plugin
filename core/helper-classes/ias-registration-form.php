@@ -450,7 +450,7 @@
 			'brand' => 'You have not chosen a broker. Please choose a broker and try again.',
 		);
 		foreach ($req_fields as $key => $error) {
-			if(!isset($_POST[$key])) {
+			if(!isset($_POST[$key]) || strlen($_POST[$key]) == 0) {
 				array_push($errors, $error);
 			}
 		}

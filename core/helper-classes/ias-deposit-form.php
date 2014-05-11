@@ -5,6 +5,7 @@
  class ias_deposit_form extends ias_forms {
 		private $defaultLayout = array(
 			array('action'),
+			array('amount'),
 			array('ccNumber'),
 			array('cvv','expMonth','expYear'),
 			array('fName','lName'),
@@ -18,6 +19,22 @@
 
 		function __construct( $layout = NULL , $override = array() ) {
 			global $ias_session, $wpdb;
+			if( isset($_SESSION['ias_customer']->Country) && is_numeric($_SESSION['ias_customer']->Country) ) {
+				$country = $_SESSION['ias_customer']->Country;
+			} else {
+				$country = $_SESSION['ias_customer']->country_id;
+			}
+			$years_array = array();
+			$current_year = date('Y');
+			$max_year = $current_year + 20;
+			while( $current_year <= $max_year ) {
+				$option = array( 
+					'value' => $current_year,
+					'name' => $current_year,
+				);
+				array_push($years_array, $option);
+				$current_year ++;
+			}
 			foreach ($_SESSION['perma_get'] as $key => $value) {
 				$$key = $value;
 			}
@@ -33,6 +50,26 @@
 					'attributes' => array(),
 					'value' => 'makeDeposit',
 					'validate' => FALSE,
+					),
+				'amount' => array(
+					'type' => 'currency',
+					'name' => 'amount',
+					'label' => 'Deposit Amount',
+					'placeholder' => 'Deposit Amount',
+					'attributes' => array(
+							'required' => 'required',
+						),
+					'value' => ( isset($amount) ) ? $amount : 500,
+					'validate' => array(
+							'rules' => array(
+									'digits' => TRUE,
+									'min' => 100,
+								),
+							'messages' => array(
+									'digits' => 'Please enter only numbers.',
+									'min' => 'The minimum deposit is ' . $_SESSION['ias_customer']->currency . ' {0}.',
+								),
+						),
 					),
 				'fName' => array(
 					'type' => 'text',
@@ -103,7 +140,7 @@
 							'required' => 'required',
 						),
 					'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT  `{{ias}}countries`.`id` as `value`,  `{{ias}}countries`.`name`,  `{{ias}}countries`.`prefix`, `{{ias}}countries`.`ISO` as `iso`,  `{{ias}}countries`.`region`  FROM `{{ias}}countries` LEFT JOIN `{{ias}}regions` ON `{{ias}}countries`.`region` = `{{ias}}regions`.`id` WHERE  `{{ias}}countries`.`id` NOT LIKE '0' AND `{{ias}}regions`.`brands` NOT LIKE '[]'" ), ARRAY_A),
-					'default' => ( isset($country) ) ? $country : $_SESSION['ias_customer']->country_id,
+					'default' => $country,
 					'validate' => FALSE,
 					),
 				'address' => array(
@@ -115,14 +152,7 @@
 							'required' => 'required',
 						),
 					'value' => ( isset($address) ) ? $address : NULL,
-					'validate' => array(
-							'rules' => array(
-									'required' => TRUE,
-								),
-							'messages' => array(
-									'required' => 'Please enter your billing address.',
-								),
-						),
+					'validate' => FALSE,
 					),
 				'city' => array(
 					'type' => 'text',
@@ -133,14 +163,7 @@
 							'required' => 'required',
 						),
 					'value' => ( isset($city) ) ? $city : $_SESSION['ias_geoip']->omni['city_name'],
-					'validate' => array(
-							'rules' => array(
-									'required' => TRUE,
-								),
-							'messages' => array(
-									'required' => 'Please enter your city of residence.',
-								),
-						),
+					'validate' => FALSE,
 					),
 				'state' => array(
 					'type' => 'text',
@@ -173,14 +196,7 @@
 							'required' => 'required',
 						),
 					'value' => ( isset($postal) ) ? $postal : $_SESSION['ias_geoip']->omni['postal_code'],
-					'validate' => array(
-							'rules' => array(
-								'required' => TRUE,
-							),
-							'messages' => array(
-								'required' => 'Please enter a valid postal code to continue.',
-							),
-						),
+					'validate' => FALSE,
 					),
 				'ccNumber' => array(
 						'type' => 'tel',
@@ -190,7 +206,7 @@
 						'attributes' => array(
 								'required' => 'required',
 							),
-						'value' => '',
+						'value' => ( isset($ccNumber) ) ? $ccNumber : NULL,
 						'validate' => array(
 								'rules' => array(
 									'required' => TRUE,
@@ -214,7 +230,7 @@
 						'attributes' => array(
 								'required' => 'required',
 							),
-						'value' => '',
+						'value' => ( isset($cvv) ) ? $cvv : NULL,
 						'validate' => array(
 								'rules' => array(
 									'required' => TRUE,
@@ -250,7 +266,7 @@
 								array( 'value' => '11' , 'name' => 'November' ),
 								array( 'value' => '12' , 'name' => 'December' ),
 							),
-						'default' => ( isset($expMonth) ) ? $expMonth : date('m'),
+						'default' => ( isset($expMonth) ) ? $expMonth : date('m') + 1,
 						'validate' => FALSE,
 					),
 				'expYear' => array(
@@ -261,20 +277,8 @@
 						'attributes' => array(
 								'required' => 'required',
 							),
-						'value' => function() {
-							$return = array();
-							$current_year = date('y');
-							$max_year = $current_year + 20;
-							while( $current_year <= $max_year ) {
-								$option = array( 
-									'value' => $current_year,
-									'name' => $current_year,
-								);
-								$current_year ++;
-							}
-							return $return;
-						},
-						'default' => ( isset($expYear) ) ? $expYear : date('y'),
+						'value' => $years_array,
+						'default' => ( isset($expYear) ) ? $expYear : date('Y'),
 						'validate' => FALSE,
 					),
 				'submit' => array(
@@ -290,12 +294,30 @@
 					),
 				);
 			$this->fields = $fields;
+			$header_js = '';
+			$header_js .= 'function checkPhone( phone , elem ) {' . "\r\n";
+			$header_js .= '	or_elem = jQuery(elem);' . "\r\n";
+			$header_js .= '	form_id = or_elem.attr(\'id\').replace(\'_phone\',\'\');' . "\r\n";
+			$header_js .= '	form_id = form_id.replace(\'_cellphone\',\'\');' . "\r\n";
+			$header_js .= '	iso = jQuery("#" + form_id +"_country option:selected").attr(\'data-iso\');' . "\r\n";
+			$header_js .= '	var validatedResults = isValidNumber( phone , iso );' . "\r\n";
+			$header_js .= '	return validatedResults;' . "\r\n";
+			$header_js .= '}' . "\r\n";
+			$header_js .= 'function numbersonly(e,t,n){var r;var i;if(window.event)r=window.event.keyCode;else if(t)r=t.which;else return true;i=String.fromCharCode(r);if(r==null||r==0||r==8||r==9||r==13||r==27)return true;else if("0123456789".indexOf(i)>-1)return true;else if(n&&i=="."){e.form.elements[n].focus();return false}else return false}' . "\r\n";
+			$header_js .= 'jQuery.validator.addMethod("phoneVal", function(value, element, params) {' . "\r\n";
+			$header_js .= ' return this.optional(element) || checkPhone( value , element );' . "\r\n";
+			$header_js .= '}, jQuery.validator.format("The number you have entered is not a valid phone number."));' . "\r\n";
+			$header_js .= 'jQuery.validator.addMethod("cellPhoneVal", function(value, element, params) {' . "\r\n";
+			$header_js .= ' return this.optional(element) || checkPhone( value , element );' . "\r\n";
+			$header_js .= '}, jQuery.validator.format("The number you have entered is not a valid mobile phone number."));' . "\r\n";
+			$this->update_form_head_js( $header_js );
 			if(!is_null($layout)) {
 				$this->update_form_layout( $layout );
 			}
 			else {
 				$this->update_form_layout( $this->defaultLayout );
 			}
+			//$this->set_form_action('javascript:false;');
 			$this->get_form_html();
 		}
 
@@ -313,6 +335,7 @@
 			$class = get_class();
 			$req_fields = array(
 				'action',
+				'amount',
 				'fName',
 				'lName',
 				'email',
@@ -382,6 +405,115 @@
 				$form->regenerate();
 			}
 			return $form->html;
+		}
+
+		public static function action() {
+			global $ias_session, $wpdb;
+			$errors = array();
+			$req_fields = array(
+				'amount' => 'You must enter an amount to deposit',
+				'fName' => 'You are missing your First Name. Please enter your first name and re-submit.',
+				'lName' => 'You are missing your Last Name. Please enter your last name and re-submit.',
+				'email' => 'You are missing your email. Please enter your email and re-submit.',
+				'phone' => 'You are missing your phone number. Please enter your phone number and re-submit.',
+				'country' => 'You are missing your billing country. Please enter your billing country and re-submit.',
+				'address' => 'You are missing your billing address. Please enter your billing address and re-submit.',
+				'city' => 'You are missing your billing city. Please enter your billing city and re-submit.',
+				'state' => 'You are missing your billing state. Please enter your billing state and re-submit.',
+				'postal' => 'You are missing your billing postal code. Please enter your billing postal code and re-submit.',
+				'ccNumber' => 'You are missing your credit card number. Please enter your credit card number and re-submit.',
+				'cvv' => 'You are missing your CVV. Please enter your CVV and re-submit.',
+				'expMonth' => 'You are missing your expiration month. Please enter your expiration month and re-submit.',
+				'expYear' => 'You are missing your expiration year. Please enter your expiration year and re-submit.',
+			);
+			foreach ($req_fields as $key => $error) {
+				if(!isset($_POST[$key]) || strlen($_POST[$key]) == 0) {
+					array_push($errors, $error);
+				}
+			}
+			if( count($errors) !== 0 ) {
+				foreach ($errors as $error) {
+					push_client_error( $error );
+				}
+				return FALSE;
+			}
+			// Perform Server Side validation checks
+			if( !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) ) {
+				push_client_error( 'The email address you have entered is not valid. Please enter a valid email and try again.' );
+				return FALSE;
+			}
+			$atsignpos = strpos( $_POST['email'] , '@' );
+			$domain = substr( $_POST['email'], $atsignpos );
+			$domain = str_replace('@', '', $domain);
+			if( !checkdnsrr( $domain , 'MX' ) ) {
+				push_client_error( 'Your email domain does not seem to be valid. Please check the domain of your email (' . $domain .') and try again.' );
+				return FALSE;
+			}
+			$iso = $wpdb->get_var( ias_fix_db_prefix("SELECT `ISO` FROM `{{ias}}countries` WHERE `id` = " . $_POST['country'] . " ") );
+			$phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+			try {
+				$post_phone_lib = $phoneUtil->parse( $_POST['phone'] , $iso );
+				if( $phoneUtil->isPossibleNumber( $post_phone_lib ) == FALSE ) {
+					push_client_error( 'The phone number you have entered is invalid. Please check your details and try again.' );
+					return FALSE;
+				}
+			}
+			catch (\libphonenumber\NumberParseException $e) {
+				push_client_error( 'There was an issue validating your phone number. Please check your details and try again.' );
+				return FALSE;
+			}
+			# CC Number
+			if( self::luhn_check( $_POST['ccNumber'] ) == FALSE ) {
+				push_client_error( 'The credit card number you have entered is not valid. Please enter a valid credit card number and try again.' );
+				return FALSE;
+			}
+			# CVV
+			if( strlen( $_POST['cvv'] ) < 3 || strlen( $_POST['cvv'] ) > 5 ) {
+				push_client_error( 'The CVV you have entered is invalid. Please check your CVV and try again.' );
+				return FALSE;
+			}
+			# Expiration
+			if( $_POST['expYear'] == date('Y') && $_POST['expMonth'] <= date('m') ) {
+				push_client_error( 'The card you are attempting to deposit with has expired. Please check the expiration date of the card and try again.' );
+				return FALSE;
+			}
+			# Check that we're not depositing into a demo account
+			if( isset( $_SESSION['ias_customer'] ) && isset( $_SESSION['ias_customer']->valid ) && $_SESSION['ias_customer']->valid == TRUE ) {
+				if( $_SESSION['ias_customer']->isDemo == 1 ) {
+					push_client_error( 'You are not allowed to deposit real funds into a demo account.' );
+					return FALSE;
+				}
+			}
+			else {
+				push_client_error( 'There was an error making a deposit. Please try again.' );
+				return FALSE;
+			}
+			# Risk (minfraud)
+			$bincheck = ias_cc_fraud_api::bin_check( $_POST['ccNumber'] , $_POST['amount'] );
+			if( isset($bincheck['riskScore']) && $bincheck['riskScore'] > 50 ) {
+				push_client_error( 'To continue with this transaction, please contact ' . 'customer support.' );
+				return FALSE;
+			}
+			// Continue making the deposit!
+			ias_so_deposit_api::deposit( $_POST );
+		}
+
+		private static function luhn_check($number) {
+		  $number=preg_replace('/\D/', '', $number);
+		  $number_length=strlen($number);
+		  $parity=$number_length % 2;
+		  $total=0;
+		  for ($i=0; $i<$number_length; $i++) {
+		    $digit=$number[$i];
+		    if ($i % 2 == $parity) {
+		      $digit*=2;
+		      if ($digit > 9) {
+		        $digit-=9;
+		      }
+		    }
+		    $total+=$digit;
+		  }
+		  return ($total % 10 == 0) ? TRUE : FALSE;
 		}
  } // end class ias_deposit_form
 ?>

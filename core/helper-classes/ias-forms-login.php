@@ -219,18 +219,18 @@ class ias_login_form extends ias_forms {
 		$cust = ias_customer::login_validate( $_POST['brand'] , $_POST['email'] , $_POST['password'] );
 		if( $cust->valid == TRUE ) {
 			$_SESSION['ias_customer'] = $cust;
-			$ias_session = $cust;
+			$ias_session['ias_customer'] = $cust;
 		}
 		else {
 			unset($_SESSION['ias_customer']);
-			unset($_SESSION['ias_session']);
+			unset($ias_session['ias_customer']);
 		}
 	}
 
 	public static function logout() {
 		global $ias_session;
 		unset($_SESSION['ias_customer']);
-		unset($_SESSION['ias_session']);
+		unset($ias_session['ias_customer']);
 	}
 } // end of ias_login_form class
 
