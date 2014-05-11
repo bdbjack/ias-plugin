@@ -9,6 +9,10 @@
 			'shortcode' => 'ias_registration_form',
 			'function' => array( 'ias_registration_form' , 'shortcode' ),
 		),
+		array(
+			'shortcode' => 'ias_deposit_form',
+			'function' => array( 'ias_deposit_form' , 'shortcode' ),
+		),
 	);
 	$shortcodes[] = do_action('ias_add_shortcode');
 	foreach ($shortcodes as $key => $value) {
