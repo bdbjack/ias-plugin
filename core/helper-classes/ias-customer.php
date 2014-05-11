@@ -138,7 +138,7 @@
 			if(isset($result['Customer']['data_0']['registrationCountry'])) {
 				$this->reg_country_id = $this->get_country_id( $result['Customer']['data_0']['registrationCountry'] );
 			}
-			$this->brand = $brand;
+			$this->brand_id = $brand;
 			$this->valid = TRUE;
 		}
 	}
