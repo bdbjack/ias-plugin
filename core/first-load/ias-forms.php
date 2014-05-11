@@ -94,7 +94,7 @@ abstract class ias_forms {
 						$html .= '<option value="' . $option['value'] . '"';
 						if(isset($field_info['default'])) {
 							if($option['value'] == $field_info['default']) {
-								$html .= ' selected';
+								$html .= ' selected ';
 							}
 						}
 						foreach ($option as $key => $value) {
