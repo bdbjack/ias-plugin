@@ -132,6 +132,13 @@
 			foreach ($result['Customer']['data_0'] as $key => $value) {
 				$this->$key = (!is_array($value)) ? $value : NULL;
 			}
+			if(isset($result['Customer']['data_0']['Country'])) {
+				$this->country_id = $this->get_country_id( $result['Customer']['data_0']['Country'] );
+			}
+			if(isset($result['Customer']['data_0']['registrationCountry'])) {
+				$this->reg_country_id = $this->get_country_id( $result['Customer']['data_0']['registrationCountry'] );
+			}
+			$this->brand = $brand;
 			$this->valid = TRUE;
 		}
 	}
@@ -156,6 +163,11 @@
 		$cust = new $class( $brand , $info , TRUE );
 		$_SESSION['ias_customer'] = $cust;
 		$ias_session['ias_customer'] = $cust;
+	}
+
+	private function get_country_id( $country_name ) {
+		global $wpdb;
+		return $wpdb->get_var( ias_fix_db_prefix("SELECT `id` FROM `{{ias}}countries` WHERE `name` LIKE '" . $country_name . "'") );
 	}
 
  } // end of ias_customer class
