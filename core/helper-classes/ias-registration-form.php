@@ -188,7 +188,7 @@
 				'attributes' => array(
 						'required' => 'required',
 					),
-				'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT  `{{ias}}countries`.`id` as `value`,  `{{ias}}countries`.`name`,  `{{ias}}countries`.`prefix`, `{{ias}}countries`.`ISO` as `iso`,  `{{ias}}countries`.`region`  FROM `{{ias}}countries` LEFT JOIN `{{ias}}regions` ON `{{ias}}countries`.`region` = `{{ias}}regions`.`id` WHERE  `{{ias}}countries`.`id` NOT LIKE '0' AND `{{ias}}regions`.`brands` NOT LIKE '[]'" ), ARRAY_A),
+				'value' => $wpdb->get_results( ias_fix_db_prefix( "SELECT  `{{ias}}countries`.`id` as `value`,  `{{ias}}countries`.`name`,  `{{ias}}countries`.`prefix`, `{{ias}}countries`.`ISO` as `iso`,  `{{ias}}countries`.`region`, `{{ias}}countries`.`currency`  FROM `{{ias}}countries` LEFT JOIN `{{ias}}regions` ON `{{ias}}countries`.`region` = `{{ias}}regions`.`id` WHERE  `{{ias}}countries`.`id` NOT LIKE '0' AND `{{ias}}regions`.`brands` NOT LIKE '[]'" ), ARRAY_A),
 				'default' => ( isset($country) ) ? $country : $_SESSION['ias_geoip']->spotid,
 				'validate' => FALSE,
 				),
@@ -213,10 +213,10 @@
 							'name' => 'Pound Sterling ( £ )',
 							'value' => 'gbp',
 							),
-						array(
-							'name' => 'Chinese Yuan ( ¥ )',
-							'value' => 'cny',
-							),
+						//array(
+						//	'name' => 'Chinese Yuan ( ¥ )',
+						//	'value' => 'cny',
+						//	),
 					),
 				'default' => ( isset($currency) ) ? $currency : NULL,
 				'validate' => FALSE,
@@ -333,7 +333,18 @@
 		$footer_js .= '		content = jQuery("#{id}_region_" + region +"_brands").html();' . "\r\n";
 		$footer_js .= '		brands_list_to_select( content , "{id}_brand");' . "\r\n";
 		$footer_js .= '	});' . "\r\n";
-		$footer_js .= '})' . "\r\n";
+		$footer_js .= '});' . "\r\n";
+		$footer_js .= 'jQuery(function() {' . "\r\n";
+		$footer_js .= '	currency = jQuery("#{id}_country option:selected").attr(\'data-currency\');' . "\r\n";
+		$footer_js .= '	jQuery("#{id}_currency").val(currency);' . "\r\n";
+		$footer_js .= '	jQuery("#{id}_currency").trigger(\'chosen:updated\')' . "\r\n";
+		$footer_js .= '	jQuery("#{id}_country").on(\'change\',function() {' . "\r\n";
+		$footer_js .= '		var id = jQuery(this).attr(\'id\');' . "\r\n";
+		$footer_js .= '		currency = jQuery("#" + id + " option:selected").attr(\'data-currency\');' . "\r\n";
+		$footer_js .= '		jQuery("#{id}_currency").val(currency);' . "\r\n";
+		$footer_js .= '		jQuery("#{id}_currency").trigger(\'chosen:updated\')' . "\r\n";
+		$footer_js .= '	});' . "\r\n";
+		$footer_js .= '});' . "\r\n";
 		$this->update_form_foot_js( $footer_js );
 		$this->get_form_html();
 	}
