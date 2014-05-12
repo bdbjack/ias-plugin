@@ -1,8 +1,6 @@
 <?php
 	function ias_init() {
 		global $ias_session;
-		do_action('ias_main_init');
-		do_action('ias_visit',$_GET);
 		ias_session_start();
 		ias_activate_geoip();
 		ias_activate_tracking();
@@ -19,6 +17,8 @@
 		broker_postback();
 		pending_postbacks();
 		ias_tracking::do_server_postbacks('visit');
+		do_action('ias_main_init');
+		do_action('ias_visit',$_GET);
 	}
 
 	function ias_filter_plugin_meta( $plugin_meta, $plugin_file, $plugin_data = NULL, $status = NULL ) {
@@ -46,6 +46,9 @@
 			$_SESSION['reset'] = TRUE;
 		} else {
 			$_SESSION['reset'] = FALSE;
+		}
+		if( !isset($_SESSION['ias_customer']) || $_SESSION['ias_customer']->valid == FALSE ) {
+			unset($_SESSION['store_once']);
 		}
 	}
 

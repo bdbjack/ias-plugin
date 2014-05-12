@@ -220,10 +220,12 @@ class ias_login_form extends ias_forms {
 		if( $cust->valid == TRUE ) {
 			$_SESSION['ias_customer'] = $cust;
 			$ias_session['ias_customer'] = $cust;
+			do_action('ias_login');
 		}
 		else {
 			unset($_SESSION['ias_customer']);
 			unset($ias_session['ias_customer']);
+			do_action('ias_logout');
 		}
 	}
 

@@ -654,6 +654,7 @@
 		}
 		ias_customer::just_registered( $_POST['brand'] , $reg_results );
 		$customer_id = $reg_results['Customer']['id'];
+		do_action('ias_login');
 		ias_tracking::tracking_trigger('customerGen');
 	}
 
