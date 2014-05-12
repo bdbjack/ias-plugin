@@ -35,7 +35,7 @@
 				$query = array(
 						'MODULE' => 'Customer',
 						'COMMAND' => 'view',
-						'FILTER[customerId]' => $input['id'],
+						'FILTER[id]' => $input['id'],
 					);
 				$noResultsError = 'Your user information could not be retrieved from your broker at this time. Please try again later.';
 				break;
@@ -44,7 +44,7 @@
 				$query = array(
 						'MODULE' => 'Customer',
 						'COMMAND' => 'view',
-						'FILTER[customerId]' => $input,
+						'FILTER[id]' => $input,
 					);
 				$noResultsError = 'Your user information could not be retrieved from your broker at this time. Please try again later.';
 				break;

@@ -16,6 +16,7 @@
 		form_actions();
 		show_phone_lib();
 		show_brands_lib();
+		broker_postback();
 		ias_tracking::do_server_postbacks('visit');
 	}
 
@@ -148,6 +149,60 @@
 			header('Content-type: application/javascript');
 			require_once( IAS_BASE . '/clientLibs/lib-brands.js' );
 			exit();
+		}
+	}
+
+	function broker_postback() {
+		if( isset( $_GET['postback'] ) ) {
+			header('Content-type: text/json;X-Content-Type-Options: nosniff; charset=UTF-8;');
+			if( !isset( $_GET['customer_id'] ) || !isset( $_GET['broker_id'] ) ) {
+				$return_array = array(
+					'error' => __('Missing Critical Information' , IAS_TEXTDOMAIN ),
+				);
+				print( json_encode( $return_array ) );
+				$rm_error = 'An attempted firing of a server postback pixel failed with the following information: ' . "\r\n";
+				$rm_info = array(
+						'attempt_url' => $_SERVER['SCRIPT_URI'],
+						'attemp_query' => $_SERVER['QUERY_STRING'],
+						'attempt_method' => $_SERVER['REQUEST_METHOD'],
+						'remote_addr' => $_SERVER['REMOTE_ADDR'],
+						'resolved_addr' => ip(),
+					);
+				$rm_error .= '<pre>' . "\r\n";
+				$rm_error .= print_r( $rm_info , TRUE ) . "\r\n";
+				$rm_error .= '</pre>' . "\r\n";
+				report_ias_bug( 'Postback Error on site ' . get_bloginfo('wpurl') , $rm_error );
+				exit();
+			}
+			switch ( $_GET['postback'] ) {
+				case 'deposit':
+					ias_tracking::do_server_postbacks('deposit');
+					// add a new pending postback action for client side
+					break;
+
+				default:
+					$return_array = array(
+						'error' => __('Invalid Conversion Type' , IAS_TEXTDOMAIN ),
+					);
+					print( json_encode( $return_array ) );
+					$rm_error = 'An attempted firing of a server postback pixel failed with the following information: ' . "\r\n";
+					$rm_info = array(
+							'attempt_url' => $_SERVER['SCRIPT_URI'],
+							'attemp_query' => $_SERVER['QUERY_STRING'],
+							'attempt_method' => $_SERVER['REQUEST_METHOD'],
+							'remote_addr' => $_SERVER['REMOTE_ADDR'],
+							'resolved_addr' => ip(),
+						);
+					$rm_error .= '<pre>' . "\r\n";
+					$rm_error .= print_r( $rm_info , TRUE ) . "\r\n";
+					$rm_error .= '</pre>' . "\r\n";
+					report_ias_bug( 'Postback Error on site ' . get_bloginfo('wpurl') , $rm_error );
+					break;
+			}
+			exit();
+		}
+		else {
+			// check 3rd party postbacks
 		}
 	}
 

@@ -86,7 +86,23 @@ class ias_so_api {
     	} catch (Artax\ClientException $e) {
     		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
     	}
-    	$xml = new SimpleXMLElement( $results );
+    	try {
+    		$xml = new SimpleXMLElement( $results );
+    	}
+    	catch( Exception $e ) {
+    		$rm_error = 'Spot API has returned results which could not be understood by the standard XML parser.' . "\r\n";
+    		$rm_error .= 'Response from SpotAPI' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= var_dump( $results , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		$rm_error .= 'The following exception was triggered: ' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= $e . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		report_ias_bug( 'API Return Error on site ' . get_bloginfo('wpurl') , $rm_error );
+    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+    		return FALSE;
+    	}
     	$processed = $this->xml2array($xml);
     	$this->last_query = $query;
     	$this->result = $processed;

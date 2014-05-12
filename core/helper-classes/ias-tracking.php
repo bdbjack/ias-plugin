@@ -81,6 +81,12 @@
 					$mapped['customer_' . $key] = $value;
 				}
 			}
+			else if( isset( $_GET['postback'] ) && isset( $_GET['customer_id'] ) && isset( $_GET['broker_id'] ) ) {
+				$customer = new ias_customer( $_GET['broker_id'], $_GET['customer_id']);
+				foreach ( $customer as $key => $value) {
+					$mapped['customer_' . $key] = $value;
+				}
+			}
 			foreach ( $_SESSION['ias_tracking'] as $key => $value) {
 				$mapped[$key] = $value;
 			}

@@ -70,6 +70,7 @@ load_plugin_textdomain(IAS_TEXTDOMAIN, false, IAS_BASE . '/languages' );
 /**
  * Set up custom error handling
  */
+libxml_use_internal_errors(true);
 function ias_error_handling($errno, $errstr, $errfile, $errline) {
 	if (!(error_reporting() & $errno)) {
         return;
