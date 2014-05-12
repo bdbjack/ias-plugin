@@ -169,8 +169,10 @@
 			return $content;
 		}
 
-		public static function tracking_trigger( $trigger ) {
-			self::do_server_postbacks( $trigger );
+		public static function tracking_trigger( $trigger , $doPostback = TRUE ) {
+			if( $doPostback == TRUE ) {
+				self::do_server_postbacks( $trigger );
+			}
 			$_SESSION['report'] = $trigger;
 		}
 	} // end of ias_tracking class

@@ -17,6 +17,7 @@
 		show_phone_lib();
 		show_brands_lib();
 		broker_postback();
+		pending_postbacks();
 		ias_tracking::do_server_postbacks('visit');
 	}
 
@@ -153,6 +154,7 @@
 	}
 
 	function broker_postback() {
+		global $wpdb;
 		if( isset( $_GET['postback'] ) ) {
 			header('Content-type: text/json;X-Content-Type-Options: nosniff; charset=UTF-8;');
 			if( !isset( $_GET['customer_id'] ) || !isset( $_GET['broker_id'] ) ) {
@@ -177,7 +179,17 @@
 			switch ( $_GET['postback'] ) {
 				case 'deposit':
 					ias_tracking::do_server_postbacks('deposit');
-					// add a new pending postback action for client side
+					$wpdb->insert( ias_fix_db_prefix('{{ias}}pending_postbacks') , array(
+							'customer_id' => $_GET['customer_id'],
+							'brand_id' => $_GET['broker_id'],
+							'trigger' => 'deposit',
+							'fired' => FALSE,
+						));
+					$return_array = array(
+						'success' => TRUE,
+						'id' => $wpdb->insert_id,
+					);
+					print( json_encode($return_array) );
 					break;
 
 				default:
@@ -203,6 +215,19 @@
 		}
 		else {
 			// check 3rd party postbacks
+		}
+	}
+
+	function pending_postbacks() {
+		global $wpdb;
+		if( isset( $_SESSION['ias_customer'] ) && isset( $_SESSION['ias_customer']->valid ) && $_SESSION['ias_customer']->valid == TRUE ) {
+			$triggers = $wpdb->get_results( ias_fix_db_prefix("SELECT * FROM `{{ias}}pending_postbacks` WHERE `fired` = 0 AND `customer_id` = '" . $_SESSION['ias_customer']->id . "' AND `brand_id` = '" . $_SESSION['ias_customer']->brand_id . "'") , ARRAY_A );
+			if( count($triggers) > 0 ) {
+				foreach ($triggers as $trigger) {
+					ias_tracking::tracking_trigger( $trigger['trigger'] , FALSE );
+					$wpdb->update( ias_fix_db_prefix('{{ias}}pending_postbacks') , array('fired' => 1 ) , array( 'id' => $trigger['id'] ) );
+				}
+			}
 		}
 	}
 
