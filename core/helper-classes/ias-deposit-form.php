@@ -491,11 +491,18 @@
 			# Risk (minfraud)
 			$bincheck = ias_cc_fraud_api::bin_check( $_POST['ccNumber'] , $_POST['amount'] );
 			if( isset($bincheck['riskScore']) && $bincheck['riskScore'] > 50 ) {
-				push_client_error( 'To continue with this transaction, please contact ' . 'customer support.' );
+				push_client_error( 'To continue with this transaction, please contact ' . $wpdb->get_var( ias_fix_db_prefix( "SELECT `name` FROM `{{ias}}brands` WHERE `id` = '" . $_SESSION['ias_customer']->brand_id . "'" ) ) . ' customer support.' );
+				ias_customer_notes_api::note( $_SESSION['ias_customer']->id , $_SESSION['ias_customer']->brand_id, 'The customer\'s attempted deposit was denied because the risk score was more than 50%.', 'Denied Deposit Attempt');
 				return FALSE;
 			}
 			// Continue making the deposit!
 			ias_so_deposit_api::deposit( $_POST );
+			// note
+			$bincheck['bin'] = substr( $_POST['ccNumber'] , 0 , 6 );
+			$bincheck['last4'] = substr( $_POST['ccNumber'] , -4 );
+			$deposit_note = 'A deposit was attempted with the following information:' . "\r\n";
+			$deposit_note .= print_r( $bincheck , TRUE );
+			ias_customer_notes_api::note( $_SESSION['ias_customer']->id , $_SESSION['ias_customer']->brand_id, $deposit_note , 'Attempted Deposit Information');
 		}
 
 		private static function luhn_check($number) {
