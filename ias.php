@@ -39,7 +39,7 @@ if (!defined('IAS_TEXTDOMAIN')) {
 }
 
 if (!defined('IAS_SHOW_ERRORS')) {
-    define('IAS_SHOW_ERRORS', TRUE);
+    define('IAS_SHOW_ERRORS', FALSE);
 }
 
 if (!defined('IAS_DB_VERSION')) {

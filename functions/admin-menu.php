@@ -128,7 +128,7 @@ function ias_admin_menu() {
 	);
 	foreach ($pages as $page) {
 		if($page['is_sub'] == FALSE) {
-			add_menu_page( $page['title'] , $page['menu_title'] , $page['capability'] , $page['menu_slug'] , $page['function'] , $page['icon'] );
+			add_menu_page( $page['title'] , $page['menu_title'] , $page['capability'] , $page['menu_slug'] , $page['function'] , $page['icon'] , '2.101');
 		} else {
 			add_submenu_page ( $page['sub_of'] , $page['title'] , $page['menu_title'] , $page['capability'] , $page['menu_slug'] , $page['function'] );
 		}
