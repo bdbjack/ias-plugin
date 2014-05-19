@@ -11,7 +11,7 @@ if( isset($_POST['selected']) ) {
 		$wpdb->update( ias_fix_db_prefix('{{ias}}regions') , array('brands' => json_encode($region_updated)) , array('id' => 3) );
 		$wpdb->delete( ias_fix_db_prefix('{{ias}}brands') , array('id' => $brand));
 	}
+	do_action('ias_delete_brand' , $_POST['selected'] );
 }
-do_action('ias_delete_brand' , $_POST['selected'] );
 header("location: admin.php?page=ias-brands");
 ?>
