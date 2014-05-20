@@ -73,8 +73,10 @@
 				'country_prefix' => $_SESSION['ias_geoip']->prefix,
 				'location_country' => $_SESSION['ias_geoip']->countryName,
 			);
-			foreach ($_SESSION['ias_geoip']->omni as $key => $value) {
-				$mapped['location_' . $key] = $value;
+			if( isset($_SESSION['ias_geoip']->omni) ) {
+				foreach ($_SESSION['ias_geoip']->omni as $key => $value) {
+					$mapped['location_' . $key] = $value;
+				}
 			}
 			if(isset($_SESSION['ias_customer'])) {
 				foreach ( $_SESSION['ias_customer'] as $key => $value) {
