@@ -82,7 +82,7 @@ class ias_login_form extends ias_forms {
 				'type' => 'submit',
 				'name' => NULL,
 				'label' => NULL,
-				'placeholder' => NULL,
+				'placeholder' => 'Log In',
 				'attributes' => array(
 						'required' => 'required',
 					),
