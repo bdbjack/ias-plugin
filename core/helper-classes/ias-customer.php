@@ -163,6 +163,7 @@
 		$cust = new $class( $brand , $info['email'] );
 		$_SESSION['ias_customer'] = $cust;
 		$ias_session['ias_customer'] = $cust;
+		$_SESSION['ias_customer']->totalDeposits = self::get_total_deposits();
 	}
 
 	public static function reload_customer_information() {
@@ -173,11 +174,34 @@
 		$cust = new $class( $_SESSION['ias_customer']->brand_id , $_SESSION['ias_customer']->email );
 		$ias_session['ias_customer'] = $cust;
 		$_SESSION['ias_customer'] = $cust;
+		$_SESSION['ias_customer']->totalDeposits = self::get_total_deposits();
 	}
 
 	private function get_country_id( $country_name ) {
 		global $wpdb;
 		return $wpdb->get_var( ias_fix_db_prefix("SELECT `id` FROM `{{ias}}countries` WHERE `name` LIKE '" . $country_name . "'") );
+	}
+
+	public static function get_total_deposits() {
+		if( !isset($_SESSION['ias_customer']) ) {
+			return FALSE;
+		}
+		$query = array(
+			'MODULE' => 'CustomerDeposits',
+			'COMMAND' => 'view',
+			'FILTER[customerId]' => $_SESSION['ias_customer']->id,
+			'FILTER[status]' => 'approved',
+		);
+		$query_results = ias_so_api::return_query( $_SESSION['ias_customer']->brand_id , $query );
+		$total_deposits = 0;
+		if( $query_results['connection_status'] == 'successful' && $query_results['operation_status'] == 'successful' && isset($query_results['CustomerDeposits']) && is_array($query_results['CustomerDeposits'])) {
+			foreach ($query_results['CustomerDeposits'] as $key => $value) {
+				if( strtolower( $value['paymentMethod'] ) !== 'bonus' ) {
+					$total_deposits = floatval($value['amount']) + $total_deposits;
+				}
+			}
+		}
+		return $total_deposits;
 	}
 
  } // end of ias_customer class
