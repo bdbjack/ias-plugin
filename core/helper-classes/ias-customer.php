@@ -172,6 +172,7 @@
 		$class = __CLASS__;
 		$cust = new $class( $_SESSION['ias_customer']->brand_id , $_SESSION['ias_customer']->email );
 		$ias_session['ias_customer'] = $cust;
+		$_SESSION['ias_customer'] = $cust;
 	}
 
 	private function get_country_id( $country_name ) {
