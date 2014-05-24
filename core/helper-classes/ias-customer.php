@@ -170,7 +170,7 @@
 			return FALSE;
 		}
 		$class = __CLASS__;
-		$cust = new $class( $_SESSION['ias_customer']->email , $_SESSION['ias_customer']->brand_id );
+		$cust = new $class( $_SESSION['ias_customer']->brand_id , $_SESSION['ias_customer']->email );
 		$ias_session['ias_customer'] = $cust;
 	}
 
