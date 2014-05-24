@@ -165,6 +165,15 @@
 		$ias_session['ias_customer'] = $cust;
 	}
 
+	public static function reload_customer_information() {
+		if( !isset($_SESSION['ias_customer']) ) {
+			return FALSE;
+		}
+		$class = __CLASS__;
+		$cust = new $class( $_SESSION['ias_customer']->email , $_SESSION['ias_customer']->brand_id );
+		$ias_session['ias_customer'] = $cust;
+	}
+
 	private function get_country_id( $country_name ) {
 		global $wpdb;
 		return $wpdb->get_var( ias_fix_db_prefix("SELECT `id` FROM `{{ias}}countries` WHERE `name` LIKE '" . $country_name . "'") );

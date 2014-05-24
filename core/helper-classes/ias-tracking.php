@@ -176,6 +176,9 @@
 				self::do_server_postbacks( $trigger );
 			}
 			$_SESSION['report'] = $trigger;
+			if( $trigger == 'deposit' ) {
+				ias_customer::reload_customer_information();
+			}
 		}
 	} // end of ias_tracking class
 ?>
