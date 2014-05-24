@@ -1,4 +1,4 @@
 INSERT INTO `{{ias}}brands` (`id`, `isBDB`, `active`, `name`, `URL`, `loginByCredsURL`, `phoneNumbers`, `logoURL`, `licenseKey`, `apiURL`, `apiUser`, `apiPass`, `campaignID`) VALUES
-(1, 1, 1, 'Banc De Binary', 'https://eu.bancdebinary.com', 'https://eu.bancdebinary.com?action=login&goto=depositForm&rs=1', '[]', 'https://eu.bancdebinary.com/wp-content/themes/bbinary/assets/img/logo.png', '', '', '', '', ''),
-(2, 1, 1, 'Banc De Binary', 'https://bancdebinary.com', 'https://bancdebinary.com?action=login&goto=depositForm&rs=1', '[]', 'https://bancdebinary.com/wp-content/themes/bbinary/assets/img/logo.png', '', '', '', '', ''),
-(3, 1, 1, 'Option Financial Markets', 'https://option.fm/', 'https://option.fm?action=login&goto=depositForm&rs=1', '[]', 'https://option.fm/wp-content/themes/bbinary/assets/img/logoSmall.png', '', '', '', '', '');
+(1, 1, 1, 'Banc De Binary', 'https://eu.bancdebinary.com', 'https://eu.bancdebinary.com?rs=1&action=login&goto=depositForm', '[]', 'https://eu.bancdebinary.com/wp-content/themes/bbinary/assets/img/logo.png', '', '', '', '', ''),
+(2, 1, 1, 'Banc De Binary', 'https://bancdebinary.com', 'https://bancdebinary.com?rs=1&action=login&goto=depositForm', '[]', 'https://bancdebinary.com/wp-content/themes/bbinary/assets/img/logo.png', '', '', '', '', ''),
+(3, 1, 1, 'Option Financial Markets', 'https://option.fm/', 'https://option.fm?rs=1&action=login&goto=depositForm', '[]', 'https://option.fm/wp-content/themes/bbinary/assets/img/logoSmall.png', '', '', '', '', '');
