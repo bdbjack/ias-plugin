@@ -82,7 +82,7 @@ class ias_login_form extends ias_forms {
 				'type' => 'submit',
 				'name' => NULL,
 				'label' => NULL,
-				'placeholder' => NULL,
+				'placeholder' => 'Log In',
 				'attributes' => array(
 						'required' => 'required',
 					),
@@ -220,6 +220,7 @@ class ias_login_form extends ias_forms {
 		if( $cust->valid == TRUE ) {
 			$_SESSION['ias_customer'] = $cust;
 			$ias_session['ias_customer'] = $cust;
+			$_SESSION['ias_customer']->totalDeposits = ias_customer::get_total_deposits();
 			do_action('ias_login');
 		}
 		else {

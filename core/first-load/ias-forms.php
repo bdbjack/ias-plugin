@@ -116,6 +116,7 @@ abstract class ias_forms {
 				$html .= '<input type="' . $field_info['type'] . '" class="form-control btn btn-success button" name="' . $field_info['name'] . '" id="' . $this->id . '_' . $field_info['name'] . '"';
 				if(!isset($field_info['placeholder']) || !is_null($field_info['placeholder']) || strlen($field_info['placeholder']) != 0 ) {
 					$html .= 'placeholder="' . $field_info['placeholder'] . '" ';
+					$html .= 'value="' . $field_info['placeholder'] . '" ';
 				}
 				foreach ($field_info['attributes'] as $key => $value) {
 					$html .= $key . '="' . $value . '" ';

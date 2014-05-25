@@ -86,14 +86,15 @@ class ias_so_api {
     	} catch (Artax\ClientException $e) {
     		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
     	}
+
     	try {
-    		$xml = new SimpleXMLElement( $results );
+    		$xml = new SimpleXMLElement( $this->lastResultsRaw  );
     	}
     	catch( Exception $e ) {
     		$rm_error = 'Spot API has returned results which could not be understood by the standard XML parser.' . "\r\n";
     		$rm_error .= 'Response from SpotAPI' . "\r\n";
     		$rm_error .= '<pre>' . "\r\n";
-    		$rm_error .= var_dump( $results , TRUE ) . "\r\n";
+    		$rm_error .= print_r( $this->lastResultsRaw , TRUE ) . "\r\n";
     		$rm_error .= '</pre>' . "\r\n";
     		$rm_error .= 'The following exception was triggered: ' . "\r\n";
     		$rm_error .= '<pre>' . "\r\n";

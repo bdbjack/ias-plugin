@@ -3,7 +3,7 @@
 		header("location: admin.php?page=ias-bugs&success=0");
 	}
 	$ip_feedback = wp_remote_get('http://httpbin.org/ip');
-	if(!is_wp_error()) {
+	if(!is_wp_error( $ip_feedback )) {
 		$ip_feedback_array = json_decode($ip_feedback['body'],true);
 	} else {
 		$ip_feedback_array['origin'] = 'Error';
