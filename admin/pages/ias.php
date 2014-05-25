@@ -35,7 +35,11 @@
 						<th><?php _e('Server External IP',IAS_TEXTDOMAIN); ?></th>
 						<td><?php 
 						$ip_feedback = wp_remote_get('http://httpbin.org/ip');
-						$ip_feedback_array = json_decode($ip_feedback['body'],true);
+						if(!is_wp_error( $ip_feedback )) {
+							$ip_feedback_array = json_decode($ip_feedback['body'],true);
+						} else {
+							$ip_feedback_array['origin'] = 'Error';
+						}
 						print( $ip_feedback_array['origin'] ); ?></td>
 					</tr>
 				</tbody>
