@@ -75,10 +75,24 @@ class ias_so_api {
 		}
 		$body = new Artax\FormBody;
 		foreach ($submission as $key => $value) {
+			if( is_null( $value ) ) {
+				$value = '';
+			}
 			$body->addField($key,$value);
 		}
 		$client = new Artax\Client;
-		$request = (new Artax\Request)->setUri($this->api_url)->setMethod('POST')->setBody($body);
+		try {
+			$request = (new Artax\Request)->setUri($this->api_url)->setMethod('POST')->setBody($body);
+		}
+		catch( Exception $e ) {
+			$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+			$rm_error = 'Artax has reported an error when attempting to interact with SpotAPI' . "\r\n";
+    		$rm_error .= 'Error Dump' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $e , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		report_ias_bug( 'API POST Error on site ' . get_bloginfo('wpurl') , $rm_error );
+		}
 		try {
     		$response = $client->request($request);
     		$results =  $response->getBody();
