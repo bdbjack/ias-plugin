@@ -121,7 +121,7 @@
 		if(isset($_SESSION['client_errors']) && is_array($_SESSION['client_errors'])) {
 			$html = '';
 			foreach ($_SESSION['client_errors'] as $error) {
-				$html .= '<div class="alert alert-danger client-error">' . "\r\n";
+				$html .= '<div class="alert alert-danger client-error" style="margin-bottom: 0px">' . "\r\n";
 				$html .= '	' . __( $error , IAS_TEXTDOMAIN ) . "\r\n";
 				$html .= '</div>' . "\r\n";
 			}
