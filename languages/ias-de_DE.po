@@ -1,0 +1,654 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Instant Affiliate Software Base\n"
+"POT-Creation-Date: 2014-05-27 23:39+0200\n"
+"PO-Revision-Date: 2014-05-27 23:39+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/pages/ias-brands-add.php:2
+msgid "Instant Affiliate Program Brand Management - Add a Brand"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:3
+msgid ""
+"Welcome to the Add Brand Interface. From here you will be able to add a new "
+"brand to recieve countries which BDB does not accept."
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:4 admin/pages/ias-brands-edit.php:15
+#: admin/pages/ias-brands.php:4 admin/pages/ias-tracking.php:4
+msgid "For more information on how to use this interface, visit:"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:10 admin/pages/ias-brands-edit.php:22
+msgid "Brand Name"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:14 admin/pages/ias-brands-edit.php:26
+msgid "Brand URL"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:18 admin/pages/ias-brands-edit.php:30
+msgid "Login by Credentials URL"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:22 admin/pages/ias-brands-edit.php:34
+msgid "URL of Logo"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:26 admin/pages/ias-brands-edit.php:38
+msgid "Campaign ID"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:30 admin/pages/ias-brands-edit.php:50
+msgid "API URL"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:34 admin/pages/ias-brands-edit.php:54
+msgid "API User"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:38 admin/pages/ias-brands-edit.php:58
+msgid "API Password"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:42 admin/pages/ias-brands-edit.php:65
+#: admin/pages/ias-tracking.php:63
+msgid "Save"
+msgstr ""
+
+#: admin/pages/ias-brands-add.php:42 admin/pages/ias-brands-edit.php:65
+#: admin/pages/ias-tracking.php:64 admin/pages/ias-tracking.php:114
+#: admin/pages/ias-tracking.php:200
+msgid "Cancel"
+msgstr ""
+
+#: admin/pages/ias-brands-edit.php:6 admin/pages/ias-brands-edit.php:13
+msgid "Instant Affiliate Program Brand Management - Edit a Brand"
+msgstr ""
+
+#: admin/pages/ias-brands-edit.php:7
+msgid "Error: Could not find the brand"
+msgstr ""
+
+#: admin/pages/ias-brands-edit.php:8
+msgid "Back"
+msgstr ""
+
+#: admin/pages/ias-brands-edit.php:14
+msgid ""
+"Welcome to the Edit Brand Interface. From here you will be able to edit your "
+"brands."
+msgstr ""
+
+#: admin/pages/ias-brands-edit.php:44
+msgid "API License Key"
+msgstr ""
+
+#: admin/pages/ias-brands.php:2
+msgid "Instant Affiliate Program Brand Management"
+msgstr ""
+
+#: admin/pages/ias-brands.php:3
+msgid ""
+"Welcome to the Brand Management Interface. From here you will be able to "
+"manage all the brands which your site is integrated with."
+msgstr ""
+
+#: admin/pages/ias-bugs.php:2
+msgid "Instant Affiliate Program Bug Submission"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:3
+msgid "Welcome to the bug submission form."
+msgstr ""
+
+#: admin/pages/ias-bugs.php:3
+msgid ""
+"Using this form you will be able to let the IAS Development team know about "
+"any issues that you have using the software."
+msgstr ""
+
+#: admin/pages/ias-bugs.php:4
+msgid ""
+"In order to properly assist you, we will be collecting the following "
+"information automatically:"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:6
+msgid "Web Server (Apache / Nginx) Version"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:7 admin/pages/ias.php:19
+msgid "PHP Version"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:8 admin/pages/ias.php:23
+msgid "MySQL Version"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:9
+msgid "WordPress Site Title"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:10 admin/pages/ias.php:27
+msgid "WordPress Version"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:11
+msgid "WordPress Admin Email"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:12 admin/pages/ias.php:31
+msgid "Server IP"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:13 admin/pages/ias.php:35
+msgid "Server External IP"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:16
+msgid ""
+"If you do not want this information to be collected, please contact your IAS "
+"distributer."
+msgstr ""
+
+#: admin/pages/ias-bugs.php:23
+msgid "Bug Submission Form"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:30
+msgid "Bug Submitted Successfully"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:36
+msgid "Bug was not submitted successfully. Please try again"
+msgstr ""
+
+#: admin/pages/ias-bugs.php:44
+msgid ""
+"Bug submission is currently not working. Please see: <a href=\"https://"
+"rm.14all.me/issues/45\" target=\"_blank\">https://rm.14all.me/issues/45</a> "
+"for more information."
+msgstr ""
+
+#: admin/pages/ias-bugs.php:65
+msgid "Submit"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:2
+msgid "Instant Affiliate Program Tracking"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:3
+msgid ""
+"Welcome to the 3rd Party Tracking System Integration Interface. From this "
+"interface you will be able to manage your integration with a 3rd Party "
+"Tracking System."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:7
+msgid "Tracking Policies"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:12
+msgid "Policy"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:13
+msgid "Value"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:18
+msgid "Tracking Override"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:21
+msgid "Last Affiliate Wins"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:22
+msgid "First Affiliate Wins"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:27
+msgid "Tracking Expiry"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:30
+msgid "Never"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:31
+msgid "Day"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:32 admin/pages/ias-tracking.php:33
+#: admin/pages/ias-tracking.php:34 admin/pages/ias-tracking.php:35
+#: admin/pages/ias-tracking.php:36
+msgid "Days"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:37
+msgid "Week"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:38 admin/pages/ias-tracking.php:39
+msgid "Weeks"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:40
+msgid "Month"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:41 admin/pages/ias-tracking.php:42
+#: admin/pages/ias-tracking.php:43 admin/pages/ias-tracking.php:44
+#: admin/pages/ias-tracking.php:45 admin/pages/ias-tracking.php:46
+#: admin/pages/ias-tracking.php:47 admin/pages/ias-tracking.php:48
+#: admin/pages/ias-tracking.php:49 admin/pages/ias-tracking.php:50
+msgid "Months"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:51
+msgid "Year"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:52 admin/pages/ias-tracking.php:53
+#: admin/pages/ias-tracking.php:54 admin/pages/ias-tracking.php:55
+msgid "Years"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:70
+msgid "Report Actions (Pixels)"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:75
+msgid "Add a new reporting action (pixel)"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:78 admin/pages/ias-tracking.php:123
+msgid "Trigger"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:79 admin/pages/ias-tracking.php:122
+msgid "Type"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:84 admin/pages/ias-tracking.php:157
+msgid "Visit"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:85 admin/pages/ias-tracking.php:161
+msgid "Email Capture"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:86 admin/pages/ias-tracking.php:165
+msgid "Lead Generation"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:87 admin/pages/ias-tracking.php:169
+msgid "Customer Generation"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:88 admin/pages/ias-tracking.php:173
+msgid "Deposit"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:93 admin/pages/ias-tracking.php:136
+msgid "Server Postback"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:94 admin/pages/ias-tracking.php:140
+msgid "Image Pixel"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:95 admin/pages/ias-tracking.php:144
+msgid "Iframe Pixel"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:96 admin/pages/ias-tracking.php:148
+msgid "Javascript"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:101 admin/pages/ias-tracking.php:124
+msgid "Content"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:113 core/helper-classes/ias-tables.php:77
+#: core/helper-classes/ias-tables.php:165
+msgid "Add"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:199 core/helper-classes/ias-tables.php:80
+#: core/helper-classes/ias-tables.php:168
+msgid "Remove Selected"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:233
+msgid "Variable Information Macros"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:238
+msgid ""
+"The following is a list of Variable Information Macros. These are used to "
+"input dynamically changing information into your Postback URLs."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:239
+msgid "For more information on Variable Information Macros, please visit "
+msgstr ""
+
+#: admin/pages/ias-tracking.php:239
+msgid "IAS Wiki - Dictionary - Variable Information Macros"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:246
+msgid "The IP Address from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:250
+msgid "The ISO of the country from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:254
+msgid ""
+"The SpotOption ID of the country from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:258
+msgid ""
+"The IAS Region ID of the country from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:262
+msgid ""
+"The Dialing Prefix of the country from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:266
+msgid "The name of the country from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:270
+msgid ""
+"The 2 digit abbreviation of the region from which the user triggered the "
+"action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:274
+msgid "The name of the region from which the user triggered the action"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:278
+msgid "The name of the city from which the user triggered the action"
+msgstr ""
+
+#: admin/pages/ias-tracking.php:282
+msgid "The time zone from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:286
+msgid ""
+"The 2 digit abbreviation of the continent from which the user triggered the "
+"action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:290
+msgid "The postal code from which the user triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:294
+msgid "The id of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:298
+msgid "The first name of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:302
+msgid "The last name of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:306
+msgid "The email of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:310
+msgid "The mobile phone number of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:314
+msgid "The phone number of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:318
+msgid "The fax number of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:322
+msgid "The first deposit date of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:326
+msgid "The country of residence of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:330
+msgid "The country of registration of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:334
+msgid "The city of residence of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:338
+msgid ""
+"The 2 letter abbreviation of the state of residence of the customer which "
+"triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:342
+msgid "The street name of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:346
+msgid "The house number of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:350
+msgid "The apartment number of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:354
+msgid "The registration time of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:358
+msgid "The current account balance of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:362
+msgid "The currency of the customer which triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:366
+msgid "The value of the parameter a_aid of the user who triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:370
+msgid "The value of the parameter a_bid of the user who triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:374
+msgid "The value of the parameter a_cid of the user who triggered the action."
+msgstr ""
+
+#: admin/pages/ias-tracking.php:378
+msgid ""
+"The value of the parameter tracker of the user who triggered the action."
+msgstr ""
+
+#: admin/pages/ias.php:2
+msgid "Instant Affiliate Program"
+msgstr ""
+
+#: admin/pages/ias.php:3
+msgid ""
+"Welcome to the IAS Information page. For more information about IAS, visit: "
+msgstr ""
+
+#: admin/pages/ias.php:4
+msgid "To report any bugs, visit:"
+msgstr ""
+
+#: admin/pages/ias.php:4
+msgid "or send an email to:"
+msgstr ""
+
+#: admin/pages/ias.php:10
+msgid "Installation Information"
+msgstr ""
+
+#: admin/pages/ias.php:15
+msgid "Server Software"
+msgstr ""
+
+#: admin/pages/ias.php:50
+msgid "Latest News"
+msgstr ""
+
+#: admin/pages/ias.php:67
+msgid "View Full Article"
+msgstr ""
+
+#: admin/pages/ias.php:83 admin/pages/ias.php:116
+msgid "Open a New Issue"
+msgstr ""
+
+#: admin/pages/ias.php:92
+msgid "Open Plugin Issues for version"
+msgstr ""
+
+#: admin/pages/ias.php:95
+msgid "Issue"
+msgstr ""
+
+#: admin/pages/ias.php:96
+msgid "Last Update"
+msgstr ""
+
+#: admin/pages/ias.php:123
+msgid "Latest Dev Team Activity"
+msgstr ""
+
+#: admin/pages/ias.php:126
+msgid "Time"
+msgstr ""
+
+#: admin/pages/ias.php:127
+msgid "Activity"
+msgstr ""
+
+#: core/first-load/ias-forms.php:243
+msgid "No Match Found"
+msgstr ""
+
+#: core/helper-classes/ias-deposit-form.php:328
+msgid "Please log in to continue:"
+msgstr ""
+
+#: core/helper-classes/ias-forms-login.php:155
+#: core/helper-classes/ias-forms-login.php:210
+#: core/helper-classes/ias-registration-form.php:433
+#: core/helper-classes/ias-registration-form.php:713
+msgid "Log Out"
+msgstr ""
+
+#: core/helper-classes/ias-forms-login.php:244
+msgid "IAS Login Form"
+msgstr ""
+
+#: core/helper-classes/ias-forms-login.php:246
+msgid ""
+"Allows a user to log in with their username and password from the intended "
+"broker."
+msgstr ""
+
+#: core/helper-classes/ias-registration-form.php:724
+msgid "IAS Registration Form"
+msgstr ""
+
+#: core/helper-classes/ias-registration-form.php:726
+msgid "Allows a user register a trading account with a chosen broker."
+msgstr ""
+
+#: core/helper-classes/ias-tables.php:48
+msgid "Total"
+msgstr ""
+
+#: core/helper-classes/ias-tables.php:62
+msgid "Search"
+msgstr ""
+
+#: core/helper-classes/ias-tables.php:111
+msgid "Edit"
+msgstr ""
+
+#: core/helper-classes/ias-tables.php:133
+msgid "View Logo"
+msgstr ""
+
+#: core/helper-classes/ias-widget-forms.php:32
+msgid "Yes"
+msgstr ""
+
+#: core/helper-classes/ias-widget-forms.php:37
+msgid "No"
+msgstr ""
+
+#: functions/initialization.php:26
+msgid "Version: "
+msgstr ""
+
+#: functions/initialization.php:27
+msgid "Settings"
+msgstr ""
+
+#: functions/initialization.php:28
+msgid "How to Use"
+msgstr ""
+
+#: functions/initialization.php:165
+msgid "Missing Critical Information"
+msgstr ""
+
+#: functions/initialization.php:200
+msgid "Invalid Conversion Type"
+msgstr ""
+
+#: functions/page-display.php:19 functions/page-display.php:27
+msgid "Login Settings"
+msgstr ""
+
+#: functions/page-display.php:84
+msgid "Sorry"
+msgstr ""
+
+#: functions/page-display.php:85
+msgid ""
+"In order to view this page, you must be logged in. Please log in below to "
+"access this page."
+msgstr ""
