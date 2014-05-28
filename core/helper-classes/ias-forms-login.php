@@ -221,6 +221,7 @@ class ias_login_form extends ias_forms {
 			$_SESSION['ias_customer'] = $cust;
 			$ias_session['ias_customer'] = $cust;
 			$_SESSION['ias_customer']->totalDeposits = ias_customer::get_total_deposits();
+			$_SESSION['ias_customer']->rawPassword = $_POST['password'];
 			do_action('ias_login');
 		}
 		else {
