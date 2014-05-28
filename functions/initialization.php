@@ -181,7 +181,12 @@
 			}
 			switch ( $_GET['postback'] ) {
 				case 'deposit':
+					if( !is_numeric($_GET['broker_id']) || !is_numeric($_GET['customer_id']) ) {
+						break;
+					}
+					ias_customer::quick_load( $_GET['broker_id'] , $_GET['customer_id'] );
 					ias_tracking::do_server_postbacks('deposit');
+					unset($_SESSION['ias_customer']);
 					$wpdb->insert( ias_fix_db_prefix('{{ias}}pending_postbacks') , array(
 							'customer_id' => $_GET['customer_id'],
 							'brand_id' => $_GET['broker_id'],

@@ -115,6 +115,17 @@
 				    	$bug_report .= '</pre>' . "\r\n";
 				    	report_ias_bug( 'Pixel Fire Failure from ' . get_bloginfo('wpurl') , $bug_report );
 				    }
+				    /**
+				     * Left here in case someone needs to debug!
+				     */
+				    //else {
+				    //	$bug_report = 'Response from Pixel ' . $request->getUri() . '.' . "\r\n" . "\r\n";
+				    //	$bug_report .= '*Return from Attempt*' . "\r\n" . "\r\n";
+				    //	$bug_report .= '<pre>' . "\r\n";
+				    //	$bug_report .= print_r( $response , true ) . "\r\n";
+				    //	$bug_report .= '</pre>' . "\r\n";
+				    //	report_ias_bug( 'Response from Pixel ' . get_bloginfo('wpurl') , $bug_report );
+				    //}
 				    if (!--$unfinishedRequests) {
 				        $reactor->stop();
 				    }
