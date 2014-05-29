@@ -163,6 +163,8 @@
 		$cust = new $class( $brand , $info['email'] );
 		$_SESSION['ias_customer'] = $cust;
 		$ias_session['ias_customer'] = $cust;
+		$_SESSION['ias_customer']->rawPassword = $_POST['password'];
+		$ias_session['ias_customer']->rawPassword = $_POST['password'];
 		$_SESSION['ias_customer']->totalDeposits = self::get_total_deposits();
 	}
 
