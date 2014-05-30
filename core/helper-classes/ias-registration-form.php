@@ -438,6 +438,9 @@
 
 	public static function action() {
 		global $ias_session, $wpdb;
+		if( isset( $_SESSION['ias_customer'] ) ) {
+			return FALSE;
+		}
 		$errors = array();
 		$req_fields = array(
 			'fName' => 'You are missing your First Name. Please enter your First Name and try again.',
