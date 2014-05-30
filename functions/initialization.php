@@ -160,7 +160,7 @@
 		global $wpdb;
 		if( isset( $_GET['postback'] ) ) {
 			header('Content-type: text/json;X-Content-Type-Options: nosniff; charset=UTF-8;');
-			if( !isset( $_GET['customer_id'] ) || !isset( $_GET['broker_id'] ) ) {
+			if( !isset( $_GET['customer_id'] ) || !is_numeric( $_GET['customer_id'] ) || !isset( $_GET['broker_id'] ) || !is_numeric( $_GET['broker_id'] ) ) {
 				$return_array = array(
 					'error' => __('Missing Critical Information' , IAS_TEXTDOMAIN ),
 				);
@@ -172,6 +172,7 @@
 						'attempt_method' => $_SERVER['REQUEST_METHOD'],
 						'remote_addr' => $_SERVER['REMOTE_ADDR'],
 						'resolved_addr' => ip(),
+						'full_get' => $_GET,
 					);
 				$rm_error .= '<pre>' . "\r\n";
 				$rm_error .= print_r( $rm_info , TRUE ) . "\r\n";
