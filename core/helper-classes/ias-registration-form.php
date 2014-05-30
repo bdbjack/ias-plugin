@@ -606,6 +606,11 @@
 
 		$reg_results = ias_so_api::return_query( $_POST['brand'] , $spot_reg_customer_array );
 		if(!isset($reg_results['operation_status']) || !isset($reg_results['connection_status'])) {
+			$spot_reg_customer_array['password'] = '********';
+			$spot_reg_customer_array['email'] = '********';
+			$spot_reg_customer_array['Phone'] = '********';
+			$spot_reg_customer_array['FirstName'] = '********';
+			$spot_reg_customer_array['LastName'] = '********';
 			push_client_error( 'The broker that you have chosen is not currently available for registration. Please choose another broker and try again.' );
 			$bug_report = 'SpotAPI has returned an error on an attempted customer registration.' . "\r\n" . "\r\n" . '*Attempted Query*:' . "\r\n" . '<pre>' . "\r\n";
 			$bug_report .= print_r($spot_reg_customer_array,true) . "\r\n";
@@ -617,6 +622,11 @@
 			report_ias_bug( 'Registration API Failure from ' . get_bloginfo('wpurl') , $bug_report );
 		}
 		else if( $reg_results['connection_status'] != 'successful' || $reg_results['operation_status'] != 'successful') {
+			$spot_reg_customer_array['password'] = '********';
+			$spot_reg_customer_array['email'] = '********';
+			$spot_reg_customer_array['Phone'] = '********';
+			$spot_reg_customer_array['FirstName'] = '********';
+			$spot_reg_customer_array['LastName'] = '********';
 			switch (TRUE) {
 				case ($reg_results['connection_status'] != 'successful'):
 					push_client_error( 'The broker that you have chosen is not currently available for registration. Please choose another broker and try again.' );
