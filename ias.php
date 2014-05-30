@@ -227,7 +227,7 @@ $ias_session = array();
  */
 ias_add_all_wp_action_functions();
 if( get_site_option( 'ias_update_available' , FALSE ) == TRUE ) {
-	array_push( $ias_sticky_messages , 'The Instant Affiliate Software Base Plugin is Out of Date. Please update to a newer version.' );
+//	array_push( $ias_sticky_messages , 'The Instant Affiliate Software Base Plugin is Out of Date. Please update to a newer version.' );
 }
 
 /**
