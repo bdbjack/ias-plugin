@@ -163,7 +163,24 @@
 		$cust = new $class( $brand , $info['email'] );
 		$_SESSION['ias_customer'] = $cust;
 		$ias_session['ias_customer'] = $cust;
+		$_SESSION['ias_customer']->rawPassword = $_POST['password'];
+		$ias_session['ias_customer']->rawPassword = $_POST['password'];
 		$_SESSION['ias_customer']->totalDeposits = self::get_total_deposits();
+	}
+
+	public static function quick_load( $brand , $identity ) {
+		if( !is_numeric($identity) ) {
+			return FALSE;
+		}
+		$class = __CLASS__;
+		$cust = new $class( $brand , $identity );
+		$_SESSION['ias_customer'] = $cust;
+		$ias_session['ias_customer'] = $cust;
+		$_SESSION['ias_customer']->totalDeposits = self::get_total_deposits();
+		$_SESSION['ias_tracking']->a_aid = $_SESSION['ias_customer']->a_aid;
+		$_SESSION['ias_tracking']->a_bid = $_SESSION['ias_customer']->a_bid;
+		$_SESSION['ias_tracking']->a_cid = $_SESSION['ias_customer']->a_cid;
+		$_SESSION['ias_tracking']->tracker = $_SESSION['ias_customer']->subCampaignParam;
 	}
 
 	public static function reload_customer_information() {
