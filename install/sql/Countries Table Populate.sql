@@ -55,7 +55,7 @@ INSERT INTO `{{ias}}countries` (`id`, `ISO`, `name`, `prefix`, `region`, `curren
 (53, 'CI', 'Cote D''Ivoire', '225', 1, 'usd'),
 (54, 'HR', 'Croatia', '385', 2, 'eur'),
 (55, 'CU', 'Cuba', '53', 3, 'usd'),
-(56, 'CY', 'Cyprus', '357', 2, 'eur'),
+(56, 'CY', 'Cyprus', '357', 3, 'eur'),
 (57, 'CZ', 'Czech Republic', '420', 2, 'eur'),
 (58, 'DK', 'Denmark', '452', 2, 'eur'),
 (59, 'DJ', 'Djibouti', '253', 3, 'usd'),
