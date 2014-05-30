@@ -47,11 +47,11 @@ if (!defined('IAS_DB_VERSION')) {
 }
 
 if (!defined('IAS_VERSION')) {
-    define('IAS_VERSION', 'Alpha Release');
+    define('IAS_VERSION', 'Beta Release');
 }
 
 if (!defined('IAS_VERSION_ID')) {
-    define('IAS_VERSION_ID', 1);
+    define('IAS_VERSION_ID', 7);
 }
 
 if (!defined('MUSKETEERS_PROJECT_ID')) {
