@@ -20,6 +20,7 @@
 		header("location: admin.php?page=ias-brands-add");
 	}
 	// Insert the information
+	$_POST['active'] = 1;
 	$wpdb->insert( ias_fix_db_prefix('{{ias}}brands') , $_POST );
 	$insertId = $wpdb->insert_id;
 	// Update the region

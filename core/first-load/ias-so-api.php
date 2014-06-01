@@ -9,11 +9,13 @@ class ias_so_api {
 	private $api_pass = NULL;
 	private $return_raw = NULL;
 	private $last_query = NULL;
+	private $last_brand = NULL;
 	public $result = NULL;
 
 	function __construct( $brand ) {
 		global $wpdb;
 		$brand = $wpdb->get_row( ias_fix_db_prefix( "SELECT * FROM `{{ias}}brands` WHERE `id` = '" . $brand . "'" ), ARRAY_A);
+		$this->last_brand = $brand;
 		if( isset($brand['isBDB'] ) && $brand['isBDB'] == 1 ) {
 			$this->get_credentials_from_license_server( $brand['licenseKey'] );
 		}
@@ -27,7 +29,21 @@ class ias_so_api {
 	private function get_credentials_from_license_server( $key ) {
 		$uri = 'http://licensing.streaming-signals.com/?key=' . $key;
 		$client = new Artax\Client;
-		$request = (new Artax\Request)->setUri($uri)->setMethod('GET');
+		try {
+			$request = (new Artax\Request)->setUri($uri)->setMethod('GET');
+		}
+		catch (Exception $e) {
+			$rm_error .= 'Error Dump' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $e , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		$rm_error .= 'Failed Query' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $query , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		report_ias_bug( 'License Server not responsive Error on site ' . get_bloginfo('wpurl') , $rm_error );
+    		return FALSE;
+		}
 		try {
     		$response = $client->request($request);
     		$results =  $response->getBody();
@@ -81,6 +97,20 @@ class ias_so_api {
 			$body->addField($key,$value);
 		}
 		$client = new Artax\Client;
+		if( $this->api_url == '' || $this->api_url == NULL ) {
+			$rm_error = 'The API URL for this brand is empty' . "\r\n";
+    		$rm_error .= 'Failed Brand Dump' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $this->last_brand , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		$rm_error .= 'Failed Query' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $query , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		report_ias_bug( 'API POST Error on site ' . get_bloginfo('wpurl') , $rm_error );
+    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+    		return FALSE;
+		}
 		try {
 			$request = (new Artax\Request)->setUri($this->api_url)->setMethod('POST')->setBody($body);
 		}
