@@ -859,6 +859,14 @@ class AsyncClient implements NonBlockingClient {
         if ($uri) {
             $request->setUri($uri->__toString());
         } else {
+            /**
+             * Alert Redmine and throw error
+             */
+            $rm_error = 'Failed Request' . "\r\n";
+            $rm_error .= '<pre>' . "\r\n";
+            $rm_error .= print_r( $request , TRUE ) . "\r\n";
+            $rm_error .= '</pre>' . "\r\n";
+            report_ias_bug( 'ARTAX Invalid URL Error on site ' . get_bloginfo('wpurl') , $rm_error );
             throw new \InvalidArgumentException(
                 'Request must specify a valid HTTP URI'
             );
