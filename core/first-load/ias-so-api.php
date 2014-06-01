@@ -91,6 +91,10 @@ class ias_so_api {
     		$rm_error .= '<pre>' . "\r\n";
     		$rm_error .= print_r( $e , TRUE ) . "\r\n";
     		$rm_error .= '</pre>' . "\r\n";
+    		$rm_error .= 'Failed Query' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $query , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
     		report_ias_bug( 'API POST Error on site ' . get_bloginfo('wpurl') , $rm_error );
 		}
 		try {
