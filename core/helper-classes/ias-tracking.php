@@ -126,6 +126,10 @@
 				    //	$bug_report .= '</pre>' . "\r\n";
 				    //	report_ias_bug( 'Response from Pixel ' . get_bloginfo('wpurl') , $bug_report );
 				    //}
+				    /**
+				     * Report Back to Pixel Log
+				     */
+				    do_action( 'finishedServerPostback' , $response );
 				    if (!--$unfinishedRequests) {
 				        $reactor->stop();
 				    }
