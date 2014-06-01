@@ -627,6 +627,7 @@
 			$spot_reg_customer_array['Phone'] = '********';
 			$spot_reg_customer_array['FirstName'] = '********';
 			$spot_reg_customer_array['LastName'] = '********';
+			$skipReportError = FALSE;
 			switch (TRUE) {
 				case ($reg_results['connection_status'] != 'successful'):
 					push_client_error( 'The broker that you have chosen is not currently available for registration. Please choose another broker and try again.' );
@@ -644,6 +645,9 @@
 				
 				default:
 					foreach ($reg_results['errors']['error'] as $error) {
+						if( $error == 'emailAlreadyExists' ) {
+							$skipReportError = TRUE;
+						}
 						if(isset($errors[$error])) {
 							push_client_error( $errors[$error] );
 						} else {
@@ -652,14 +656,16 @@
 					}
 					break;
 			}
-			$bug_report = 'SpotAPI has returned an error on an attempted customer registration.' . "\r\n" . "\r\n" . '*Attempted Query*:' . "\r\n" . '<pre>' . "\r\n";
-			$bug_report .= print_r($spot_reg_customer_array,true) . "\r\n";
-			$bug_report .= '</pre>' . "\r\n". "\r\n";
-			$bug_report .= '*SpotAPI Return*' . "\r\n" . "\r\n";
-			$bug_report .= '<pre>' . "\r\n";
-			$bug_report .= print_r($reg_results,true) . "\r\n";
-			$bug_report .= '</pre>' . "\r\n". "\r\n";
-			report_ias_bug( 'Registration API Failure from ' . get_bloginfo('wpurl') , $bug_report );
+			if( $skipReportError == TRUE ) {
+				$bug_report = 'SpotAPI has returned an error on an attempted customer registration.' . "\r\n" . "\r\n" . '*Attempted Query*:' . "\r\n" . '<pre>' . "\r\n";
+				$bug_report .= print_r($spot_reg_customer_array,true) . "\r\n";
+				$bug_report .= '</pre>' . "\r\n". "\r\n";
+				$bug_report .= '*SpotAPI Return*' . "\r\n" . "\r\n";
+				$bug_report .= '<pre>' . "\r\n";
+				$bug_report .= print_r($reg_results,true) . "\r\n";
+				$bug_report .= '</pre>' . "\r\n". "\r\n";
+				report_ias_bug( 'Registration API Failure from ' . get_bloginfo('wpurl') , $bug_report );
+			}
 		}
 		if( !isset( $reg_results['Customer']['id'] ) ) {
 			push_client_error( 'There was an issue processing your registration. Please try again.' );
