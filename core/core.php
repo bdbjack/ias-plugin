@@ -108,13 +108,13 @@ function ias_add_all_wp_action_functions() {
 
  foreach ($actions as $action) {
  	if(function_exists('ias_' . $action)) {
-		add_action($action,'ias_' . $action,9);
+		add_action($action,'ias_' . $action, 1);
  	}
  }
 
  foreach ($admin_actions as $action) {
  	if(function_exists('ias_' . $action)) {
-		add_action($action,'ias_' . $action,9);
+		add_action($action,'ias_' . $action, 1);
  	}
  }
 
