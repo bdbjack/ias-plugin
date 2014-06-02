@@ -542,7 +542,7 @@
 			'password' => $_POST['password'],
 		);
 		if( !current_user_can( 'manage_options' ) ) {
-			$spot_reg_customer_array['registrationCountry'] = $_SESSION['ias_geoip']->spotid;
+			$spot_reg_customer_array['registrationCountry'] = $_POST['country'];
 		} else {
 			$spot_reg_customer_array['registrationCountry'] = $_POST['country'];
 		}
