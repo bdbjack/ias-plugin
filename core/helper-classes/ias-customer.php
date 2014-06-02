@@ -177,10 +177,11 @@
 		$_SESSION['ias_customer'] = $cust;
 		$ias_session['ias_customer'] = $cust;
 		$_SESSION['ias_customer']->totalDeposits = self::get_total_deposits();
-		$_SESSION['ias_tracking']->a_aid = $_SESSION['ias_customer']->a_aid;
-		$_SESSION['ias_tracking']->a_bid = $_SESSION['ias_customer']->a_bid;
-		$_SESSION['ias_tracking']->a_cid = $_SESSION['ias_customer']->a_cid;
-		$_SESSION['ias_tracking']->tracker = $_SESSION['ias_customer']->subCampaignParam;
+		$_GET['a_aid'] = $_SESSION['ias_customer']->a_aid;
+		$_GET['a_bid'] = $_SESSION['ias_customer']->a_bid;
+		$_GET['a_cid'] = $_SESSION['ias_customer']->a_cid;
+		$_GET['tracker'] = $_SESSION['ias_customer']->subCampaignParam;
+		$_SESSION['ias_tracking'] = new ias_affiliate_tracking();
 	}
 
 	public static function reload_customer_information() {
