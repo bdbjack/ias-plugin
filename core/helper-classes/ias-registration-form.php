@@ -533,14 +533,83 @@
 			'Country' => $_POST['country'],
 			'birthday' => '1970-01-01',
 			'campaignId' => $wpdb->get_var( ias_fix_db_prefix("SELECT `campaignID` FROM `{{ias}}brands` WHERE `id` = '" . $_POST['brand'] . "'") ),
-			'subCampaign' => ( strlen( $_SESSION['ias_tracking']->tracker ) > 0 ) ? $_SESSION['ias_tracking']->tracker : $_POST['tracker'],
-			'a_aid' => ( strlen( $_SESSION['ias_tracking']->a_aid ) > 0 ) ? $_SESSION['ias_tracking']->a_aid : $_POST['a_aid'],
-			'a_bid' => ( strlen( $_SESSION['ias_tracking']->a_bid ) > 0 ) ? $_SESSION['ias_tracking']->a_bid : $_POST['a_bid'],
-			'a_cid' => ( strlen( $_SESSION['ias_tracking']->a_cid ) > 0 ) ? $_SESSION['ias_tracking']->a_cid : $_POST['a_cid'],
 			'siteLanguage' => substr( get_bloginfo('language') , 0 , 2 ),
 			'currency' => strtoupper( $_POST['currency'] ),
 			'password' => $_POST['password'],
 		);
+		/*
+		Tracker
+		 */
+		if( strlen( $_SESSION['ias_tracking']->tracker ) > 0 ) {
+			$spot_reg_customer_array['subCampaign'] = $_SESSION['ias_tracking']->tracker;
+		}
+		elseif( isset( $_POST['tracker'] ) && strlen( $_POST['tracker'] ) > 0 ) {
+			$spot_reg_customer_array['subCampaign'] = $_POST['tracker'];
+		}
+		elseif( isset( $_GET['tracker'] ) && strlen( $_GET['tracker'] ) > 0 ) {
+			$spot_reg_customer_array['subCampaign'] = $_GET['tracker'];
+		}
+		elseif( isset( $_SESSION['perma_get']['tracker'] ) && strlen( $_SESSION['perma_get']['tracker'] ) > 0 ) {
+			$spot_reg_customer_array['subCampaign'] = $_SESSION['perma_get']['tracker'];
+		}
+		else {
+			$spot_reg_customer_array['subCampaign'] = 0;
+		}
+		/*
+		a_aid
+		 */
+		if( strlen( $_SESSION['ias_tracking']->a_aid ) > 0 ) {
+			$spot_reg_customer_array['a_aid'] = $_SESSION['ias_tracking']->a_aid;
+		}
+		elseif( isset( $_POST['a_aid'] ) && strlen( $_POST['a_aid'] ) > 0 ) {
+			$spot_reg_customer_array['a_aid'] = $_POST['a_aid'];
+		}
+		elseif( isset( $_GET['a_aid'] ) && strlen( $_GET['a_aid'] ) > 0 ) {
+			$spot_reg_customer_array['a_aid'] = $_GET['a_aid'];
+		}
+		elseif( isset( $_SESSION['perma_get']['a_aid'] ) && strlen( $_SESSION['perma_get']['a_aid'] ) > 0 ) {
+			$spot_reg_customer_array['a_aid'] = $_SESSION['perma_get']['a_aid'];
+		}
+		else {
+			$spot_reg_customer_array['a_aid'] = 0;
+		}
+		/*
+		a_bid
+		 */
+		if( strlen( $_SESSION['ias_tracking']->a_bid ) > 0 ) {
+			$spot_reg_customer_array['a_bid'] = $_SESSION['ias_tracking']->a_bid;
+		}
+		elseif( isset( $_POST['a_bid'] ) && strlen( $_POST['a_bid'] ) > 0 ) {
+			$spot_reg_customer_array['a_bid'] = $_POST['a_bid'];
+		}
+		elseif( isset( $_GET['a_bid'] ) && strlen( $_GET['a_bid'] ) > 0 ) {
+			$spot_reg_customer_array['a_bid'] = $_GET['a_bid'];
+		}
+		elseif( isset( $_SESSION['perma_get']['a_bid'] ) && strlen( $_SESSION['perma_get']['a_bid'] ) > 0 ) {
+			$spot_reg_customer_array['a_bid'] = $_SESSION['perma_get']['a_bid'];
+		}
+		else {
+			$spot_reg_customer_array['a_bid'] = 0;
+		}
+		/*
+		a_cid
+		 */
+		if( strlen( $_SESSION['ias_tracking']->a_cid ) > 0 ) {
+			$spot_reg_customer_array['a_cid'] = $_SESSION['ias_tracking']->a_cid;
+		}
+		elseif( isset( $_POST['a_cid'] ) && strlen( $_POST['a_cid'] ) > 0 ) {
+			$spot_reg_customer_array['a_cid'] = $_POST['a_cid'];
+		}
+		elseif( isset( $_GET['a_cid'] ) && strlen( $_GET['a_cid'] ) > 0 ) {
+			$spot_reg_customer_array['a_cid'] = $_GET['a_cid'];
+		}
+		elseif( isset( $_SESSION['perma_get']['a_cid'] ) && strlen( $_SESSION['perma_get']['a_cid'] ) > 0 ) {
+			$spot_reg_customer_array['a_cid'] = $_SESSION['perma_get']['a_cid'];
+		}
+		else {
+			$spot_reg_customer_array['a_cid'] = 0;
+		}
+		
 		if( !current_user_can( 'manage_options' ) ) {
 			$spot_reg_customer_array['registrationCountry'] = $_POST['country'];
 		} else {
