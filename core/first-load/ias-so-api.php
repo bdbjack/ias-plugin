@@ -108,14 +108,14 @@ class ias_so_api {
     		$rm_error .= print_r( $query , TRUE ) . "\r\n";
     		$rm_error .= '</pre>' . "\r\n";
     		report_ias_bug( 'API POST Error on site ' . get_bloginfo('wpurl') , $rm_error );
-    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><status><connection_status>failed</connection_status><operation_status>failed</operation_status></status>";
     		return FALSE;
 		}
 		try {
 			$request = (new Artax\Request)->setUri($this->api_url)->setMethod('POST')->setBody($body);
 		}
 		catch( Exception $e ) {
-			$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+			$this->lastResultsRaw = "<?xml version=\"1.0\"?><status><connection_status>failed</connection_status><operation_status>failed</operation_status></status>";
 			$rm_error = 'Artax has reported an error when attempting to interact with SpotAPI' . "\r\n";
     		$rm_error .= 'Error Dump' . "\r\n";
     		$rm_error .= '<pre>' . "\r\n";
@@ -132,7 +132,7 @@ class ias_so_api {
     		$results =  $response->getBody();
     		$this->lastResultsRaw = $results;
     	} catch (Artax\ClientException $e) {
-    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><status><connection_status>failed</connection_status><operation_status>failed</operation_status></status>";
     	}
 
     	try {
@@ -149,7 +149,7 @@ class ias_so_api {
     		$rm_error .= $e . "\r\n";
     		$rm_error .= '</pre>' . "\r\n";
     		report_ias_bug( 'API Return Error on site ' . get_bloginfo('wpurl') , $rm_error );
-    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><connection_status>failed</connection_status><operation_status>failed</operation_status>";
+    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><status><connection_status>failed</connection_status><operation_status>failed</operation_status></status>";
     		return FALSE;
     	}
     	$processed = $this->xml2array($xml);
