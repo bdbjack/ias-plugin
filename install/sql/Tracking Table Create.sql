@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `{{ias}}tracking` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ip` varchar(16) NOT NULL,
   `agent` text NOT NULL,
   `time` bigint(20) NOT NULL,
