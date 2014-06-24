@@ -50,12 +50,21 @@
 				 */
 				# if cookies are never meant to expire and the over-ride is first cookie wins
 				if( $expiry == ( ( 60 * 60 * 24 * 365 * 5 ) + 1 ) && $overridetype == 'fcw' ) {
-					$info = $db_tracking_info[0];
-					$this->a_aid = $info['a_aid'];
-					$this->a_bid = $info['a_bid'];
-					$this->a_cid = $info['a_cid'];
-					$this->tracker = $info['tracker'];
-					$this->set_cookies();
+					if( !isset( $_GET['postback'] ) ) {
+						$info = $db_tracking_info[0];
+						$this->a_aid = $info['a_aid'];
+						$this->a_bid = $info['a_bid'];
+						$this->a_cid = $info['a_cid'];
+						$this->tracker = $info['tracker'];
+						$this->set_cookies();
+					}
+					elseif( isset( $_GET['tracker']) ) {
+						$this->a_aid = $_GET['a_aid'];
+						$this->a_bid = $_GET['a_bid'];
+						$this->a_cid = $_GET['a_cid'];
+						$this->tracker = $_GET['tracker'];
+						$this->set_cookies();
+					}
 				}
 				# if cookies are never meant to expire and the over-ride is the last cookie wins
 				elseif( $expiry == ( ( 60 * 60 * 24 * 365 * 5 ) + 1 ) && $overridetype == 'lcw' ) {

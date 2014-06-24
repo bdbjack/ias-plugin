@@ -111,7 +111,7 @@
 			'invalidSpecialAccountNumber' => 'There was a general issue with your registration. Please try again in a few moments.',
 			'specialAccountNumberExists' => 'There was a general issue with your registration. Please try again in a few moments.',
 		);
-		if( $result['connection_status'] != 'successful' || $result['operation_status'] != 'successful' ) {
+		if( !isset( $result['connection_status'] ) || $result['connection_status'] != 'successful' || $result['operation_status'] != 'successful' ) {
 			switch (TRUE) {
 				case ($result['connection_status'] != 'successful'):
 					push_client_error( 'Your broker is currently not available for login. Please try again in a few minutes' );

@@ -134,7 +134,19 @@ class ias_so_api {
     	} catch (Artax\ClientException $e) {
     		$this->lastResultsRaw = "<?xml version=\"1.0\"?><status><connection_status>failed</connection_status><operation_status>failed</operation_status></status>";
     	}
-
+    	if( strlen( $this->lastResultsRaw ) == 0 ) {
+    		$rm_error = 'Spot API has not returned any feedback.' . "\r\n";
+    		$rm_error .= 'Response from SpotAPI' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= print_r( $this->lastResultsRaw , TRUE ) . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		$rm_error .= 'The following query triggered the empty response: ' . "\r\n";
+    		$rm_error .= '<pre>' . "\r\n";
+    		$rm_error .= $query . "\r\n";
+    		$rm_error .= '</pre>' . "\r\n";
+    		report_ias_bug( 'Empty API Return Error on site ' . get_bloginfo('wpurl') , $rm_error );
+    		$this->lastResultsRaw = "<?xml version=\"1.0\"?><status><connection_status>failed</connection_status><operation_status>failed</operation_status></status>";
+    	}
     	try {
     		$xml = new SimpleXMLElement( $this->lastResultsRaw  );
     	}
