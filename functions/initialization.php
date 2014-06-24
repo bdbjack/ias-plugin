@@ -199,6 +199,10 @@
 						'id' => $wpdb->insert_id,
 					);
 					print( json_encode($return_array) );
+					foreach ($_SESSION as $key => $value) {
+						unset($_SESSION[$key]);
+					}
+					session_destroy();
 					break;
 
 				default:

@@ -32,9 +32,11 @@
 							else if ( !filter_var( $elemts[0]->src , FILTER_VALIDATE_URL , FILTER_FLAG_HOST_REQUIRED ) ) {
 								# do nothing
 							}
-							$elemts[0]->src = $this->switch_out_macros( $elemts[0]->src );
-							$elemts[0]->style = 'display:none !important;';
-							array_push( $this->image_pixels , $html->save() );
+							else {
+								$elemts[0]->src = $this->switch_out_macros( $elemts[0]->src );
+								$elemts[0]->style = 'display:none !important;';
+								array_push( $this->image_pixels , $html->save() );
+							}
 							break;
 						case 'iframe':
 							$html = str_get_html( $pixel['content'] );
@@ -48,9 +50,11 @@
 							else if ( !filter_var( $elemts[0]->src , FILTER_VALIDATE_URL , FILTER_FLAG_HOST_REQUIRED ) ) {
 								# do nothing
 							}
-							$elemts[0]->src = $this->switch_out_macros( $elemts[0]->src );
-							$elemts[0]->style = 'display:none !important;';
-							array_push( $this->iframe_pixels , $html->save() );
+							else {
+								$elemts[0]->src = $this->switch_out_macros( $elemts[0]->src );
+								$elemts[0]->style = 'display:none !important;';
+								array_push( $this->iframe_pixels , $html->save() );
+							}
 							break;
 						case 'js':
 							$html = str_get_html( $pixel['content'] );
